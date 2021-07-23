@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
+import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
+import 'package:shellcode2/Navigation%20Drawer%20pages/myOrders.dart';
+import 'package:shellcode2/Navigation%20Drawer%20pages/userAcc.dart';
+import 'package:shellcode2/Navigation%20Drawer%20pages/wallet.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 
@@ -50,7 +55,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.shop,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
+                          builder: (context) => Orders(),
                         )),
                   ),
                   buildMenuItem(
@@ -58,7 +63,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.favorite_border,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
+                          builder: (context) => Wishlist(),
                         )),
                   ),
                   buildMenuItem(
@@ -66,7 +71,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.account_balance_wallet_rounded,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
+                          builder: (context) => Wallet(),
                         )),
                   ),
                   buildMenuItem(
@@ -82,7 +87,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.account_circle,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
+                          builder: (context) => UserAcc(),
                         )),
                   ),
                   buildMenuItem(
@@ -90,7 +95,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.assignment,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
+                          builder: (context) => HandyOrder(),
                         )),
                   ),
                   buildMenuItem(

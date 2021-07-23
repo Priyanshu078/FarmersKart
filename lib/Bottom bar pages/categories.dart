@@ -11,7 +11,7 @@ class Category extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: bgcolor,
       appBar: AppBar(
         centerTitle: true,
         titleSpacing: 0.0,

@@ -5,7 +5,6 @@ import 'package:shellcode2/More%20pages/ImmunityMore.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/colors.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/drawerscreen.dart';
 import 'package:shellcode2/More%20pages/festiveSpecialMore.dart';
