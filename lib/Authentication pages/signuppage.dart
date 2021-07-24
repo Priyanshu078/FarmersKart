@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shellcode2/Authentication%20pages/SocietyShopHotels.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
 
@@ -82,8 +83,9 @@ class _SignupState extends State<Signup> {
                     child: TextField(
                       controller: phoneController,
                       style: TextStyle(
-                        height: 1.5,
+                          height: 1.5,color: Colors.purple
                       ),
+                      cursorColor: Colors.purpleAccent,
                       decoration: InputDecoration(
                         hintText: "Mobile Number",
                         border: InputBorder.none,
@@ -105,6 +107,7 @@ class _SignupState extends State<Signup> {
                   ),
                   Divider(
                     color: Colors.greenAccent[400],
+                    thickness: 1,
                   ),
                   SizedBox(
                     height: 20,
@@ -117,7 +120,7 @@ class _SignupState extends State<Signup> {
                           children: [
                             GestureDetector(
                               onTap: (){
-
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(0)));
                               },
                               child: CircleAvatar(
                               foregroundImage: AssetImage('assets/bg.jpg'),
@@ -127,7 +130,7 @@ class _SignupState extends State<Signup> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text('SOCIETY', style: TextStyle(color: Colors.white,fontSize: 12),)
+                            Text('SOCIETY', style: TextStyle(color: Colors.black,fontSize: 12),)
                           ],
                         ),
                       ),
@@ -135,7 +138,9 @@ class _SignupState extends State<Signup> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(1)));
+                              },
                               child: CircleAvatar(
                                 foregroundImage: AssetImage('assets/bg.jpg'),
                                 maxRadius: 35,
@@ -144,7 +149,7 @@ class _SignupState extends State<Signup> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text('SHOP', style: TextStyle(color: Colors.white,fontSize: 12),)
+                            Text('SHOP', style: TextStyle(color: Colors.black,fontSize: 12),)
                           ],
                         ),
                       ),
@@ -152,7 +157,9 @@ class _SignupState extends State<Signup> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(3)));
+                              },
                               child: CircleAvatar(
                                 foregroundImage: AssetImage('assets/bg.jpg'),
                                 maxRadius: 35,
@@ -161,7 +168,7 @@ class _SignupState extends State<Signup> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text('HOTELS', style: TextStyle(color: Colors.white,fontSize: 12),)
+                            Text('HOTELS', style: TextStyle(color: Colors.black,fontSize: 12),)
                           ],
                         ),
                       ),

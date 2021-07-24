@@ -47,7 +47,7 @@ class _ForgotPwdState extends State<ForgotPwd> {
               child: Column(
                 children: [
                   Text(
-                    'Enter Your Mobile Number', style: TextStyle(color: Colors.white,fontSize: 18),
+                    'Enter Your Mobile Number', style: TextStyle(color: Colors.black,fontSize: 18),
                   ),
                   SizedBox(
                     height: 20,
@@ -69,9 +69,11 @@ class _ForgotPwdState extends State<ForgotPwd> {
                     child: TextField(
                       controller: phoneController,
                       style: TextStyle(
-                        height: 1.5,
+                        height: 1.5,color: Colors.purple
                       ),
+                      cursorColor: Colors.purpleAccent,
                       decoration: InputDecoration(
+
                         hintText: "Mobile Number",
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -79,7 +81,7 @@ class _ForgotPwdState extends State<ForgotPwd> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintStyle: Theme.of(context).textTheme.caption!.copyWith(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: yellow, // Set Your Own Color
                         ),

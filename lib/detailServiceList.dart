@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
+import 'package:shellcode2/filter.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
+import 'package:shellcode2/productdetails.dart';
+import 'package:shellcode2/search.dart';
 import '../colors.dart';
 
 const String _heroAddTodo = 'add-todo-hero';
@@ -145,7 +148,9 @@ class _DetailPageState extends State<DetailPage> {
                   color: bgcolor,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Search(),));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
@@ -192,14 +197,16 @@ class _DetailPageState extends State<DetailPage> {
                         color: bgcolor,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(30),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Filter()));
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child:
                                     Text('    Filter    ', style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                     ),
                             ),
@@ -223,18 +230,32 @@ class _DetailPageState extends State<DetailPage> {
             child: Container(
               height: MediaQuery.of(context).size.height,
               child: new ListView.builder(
+
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: temp.length,
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (context, index){
-
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        List temp2 = [temp[index].imageUrl,temp[index].title,temp[index].weight,temp[index].newrate,temp[index].description,temp[index].oldrate,temp[index].data];
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetails(temp2,0)));
+                      },
                       child: Container(
                         margin: EdgeInsets.all(10),
                         width: 150,
-                        color: bgcolor,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 1,
+                                  blurRadius: 1,
+                                  offset: Offset(0, 1),
+                                  color: Colors.black38
+                              )
+                            ]
+                        ),
                         child:
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -245,7 +266,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Container(
                                 height: 50,
                                 width: 50,
-                                child: Image.asset(temp[index].imageUrl!, fit: BoxFit.cover,),
+                                child: Image.asset(temp[index].imageUrl, fit: BoxFit.cover,),
                               ),
                             ),
                             Container(
@@ -262,11 +283,11 @@ class _DetailPageState extends State<DetailPage> {
                                   Text(temp[index].title,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Colors.deepPurpleAccent[100],
+                                      fontSize: 14,
+                                      color: Colors.deepPurple,
                                     ),),
                                   SizedBox(
-                                    height: 3,
+                                    height: 5,
                                   ),
                                   GestureDetector(
                                    // borderRadius: BorderRadius.circular(20),
@@ -280,17 +301,17 @@ class _DetailPageState extends State<DetailPage> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                             border: Border(
-                                              top: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                                              left: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                                              right: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                                              bottom: BorderSide(width: 1.0, color: Colors.purpleAccent),
+                                              top: BorderSide(width: 2.0, color: Colors.purple),
+                                              left: BorderSide(width: 2.0, color: Colors.purple),
+                                              right: BorderSide(width: 2.0, color: Colors.purple),
+                                              bottom: BorderSide(width: 2.0, color: Colors.purple),
                                             ),
                                             borderRadius: BorderRadius.circular(5.0),
                                         ),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(' ₹ ${temp[index].weight}', style: TextStyle(
+                                            Text(' ${temp[index].weight}', style: TextStyle(
                                               fontSize: 14,
                                               color: yellow,
                                               fontWeight: FontWeight.w700,
@@ -308,14 +329,14 @@ class _DetailPageState extends State<DetailPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("₹  ${temp[index].rate}",
+                                      Text("₹  ${temp[index].newrate}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.purple,
                                         ),),
                                       RatingBar.builder(
-                                        unratedColor: lightbg,
+                                        unratedColor: Colors.grey[300],
                                         itemCount: 5,
                                         initialRating: 0,
                                         direction: Axis.horizontal,
@@ -338,6 +359,7 @@ class _DetailPageState extends State<DetailPage> {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: RaisedButton(
+                                      elevation: 0.0,
                                       color: bgcolor,
                                       onPressed: (){
                                         setState(() {
@@ -350,7 +372,7 @@ class _DetailPageState extends State<DetailPage> {
                                           width: 80,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(5.0),
-                                            color: Colors.purple,
+                                            color: Colors.purple[700],
                                           ),
                                           child: Align(
                                             alignment: Alignment.center,
@@ -399,7 +421,7 @@ class _NavigateState extends State<Navigate> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Colors.grey[200],
             //type: BottomNavigationBarType.fixed,
             selectedFontSize: 12,
             unselectedFontSize: 12,
@@ -457,7 +479,7 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
         child: ChoiceChip(
           label: Text(item),
           labelStyle: TextStyle(
-              color: Colors.white, fontSize: 14.0),
+              color: selectedChoice == item ? Colors.white : Colors.black, fontSize: 14.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -504,41 +526,45 @@ class General{
   String title;
   String imageUrl;
   int weight;
-  int rate;
+  int oldrate;
+  int newrate;
+  String description;
   List<List> data;
   General({
     required this.title,
     required this.weight,
-    required this.rate,
+    required this.oldrate,
+    required this.newrate,
     required this.imageUrl,
+    required this.description,
     required this.data,
     }
       );
 }
 List<General> freshVegetables =[
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, rate: 600,data: [['180 GM',200,197]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
 ];
 List<General> grocery =[
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
 ];
 List<General> dairy =[
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
 ];
 List<General> bakery =[
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, rate: 600,data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
+  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
 ];
 
 int n = 0;
@@ -608,7 +634,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                      Text(
                     'Available quantities for',
                        style: TextStyle(
-                         color: Colors.purpleAccent,
+                         color: Colors.purple,
                          fontSize: 14,
                          fontWeight: FontWeight.w600
                        ),
@@ -617,7 +643,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                         'Farmerskart - ${temp[n].title}',
                       style: TextStyle(
                         height: 2,
-                          color: Colors.purpleAccent,
+                          color: Colors.purple,
                           fontSize: 18,
                           letterSpacing: 0.5,
                           fontWeight: FontWeight.w700
@@ -716,8 +742,8 @@ class _CustomStepperState extends State<CustomStepper> {
       height: 30,
       width: 100,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.purpleAccent),
-          borderRadius: BorderRadius.circular(5)
+          border: Border.all(color: Colors.purple),
+          borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -726,7 +752,7 @@ class _CustomStepperState extends State<CustomStepper> {
             flex: 1,
             child: GestureDetector(
               child: Icon(Icons.remove,
-                color: Colors.deepPurpleAccent[100],
+                color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
@@ -765,7 +791,7 @@ class _CustomStepperState extends State<CustomStepper> {
             flex: 1,
             child: GestureDetector(
               child: Icon(Icons.add,
-                color: Colors.greenAccent,
+                color: Colors.purple,
                 size: widget.iconSize,
               ),
               onTap: () {

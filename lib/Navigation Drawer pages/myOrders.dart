@@ -15,11 +15,6 @@ class Orders extends StatefulWidget {
 int val=0;
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
 
-  List<Widget> containers = [
-    Container(color: Colors.amber,),
-    Container(color: Colors.yellow,),
-    Container(color: Colors.purple,),
-  ];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -148,11 +143,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                               ),
                             ),
                           ),
-                          Text('Order Number: ${category1[i].orderNo}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.white),),
+                          Text('Order Number: ${category1[i].orderNo}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.black),),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Total Amount: ₹${category1[i].amount}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.white),),
+                          Text('Total Amount: ₹${category1[i].amount}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.black),),
                           SizedBox(
                             height: 10,
                           ),
@@ -183,7 +178,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                     onTap: () {},
                                     child: Align(
                                         alignment: Alignment.center,
-                                        child: Text('Complaints',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.white),)
+                                        child: Text('Complaints',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.black),)
                                     ),
                                   ),
                                 ),
@@ -207,7 +202,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                     onTap: () {},
                                     child: Align(
                                         alignment: Alignment.center,
-                                        child: Text('Feedback',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.white),)
+                                        child: Text('Feedback',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.black),)
                                     ),
                                   ),
                                 ),
@@ -240,7 +235,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                     onTap: () {},
                                     child: Align(
                                         alignment: Alignment.center,
-                                        child: Text('Track Order',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.white),)
+                                        child: Text('Track Order',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.black),)
                                     ),
                                   ),
                                 ),
@@ -288,30 +283,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  /*Align(
-                            alignment: Alignment.topRight,
-                            child: OutlinedButton(
-                              onPressed: () {
-                              },
-                              style: OutlinedButton.styleFrom(
-                                primary: Colors.greenAccent,
-                                backgroundColor: bgcolor,
-                                fixedSize: Size(110,10),
-                                side: BorderSide(color: Colors.greenAccent),
-                              ),
-                              child: const Text('Generate Invoice',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal),),
-                            ),
-                          )*/
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: Container(
                                       height: 25,
                                       decoration: BoxDecoration(
                                         border: Border(
-                                          top: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                          left: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                          right: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                          bottom: BorderSide(width: 1.0, color: Colors.greenAccent),
+                                          top: BorderSide(width: 1.0, color: Colors.black),
+                                          left: BorderSide(width: 1.0, color: Colors.black),
+                                          right: BorderSide(width: 1.0, color: Colors.black),
+                                          bottom: BorderSide(width: 1.0, color: Colors.black),
                                         ),
                                         borderRadius: BorderRadius.circular(5.0),
                                       ),
@@ -320,16 +301,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                         onTap: () {},
                                         child: Padding(
                                             padding: const EdgeInsets.all(5.0),
-                                            child: Text('Gnerate invoice',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.greenAccent),)
+                                            child: Text('Generate invoice',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.blueGrey),)
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Text('Order Number: ${category1[i].orderNo}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.white),),
+                                  Text('Order Number: ${category1[i].orderNo}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.black),),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text('Total Amount: ₹${category1[i].amount}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.white),),
+                                  Text('Total Amount: ₹${category1[i].amount}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.black),),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -348,10 +329,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                           width: 150,
                                           decoration: BoxDecoration(
                                             border: Border(
-                                              top: BorderSide(width: 1.0, color: Colors.orange),
-                                              left: BorderSide(width: 1.0, color: Colors.orange),
-                                              right: BorderSide(width: 1.0, color: Colors.orange),
-                                              bottom: BorderSide(width: 1.0, color: Colors.orange),
+                                              top: BorderSide(width: 1.0, color: Colors.yellow),
+                                              left: BorderSide(width: 1.0, color: Colors.yellow),
+                                              right: BorderSide(width: 1.0, color: Colors.yellow),
+                                              bottom: BorderSide(width: 1.0, color: Colors.yellow),
                                             ),
                                             borderRadius: BorderRadius.circular(5.0),
                                           ),
@@ -360,7 +341,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                             onTap: () {},
                                             child: Align(
                                                 alignment: Alignment.center,
-                                                child: Text('Complaints',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.white),)
+                                                child: Text('Complaints',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.black),)
                                             ),
                                           ),
                                         ),
@@ -372,10 +353,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                           width: 150,
                                           decoration: BoxDecoration(
                                             border: Border(
-                                              top: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                              left: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                              right: BorderSide(width: 1.0, color: Colors.greenAccent),
-                                              bottom: BorderSide(width: 1.0, color: Colors.greenAccent),
+                                              top: BorderSide(width: 1.0, color: Colors.black),
+                                              left: BorderSide(width: 1.0, color: Colors.black),
+                                              right: BorderSide(width: 1.0, color: Colors.black),
+                                              bottom: BorderSide(width: 1.0, color: Colors.black),
                                             ),
                                             borderRadius: BorderRadius.circular(5.0),
                                           ),
@@ -441,7 +422,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin{
                                             onTap: () {},
                                             child: Align(
                                                 alignment: Alignment.center,
-                                                child: Text('Cancel Order',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.orangeAccent),)
+                                                child: Text('Cancel Order',style: TextStyle(fontSize: 10,fontWeight: FontWeight.normal,color: Colors.red),)
                                             ),
                                           ),
                                         ),
@@ -620,7 +601,7 @@ class _NavigateState extends State<Navigate> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: lightbg,
             //type: BottomNavigationBarType.fixed,
             selectedFontSize: 12,
             unselectedFontSize: 12,

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/More%20pages/ImmunityMore.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
+import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/drawerscreen.dart';
@@ -12,6 +14,7 @@ import 'package:shellcode2/More%20pages/newArrivalsmore.dart';
 import 'package:shellcode2/More%20pages/offerMore.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
+import 'package:shellcode2/search.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -43,10 +46,13 @@ class _HomeState extends State<Home> {
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
         title: Text('Farmers kart'),
+        elevation: 0,
         iconTheme: IconThemeData(color: yellow),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -71,7 +77,7 @@ class _HomeState extends State<Home> {
                 height: 50,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: [left,middle,Colors.purple]
+                        colors: [left,left,middle,right,Colors.purple]
                     )
                 ),
                 child: Padding(
@@ -87,17 +93,22 @@ class _HomeState extends State<Home> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.search, color: yellow,),
-                                Text('   '),
-                                Text('Search', style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: Colors.grey[600],
-                                ),
-                                ),
-                              ],
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Search(),));
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.search, color: yellow,),
+                                  Text('   '),
+                                  Text('Search', style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                    color: Colors.grey[600],
+                                  ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
                               children: [
@@ -120,8 +131,8 @@ class _HomeState extends State<Home> {
                       Row(
                         children: [
                           Icon(Icons.location_on, color: Colors.red,),
-                          Text('Deliver to ', style: TextStyle(color: Colors.greenAccent),),
-                          Text('641026',style: TextStyle(color: Colors.white),),
+                          Text('Deliver to ', style: TextStyle(color: Colors.green[800]),),
+                          Text('641026',style: TextStyle(color: Colors.black),),
                         ],
                       ),
                       SizedBox(
@@ -143,7 +154,11 @@ class _HomeState extends State<Home> {
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(30),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => HandyOrder(),
+                            ));
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child:
@@ -191,7 +206,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -228,7 +243,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 10,
-                                          color: Colors.purpleAccent,
+                                          color: Colors.purple,
                                         ),),
                                       ],
                                     ),
@@ -284,7 +299,7 @@ class _HomeState extends State<Home> {
                             margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: _current == index ? Colors.purple : Colors.grey[850],
+                              color: _current == index ? Colors.purple : Colors.grey[200],
                             ),
                           );
                         }),
@@ -302,7 +317,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -317,7 +332,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -392,7 +407,7 @@ class _HomeState extends State<Home> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),),
                                         SizedBox(
                                           height: 5,
@@ -401,7 +416,7 @@ class _HomeState extends State<Home> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),),
                                         SizedBox(
                                           height: 5,
@@ -440,7 +455,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -454,7 +469,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -497,7 +512,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -506,7 +521,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -548,7 +563,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -563,7 +578,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -813,7 +828,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -828,7 +843,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -871,7 +886,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -880,7 +895,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -922,7 +937,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -937,7 +952,7 @@ class _HomeState extends State<Home> {
                                 'more>',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.purpleAccent,
+                                  color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -980,7 +995,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -989,7 +1004,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),),
                                       SizedBox(
                                         height: 5,
@@ -1049,7 +1064,7 @@ class _NavigateState extends State<Navigate> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: lightbg,
             //type: BottomNavigationBarType.fixed,
             selectedFontSize: 12,
             unselectedFontSize: 12,

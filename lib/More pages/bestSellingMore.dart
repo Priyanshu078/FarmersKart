@@ -99,7 +99,7 @@ class _BestSellingState extends State<BestSelling> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         SizedBox(
@@ -109,7 +109,7 @@ class _BestSellingState extends State<BestSelling> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         SizedBox(
@@ -219,7 +219,7 @@ void _BottomSheet(context, int j) {
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
-                      color: Colors.purpleAccent,
+                      color: Colors.purple,
                     ),
                   ),
                   SizedBox(
@@ -257,7 +257,7 @@ void _BottomSheet(context, int j) {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                   SizedBox(
@@ -341,7 +341,7 @@ class _CustomStepperState extends State<CustomStepper> {
       height: 35,
       width: 80,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.purpleAccent),
+          border: Border.all(color: Colors.purple,width: 1.5),
           borderRadius: BorderRadius.circular(5)
       ),
       child: Row(
@@ -351,7 +351,7 @@ class _CustomStepperState extends State<CustomStepper> {
             flex: 1,
             child: GestureDetector(
               child: Icon(Icons.remove,
-                color: Colors.deepPurpleAccent[100],
+                color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
@@ -390,7 +390,7 @@ class _CustomStepperState extends State<CustomStepper> {
             flex: 1,
             child: GestureDetector(
               child: Icon(Icons.add,
-                color: Colors.greenAccent,
+                color: Colors.purple,
                 size: widget.iconSize,
               ),
               onTap: () {

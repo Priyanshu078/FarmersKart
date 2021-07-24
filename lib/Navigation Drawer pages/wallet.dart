@@ -55,14 +55,14 @@ class _WalletState extends State<Wallet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Farmers Kart Wallet',style: TextStyle(color: Colors.purpleAccent,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
+                    Text('Farmers Kart Wallet',style: TextStyle(color: Colors.purple,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
                     SizedBox(
                       height: 25,
                     ),
                     Row(
                       children: [
-                        Text(' ₹ ',style: TextStyle(color: Colors.deepPurpleAccent,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
-                        Text('74',style: TextStyle(color: Colors.deepPurpleAccent[100],fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),)
+                        Text(' ₹ ',style: TextStyle(color: Colors.deepPurple,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
+                        Text('74',style: TextStyle(color: Colors.deepPurple,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),)
                       ],
                     )
 
@@ -85,8 +85,8 @@ class _WalletState extends State<Wallet> {
               children: [
                 Row(
                   children: [
-                    Text(' ₹ ',style: TextStyle(color: Colors.deepPurpleAccent,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
-                    Text('0',style: TextStyle(color: Colors.deepPurpleAccent[100],fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),)
+                    Text(' ₹ ',style: TextStyle(color: Colors.deepPurple,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),),
+                    Text('0',style: TextStyle(color: Colors.deepPurple,fontSize: 18,fontWeight: FontWeight.bold,letterSpacing: 0.8),)
                   ],
                 ),
                 GestureDetector(
@@ -98,7 +98,7 @@ class _WalletState extends State<Wallet> {
                     width: 150,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.purple
+                        color: Colors.purple[700]
                     ),
                     child: Align(
                       alignment: Alignment.center,

@@ -16,8 +16,10 @@ class Wishlist extends StatefulWidget {
 
 class _WishlistState extends State<Wishlist> {
   List<String> tempin = ['All','Fresh vegetables & fruit','Grocery & Staples','Dairy','Bakery & Confectionery'];
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: lightbg,
       appBar: AppBar(
@@ -130,7 +132,7 @@ class _WishlistState extends State<Wishlist> {
                                 child: Container(
                                   height: 50,
                                   width: 50,
-                                  child: Image.asset(temp[index].imageUrl!, fit: BoxFit.cover,),
+                                  child: Image.asset(detail[index].imageURL, fit: BoxFit.cover,),
                                 ),
                               ),
                               Container(
@@ -139,11 +141,11 @@ class _WishlistState extends State<Wishlist> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(temp[index].title,
+                                    Text(detail[index].title,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14,
-                                        color: Colors.purpleAccent,
+                                        color: Colors.purple,
                                       ),),
                                     SizedBox(
                                       height: 10,
@@ -170,7 +172,7 @@ class _WishlistState extends State<Wishlist> {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(' ₹ ${temp[index].weight}', style: TextStyle(
+                                              Text(' ${detail[0].weight[0][0]}', style: TextStyle(
                                                 fontSize: 14,
                                                 color: yellow,
                                                 fontWeight: FontWeight.w700,
@@ -185,11 +187,11 @@ class _WishlistState extends State<Wishlist> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Text("₹  ${temp[index].rate}",
+                                    Text("₹  ${detail[index].rate}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 12,
-                                        color: Colors.purpleAccent,
+                                        color: Colors.purple,
                                       ),),
                                     SizedBox(
                                       height: 10,
@@ -245,7 +247,7 @@ class _NavigateState extends State<Navigate> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Colors.grey[300],
             //type: BottomNavigationBarType.fixed,
             selectedFontSize: 12,
             unselectedFontSize: 12,
@@ -397,19 +399,22 @@ class _AddTodoPopupCard extends StatelessWidget {
                     Text(
                       'Available quantities for',
                       style: TextStyle(
-                          color: Colors.purpleAccent,
+                          color: Colors.purple,
                           fontSize: 14,
                           fontWeight: FontWeight.w600
                       ),
                     ),
-                    Text(
-                      'Farmerskart - ${detail[n].title}',
-                      style: TextStyle(
-                          height: 2,
-                          color: Colors.purpleAccent,
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w700
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Farmerskart - ${detail[n].title}',
+                        style: TextStyle(
+                            height: 2,
+                            color: Colors.purple,
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w700
+                        ),
                       ),
                     ),
                     const Divider(
@@ -479,18 +484,20 @@ class _AddTodoPopupCard extends StatelessWidget {
 }
 
 class Detail{
+  String imageURL;
   String title;
   int rate;
   List weight;
   Detail({
+    required this.imageURL,
     required this.title,
     required this.rate,
     required this.weight,
   });
 }
 List<Detail> detail =[
-  Detail(title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
-  Detail(title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
-  Detail(title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
-  Detail(title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]])
+  Detail(imageURL: 'assets/bg.jpg',title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
+  Detail(imageURL: 'assets/bg.jpg',title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
+  Detail(imageURL: 'assets/bg.jpg',title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]]),
+  Detail(imageURL: 'assets/bg.jpg',title: 'Fresh Vegetables & fruits',rate: 500,weight: [['180 GM',200,197],['250 GM',500,400]])
 ];

@@ -70,7 +70,7 @@ class Category extends StatelessWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16,
-                                    color: Colors.purpleAccent,
+                                    color: Colors.purple,
                                   ),
                                 ),
                               ),
@@ -105,7 +105,7 @@ class _NavigateState extends State<Navigate> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: lightbg,
             //type: BottomNavigationBarType.fixed,
             selectedFontSize: 12,
             unselectedFontSize: 12,

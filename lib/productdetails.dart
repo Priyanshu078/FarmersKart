@@ -74,12 +74,13 @@ class _ProductDetailsState extends State<ProductDetails> {
               alignment: Alignment.center,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children:[
                   Align(
                     alignment: Alignment.topLeft,
                     child: j == 0 ? null : new Container(
-                      height: 60,
-                      width: 50,
+                      height: 40,
+                      width: 80,
                       padding: EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
                           border: Border(
@@ -104,11 +105,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
                   ),
-                  Container(
-                  padding: EdgeInsets.all(10.0),
-                  height: 200,
-                    width: 200,
-                    child: Image.asset(temp[0],fit: BoxFit.cover,)),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    height: 200,
+                      width: 200,
+                      child: Image.asset(temp[0],fit: BoxFit.cover,)),
+                  ),
               ],
               ),
             ),
@@ -121,7 +125,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             Text(temp[1],
             style: TextStyle(
-              color: Colors.deepPurpleAccent[100],
+              color: Colors.deepPurple[800],
               fontWeight: FontWeight.w600,
               fontSize: 18
             ),),
@@ -158,7 +162,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: [
                 Text('Selling MRP:',
                   style: TextStyle(
-                      color: Colors.deepPurpleAccent[100],
+                      color: Colors.deepPurple[800],
                       fontWeight: FontWeight.w500,
                       fontSize: 14
                   ),),
@@ -170,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),),
                 Text('${temp[3]}',
                   style: TextStyle(
-                      color: Colors.deepPurpleAccent[100],
+                      color: Colors.deepPurple[800],
                       fontWeight: FontWeight.w500,
                       fontSize: 14
                   ),),
@@ -251,10 +255,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                      left: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                      right: BorderSide(width: 1.0, color: Colors.purpleAccent),
-                      bottom: BorderSide(width: 1.0, color: Colors.purpleAccent),
+                      top: BorderSide(width: 1.0, color: Colors.purple),
+                      left: BorderSide(width: 1.0, color: Colors.purple),
+                      right: BorderSide(width: 1.0, color: Colors.purple),
+                      bottom: BorderSide(width: 1.0, color: Colors.purple),
                     ),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
@@ -339,7 +343,7 @@ class _CustomStepperState extends State<CustomStepper> {
       height: 40,
       width: 150,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.purpleAccent),
+          border: Border.all(color: Colors.purple),
           borderRadius: BorderRadius.circular(5)
       ),
       child: Row(
@@ -349,7 +353,7 @@ class _CustomStepperState extends State<CustomStepper> {
             flex: 1,
             child: GestureDetector(
               child: Icon(Icons.remove,
-                color: Colors.deepPurpleAccent[100],
+                color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
@@ -471,7 +475,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                     Text(
                       'Available quantities for',
                       style: TextStyle(
-                          color: Colors.purpleAccent,
+                          color: Colors.purple,
                           fontSize: 14,
                           fontWeight: FontWeight.w600
                       ),
@@ -480,7 +484,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                       'Farmerskart - ${temp[1]}',
                       style: TextStyle(
                           height: 2,
-                          color: Colors.purpleAccent,
+                          color: Colors.purple,
                           fontSize: 18,
                           letterSpacing: 0.5,
                           fontWeight: FontWeight.w700

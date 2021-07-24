@@ -27,100 +27,113 @@ class _OtpVerificationState extends State<OtpVerification> {
     return Scaffold(
       backgroundColor: lightbg,
       body: Container(
-        child: Column(
+        child: Stack(
+          children: [
+          Column(
           children:[
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80),),
-                  gradient: LinearGradient(
-                    colors: [left,middle,Colors.purple],
+          Container(
+          width: double.infinity,
+          height: 200,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80),),
+              gradient: LinearGradient(
+                colors: [left,middle,Colors.purple],
+              )
+          ),
+          child:
+          Center(
+            child: Text(
+              'OTP Verification', style: TextStyle(
+                color: Colors.white,
+                fontSize: 18
+            ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        Container(
+          padding: EdgeInsets.all(40),
+          child: Column(
+            children: [
+              Text(
+                'Enter the OTP sent to Your Number', style: TextStyle(color: Colors.black,fontSize: 18),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                  child: PinFieldAutoFill(
+                    decoration: UnderlineDecoration(
+                        colorBuilder: FixedColorBuilder(Colors.purple)
+                    ),
+                    codeLength: 6,
+                    onCodeChanged: (val){
+
+                    },
                   )
               ),
-              child:
-              Center(
-                child: Text(
-                  'OTP Verification', style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18
-                ),
-                ),
+              SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.all(40),
-              child: Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Enter the OTP sent to Your Number', style: TextStyle(color: Colors.white,fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                      child: PinFieldAutoFill(
-                        decoration: UnderlineDecoration(
-                          colorBuilder: FixedColorBuilder(Colors.purple)
-                        ),
-                        codeLength: 6,
-                        onCodeChanged: (val){
-
-                        },
-                      )
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text("Din't Receive the OTP ?",style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white
-                      ),),
-                      GestureDetector(
-                        onTap: (){
-                        },
-                        child: Text(" RESEND OTP",style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.purple
-                        ),),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children:[
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: (){
-                            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                              return _AddTodoPopupCard();
-                            }, settings:  ModalRoute.of(context)!.settings));
-                          },
-                          child: Text('VERIFY & PROCEED',style: TextStyle(color: Colors.white),),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.purple[600]),
-                              padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 15)),
-                              textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18))),
-                        ),
-                      ),
-                    ],
+                  Text("Din't Receive the OTP ?",style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black
+                  ),),
+                  GestureDetector(
+                    onTap: (){
+                    },
+                    child: Text(" RESEND OTP",style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.purple
+                    ),),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children:[
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: (){
+                        Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                          return _AddTodoPopupCard();
+                        }, settings:  ModalRoute.of(context)!.settings));
+                      },
+                      child: Text('VERIFY & PROCEED',style: TextStyle(color: Colors.white),),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.purple[600]),
+                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 15)),
+                          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18))),
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
+          ),
+        ),
+
+        ],
+      ),
+            Positioned(
+                top: 140,
+                left: 140,
+                child: Container(
+                    height: 120,
+                    width: 120,
+                    child: Image.asset('assets/otp_image.png',fit: BoxFit.cover,))),
 
           ],
         ),
+
       ),
     );
   }
@@ -196,7 +209,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                         Text(
                           ' Registered Successfully!',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.w500
                           ),
@@ -210,7 +223,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                       'Dear customer, Thank you for registering with us, your account is pending approval and you will be notified once it is approved.',
                       style: TextStyle(
                         height: 1.5,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.w400
                       ),
@@ -226,7 +239,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                         alignment: Alignment.bottomRight,
                         child: Text('OK',style: TextStyle(
                             height: 1.5,
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w400
                         ),),

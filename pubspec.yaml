@@ -33,6 +33,11 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   sign_button: ^2.0.0
   sms_autofill: ^2.0.1
+  image_picker: ^0.8.2
+  path_provider: ^2.0.2
+  image: ^3.0.2
+  flutter_sound_lite: ^8.2.0
+  permission_handler: ^8.1.4+1
 
 dev_dependencies:
   flutter_test:
