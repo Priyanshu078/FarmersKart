@@ -5,7 +5,7 @@ import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
 
 class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+  const Signup({Key key}) : super(key: key);
 
   @override
   _SignupState createState() => _SignupState();
@@ -13,9 +13,11 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   final phoneController = TextEditingController();
-  String title1 ='';
+  String phoneNumber = '';
   final pwController = TextEditingController();
-  String title2 ='';
+  String title2 = '';
+  int index = 0;
+  String iconChange = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,36 +27,34 @@ class _SignupState extends State<Signup> {
           children: [
             Container(
               width: double.infinity,
-              padding: EdgeInsets.only(left: 90,right: 90),
+              padding: EdgeInsets.only(left: 90, right: 90),
               height: 200,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80),),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(80),
+                  ),
                   gradient: LinearGradient(
-                    colors: [left,middle,Colors.purple],
-                  )
-              ),
+                    colors: [left, middle, Colors.purple],
+                  )),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignIn()));
                     },
                     child: Text(
-                      'SIGN IN', style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18
-                    ),
+                      'SIGN IN',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){},
+                    onTap: () {},
                     child: Text(
-                      'SIGN UP', style: TextStyle(
-                        color: yellow,
-                        fontSize: 18
-                    ),
+                      'SIGN UP',
+                      style: TextStyle(color: yellow, fontSize: 18),
                     ),
                   )
                 ],
@@ -81,10 +81,9 @@ class _SignupState extends State<Signup> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: phoneController,
-                      style: TextStyle(
-                          height: 1.5,color: Colors.purple
-                      ),
+                      style: TextStyle(height: 1.5, color: Colors.purple),
                       cursorColor: Colors.purpleAccent,
                       decoration: InputDecoration(
                         hintText: "Mobile Number",
@@ -93,13 +92,13 @@ class _SignupState extends State<Signup> {
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
-                        hintStyle: Theme.of(context).textTheme.caption!.copyWith(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: yellow, // Set Your Own Color
-                        ),
+                        hintStyle: Theme.of(context).textTheme.caption.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: yellow, // Set Your Own Color
+                            ),
                       ),
-                      onChanged: (value) => title1 = value,
+                      onChanged: (value) => phoneNumber = value,
                     ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
                   ),
                   SizedBox(
@@ -119,18 +118,30 @@ class _SignupState extends State<Signup> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(0)));
+                              onTap: () {
+                                setState(() {
+                                  index = 0;
+                                  iconChange = "Society";
+                                });
                               },
                               child: CircleAvatar(
-                              foregroundImage: AssetImage('assets/bg.jpg'),
-                                maxRadius: 35,
+                                child: iconChange == "Society"
+                                    ? Icon(
+                                        Icons.house,
+                                        size: 30,
+                                      )
+                                    : Image.asset('assets/bg.jpg'),
+                                radius: 35,
                               ),
                             ),
                             SizedBox(
                               height: 8,
                             ),
-                            Text('SOCIETY', style: TextStyle(color: Colors.black,fontSize: 12),)
+                            Text(
+                              'SOCIETY',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                            )
                           ],
                         ),
                       ),
@@ -138,18 +149,30 @@ class _SignupState extends State<Signup> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(1)));
+                              onTap: () {
+                                setState(() {
+                                  index = 1;
+                                  iconChange = "Shop";
+                                });
                               },
                               child: CircleAvatar(
-                                foregroundImage: AssetImage('assets/bg.jpg'),
+                                child: iconChange == "Shop"
+                                    ? Icon(
+                                        Icons.store,
+                                        size: 30,
+                                      )
+                                    : Image.asset('assets/bg.jpg'),
                                 maxRadius: 35,
                               ),
                             ),
                             SizedBox(
                               height: 8,
                             ),
-                            Text('SHOP', style: TextStyle(color: Colors.black,fontSize: 12),)
+                            Text(
+                              'SHOP',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                            )
                           ],
                         ),
                       ),
@@ -157,18 +180,30 @@ class _SignupState extends State<Signup> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SSH(3)));
+                              onTap: () {
+                                setState(() {
+                                  index = 2;
+                                  iconChange = "Hotels";
+                                });
                               },
                               child: CircleAvatar(
-                                foregroundImage: AssetImage('assets/bg.jpg'),
+                                child: iconChange == "Hotels"
+                                    ? Icon(
+                                        Icons.hotel,
+                                        size: 30,
+                                      )
+                                    : Image.asset('assets/bg.jpg'),
                                 maxRadius: 35,
                               ),
                             ),
                             SizedBox(
                               height: 8,
                             ),
-                            Text('HOTELS', style: TextStyle(color: Colors.black,fontSize: 12),)
+                            Text(
+                              'HOTELS',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                            )
                           ],
                         ),
                       ),
@@ -178,24 +213,35 @@ class _SignupState extends State<Signup> {
                     height: 20,
                   ),
                   Row(
-                    children:[
+                    children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: null,
-                          child: Text('PROCEED',style: TextStyle(color: Colors.white),),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SSH(
+                                        index: index, phoneNo: phoneNumber)));
+                            print(phoneNumber);
+                          },
+                          child: Text(
+                            'PROCEED',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Colors.purple[600]),
-                              padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 15)),
-                              textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18))),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.purple[600]),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(vertical: 15)),
+                              textStyle: MaterialStateProperty.all(
+                                  TextStyle(fontSize: 18))),
                         ),
                       ),
                     ],
                   ),
-
                 ],
               ),
             )
-
           ],
         ),
       ),

@@ -3,26 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetails extends StatefulWidget {
-  List temporary=[];
-  int k=0;
- // ProductDetails(List cat,int j){
-   // this.temporary = cat;
-   // this.k = j;
+  List temporary = [];
+  int k = 0;
+  // ProductDetails(List cat,int j){
+  // this.temporary = cat;
+  // this.k = j;
   //}
-  ProductDetails(this.temporary,this.k);
+  ProductDetails(this.temporary, this.k);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
-List temp=[];
-class _ProductDetailsState extends State<ProductDetails> {
 
-  int j=0;
-  void te(){
-   j = widget.k;
-   temp=List.from(widget.temporary);
+List temp = [];
+
+class _ProductDetailsState extends State<ProductDetails> {
+  int j = 0;
+  void te() {
+    j = widget.k;
+    temp = List.from(widget.temporary);
   }
+
   @override
   Widget build(BuildContext context) {
     te();
@@ -35,10 +38,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         //brightness: Brightness.light,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [left,middle,Colors.purple]
-              )
-          ),
+              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
         ),
         actions: [
           IconButton(
@@ -46,27 +46,26 @@ class _ProductDetailsState extends State<ProductDetails> {
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
-              )
-          )
+              ))
         ],
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios,
-              size: 20,
-              color: yellow),
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: yellow),
         ),
-        title: Text('Product Details',
+        title: Text(
+          'Product Details',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18,
             color: Colors.white,
-          ),),
-
+          ),
+        ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 28.0,right: 28.0,top: 18.0,bottom: 18.0),
+        padding:
+            EdgeInsets.only(left: 28.0, right: 28.0, top: 18.0, bottom: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -75,45 +74,61 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:[
+                children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: j == 0 ? null : new Container(
-                      height: 40,
-                      width: 80,
-                      padding: EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(width: 1.0, color: yellow),
-                            left: BorderSide(width: 1.0, color: yellow),
-                            right: BorderSide(width: 1.0, color: yellow),
-                            bottom: BorderSide(width: 1.0, color: yellow),
+                    child: j == 0
+                        ? null
+                        : new Container(
+                            height: 40,
+                            width: 80,
+                            padding: EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(width: 1.0, color: yellow),
+                                  left: BorderSide(width: 1.0, color: yellow),
+                                  right: BorderSide(width: 1.0, color: yellow),
+                                  bottom: BorderSide(width: 1.0, color: yellow),
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                                gradient: LinearGradient(
+                                    colors: [left, middle, Colors.purple])),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '₹ ${temp[7]} OFF',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(5.0),
-                          gradient: LinearGradient(
-                              colors: [left,middle,Colors.purple]
-                          )
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text('₹ ${temp[7]} OFF', style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                        ),
-                      ),
-                    ),
                   ),
                   Align(
                     alignment: Alignment.center,
                     child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    height: 200,
-                      width: 200,
-                      child: Image.asset(temp[0],fit: BoxFit.cover,)),
+                        padding: EdgeInsets.all(10.0),
+                        height: 200,
+                        width: 200,
+                        child: CachedNetworkImage(
+                          imageUrl: "http://uprank.live/farmerskart/images/product/${temp[0]}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                  colorFilter:
+                                  ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                            ),
+                          ),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
                   ),
-              ],
+                  )
+                ],
               ),
             ),
             const Divider(
@@ -123,36 +138,41 @@ class _ProductDetailsState extends State<ProductDetails> {
             SizedBox(
               height: 10,
             ),
-            Text(temp[1],
-            style: TextStyle(
-              color: Colors.deepPurple[800],
-              fontWeight: FontWeight.w600,
-              fontSize: 18
-            ),),
+            Text(
+              temp[1],
+              style: TextStyle(
+                  color: Colors.deepPurple[800],
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18),
+            ),
             SizedBox(
               height: 10,
             ),
             new Align(
               alignment: Alignment.centerLeft,
-              child: j == 0 ? null : new Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Product MRP: ₹ ',
-                    style: TextStyle(
-                        color: yellow,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14
-                    ),),
-                  Text('${temp[3]}',
-                    style: TextStyle(
-
-                      color: yellow,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      decoration: TextDecoration. lineThrough,
-                    ),),
-                ],
-              ),
+              child: j == 0
+                  ? null
+                  : new Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Product MRP: ₹ ',
+                          style: TextStyle(
+                              color: yellow,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14),
+                        ),
+                        Text(
+                          '${temp[3]}',
+                          style: TextStyle(
+                            color: yellow,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             SizedBox(
               height: 10,
@@ -160,41 +180,51 @@ class _ProductDetailsState extends State<ProductDetails> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selling MRP:',
+                Text(
+                  'Selling MRP:',
                   style: TextStyle(
                       color: Colors.deepPurple[800],
                       fontWeight: FontWeight.w500,
-                      fontSize: 14
-                  ),),
-                Text(' ₹ ',
+                      fontSize: 14),
+                ),
+                Text(
+                  ' ₹ ',
                   style: TextStyle(
                       color: Colors.blue[800],
                       fontWeight: FontWeight.w500,
-                      fontSize: 14
-                  ),),
-                Text('${temp[3]}',
+                      fontSize: 14),
+                ),
+                Text(
+                  '${temp[3]}',
                   style: TextStyle(
                       color: Colors.deepPurple[800],
                       fontWeight: FontWeight.w500,
-                      fontSize: 14
-                  ),),
+                      fontSize: 14),
+                ),
               ],
             ),
             SizedBox(
               height: 10,
             ),
-            Text('[Inclusive Of all taxes]',
+            Text(
+              '[Inclusive Of all taxes]',
               style: TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.w400,
-                  fontSize: 14
-              ),),
+                  fontSize: 14),
+            ),
             SizedBox(
               height: 10,
             ),
             Align(
               alignment: Alignment.centerRight,
-              child:  CustomStepper(lowerLimit: 1,upperLimit: 10,value: 1,stepValue: 1,iconSize: 10,),
+              child: CustomStepper(
+                lowerLimit: 1,
+                upperLimit: 10,
+                value: 1,
+                stepValue: 1,
+                iconSize: 10,
+              ),
             ),
             SizedBox(
               height: 10,
@@ -210,17 +240,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                     bottom: BorderSide(width: 1.0, color: yellow),
                   ),
                   borderRadius: BorderRadius.circular(5.0),
-                  gradient: LinearGradient(
-                      colors: [left,middle,Colors.purple]
-                  )
-              ),
+                  gradient:
+                      LinearGradient(colors: [left, middle, Colors.purple])),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text('${temp[4]}', style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
+                child: Text(
+                  '${temp[4]}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -234,21 +264,22 @@ class _ProductDetailsState extends State<ProductDetails> {
             SizedBox(
               height: 10,
             ),
-            Text('Unit',
+            Text(
+              'Unit',
               style: TextStyle(
-                  color: yellow,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16
-              ),),
+                  color: yellow, fontWeight: FontWeight.w400, fontSize: 16),
+            ),
             SizedBox(
               height: 10,
             ),
             GestureDetector(
               // borderRadius: BorderRadius.circular(20),
-              onTap: (){
-                Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                  return _AddTodoPopupCard();
-                }, settings:  ModalRoute.of(context)!.settings));
+              onTap: () {
+                Navigator.of(context).push(HeroDialogRoute(
+                    builder: (context) {
+                      return _AddTodoPopupCard();
+                    },
+                    settings: ModalRoute.of(context).settings));
               },
               child: Hero(
                 tag: _heroAddTodo,
@@ -265,13 +296,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(' ₹ ${temp[2]}', style: TextStyle(
-                        fontSize: 14,
+                      Text(
+                        ' ₹ ${temp[2]}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: yellow,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down,
                         color: yellow,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      ),
-                      Icon(Icons.keyboard_arrow_down,color: yellow,)
+                      )
                     ],
                   ),
                 ),
@@ -281,8 +317,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               height: 20,
             ),
             GestureDetector(
-              onTap: (){
-
+              onTap: () {
+                print(temp[7]);
               },
               child: Container(
                 height: 50,
@@ -295,17 +331,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                       bottom: BorderSide(width: 1.0, color: yellow),
                     ),
                     borderRadius: BorderRadius.circular(5.0),
-                    gradient: LinearGradient(
-                        colors: [left,middle,Colors.purple]
-                    )
-                ),
+                    gradient:
+                        LinearGradient(colors: [left, middle, Colors.purple])),
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text('ADD TO CART', style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
+                  child: Text(
+                    'ADD TO CART',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -319,11 +355,11 @@ class _ProductDetailsState extends State<ProductDetails> {
 
 class CustomStepper extends StatefulWidget {
   CustomStepper({
-    required this.lowerLimit,
-    required this.upperLimit,
-    required this.stepValue,
-    required this.iconSize,
-    required this.value,
+    @required this.lowerLimit,
+    @required this.upperLimit,
+    @required this.stepValue,
+    @required this.iconSize,
+    @required this.value,
   });
 
   final int lowerLimit;
@@ -335,8 +371,8 @@ class CustomStepper extends StatefulWidget {
   @override
   _CustomStepperState createState() => _CustomStepperState();
 }
-class _CustomStepperState extends State<CustomStepper> {
 
+class _CustomStepperState extends State<CustomStepper> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -344,34 +380,35 @@ class _CustomStepperState extends State<CustomStepper> {
       width: 150,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.purple),
-          borderRadius: BorderRadius.circular(5)
-      ),
+          borderRadius: BorderRadius.circular(5)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.remove,
+              child: Icon(
+                Icons.remove,
                 color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.lowerLimit ? widget.lowerLimit : widget
-                      .value -= widget.stepValue;
-                },);},
+                setState(
+                  () {
+                    widget.value = widget.value == widget.lowerLimit
+                        ? widget.lowerLimit
+                        : widget.value -= widget.stepValue;
+                  },
+                );
+              },
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [left,middle,Colors.purple]
-                  )
-              ),
+                  gradient:
+                      LinearGradient(colors: [left, middle, Colors.purple])),
               width: widget.iconSize,
               child: Center(
                 child: FittedBox(
@@ -391,15 +428,18 @@ class _CustomStepperState extends State<CustomStepper> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.add,
+              child: Icon(
+                Icons.add,
                 color: Colors.greenAccent,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.upperLimit ? widget.upperLimit : widget.value += widget.stepValue;
-                },
+                setState(
+                  () {
+                    widget.value = widget.value == widget.upperLimit
+                        ? widget.upperLimit
+                        : widget.value += widget.stepValue;
+                  },
                 );
               },
             ),
@@ -411,11 +451,12 @@ class _CustomStepperState extends State<CustomStepper> {
 }
 
 const String _heroAddTodo = 'add-todo-hero';
+
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({
-    required WidgetBuilder builder,
-    required RouteSettings settings,
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
     bool fullscreenDialog = false,
   })  : _builder = builder,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
@@ -452,8 +493,8 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   String get barrierLabel => 'Popup dialog open';
 }
-class _AddTodoPopupCard extends StatelessWidget {
 
+class _AddTodoPopupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -465,7 +506,7 @@ class _AddTodoPopupCard extends StatelessWidget {
             color: lightbg,
             elevation: 2,
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -477,8 +518,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.purple,
                           fontSize: 14,
-                          fontWeight: FontWeight.w600
-                      ),
+                          fontWeight: FontWeight.w600),
                     ),
                     Text(
                       'Farmerskart - ${temp[1]}',
@@ -487,14 +527,13 @@ class _AddTodoPopupCard extends StatelessWidget {
                           color: Colors.purple,
                           fontSize: 18,
                           letterSpacing: 0.5,
-                          fontWeight: FontWeight.w700
-                      ),
+                          fontWeight: FontWeight.w700),
                     ),
                     const Divider(
                       color: Colors.orange,
                       thickness: 0.8,
                     ),
-                    for(int k=0; k<temp[6].length; k++) ...{
+                    for (int k = 0; k < temp[6].length; k++) ...{
                       Container(
                         height: 35,
                         decoration: BoxDecoration(
@@ -506,36 +545,44 @@ class _AddTodoPopupCard extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(5.0),
                             gradient: LinearGradient(
-                                colors: [left,middle,Colors.purple]
-                            )
-                        ),
+                                colors: [left, middle, Colors.purple])),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 25.0,right: 85.0),
-                          child:
-                          Row(
+                          padding:
+                              const EdgeInsets.only(left: 25.0, right: 85.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${temp[6][k][0]} -', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
+                              Text(
+                                '${temp[6][k][0]} -',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                               ),
+                              Spacer(
+                                flex: 2,
                               ),
-                              Spacer(flex: 2,),
-                              Text('₹${temp[6][k][1]}', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
-                                decoration: TextDecoration. lineThrough,
+                              Text(
+                                '₹${temp[6][k][1]}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                               ),
+                              Spacer(
+                                flex: 2,
                               ),
-                              Spacer(flex: 2,),
-                              Text('₹${temp[6][k][2]}', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),),
-
+                              Text(
+                                '₹${temp[6][k][2]}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shellcode2/Authentication%20pages/signinpage.dart';
+import 'package:shellcode2/Authentication%20pages/signuppage.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/myOrders.dart';
@@ -7,6 +9,8 @@ import 'package:shellcode2/Navigation%20Drawer%20pages/userAcc.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/wallet.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
+import 'package:provider/provider.dart';
+import 'package:shellcode2/Provider/data.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 15);
@@ -19,15 +23,12 @@ class NavigationDrawerWidget extends StatelessWidget {
     return Drawer(
       child: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [left, middle, Colors.purple]
-            )
-        ),
+            gradient: LinearGradient(colors: [left, middle, Colors.purple])),
         child: ListView(
           children: <Widget>[
             buildHeader(
               urlImage: urlImage,
-              name: name,
+              name:  Provider.of<APIData>(context,listen: false).user.name,
               onClicked: () {
                 Navigator.pop(context);
               },
@@ -47,72 +48,72 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.home,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
-                        )),
+                      builder: (context) => Home(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'My Orders',
                     icon: Icons.shop,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Orders(),
-                        )),
+                      builder: (context) => Orders(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'Favourites Or wishlist',
                     icon: Icons.favorite_border,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Wishlist(),
-                        )),
+                      builder: (context) => Wishlist(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'Wallet',
                     icon: Icons.account_balance_wallet_rounded,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Wallet(),
-                        )),
+                      builder: (context) => Wallet(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'Rate us',
                     icon: Icons.star_border_outlined,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
-                        )),
+                      builder: (context) => Home(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'User Account',
                     icon: Icons.account_circle,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UserAcc(),
-                        )),
+                      builder: (context) => UserAcc(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'Handy Order',
                     icon: Icons.assignment,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => HandyOrder(),
-                        )),
+                      builder: (context) => HandyOrder(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'About us',
                     icon: Icons.person,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
-                        )),
+                      builder: (context) => Home(),
+                    )),
                   ),
                   buildMenuItem(
                     text: 'Sign out',
                     icon: Icons.exit_to_app,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Home(),
-                        )),
+                      builder: (context) => SignIn(),
+                    )),
                   ),
                 ],
               ),
@@ -124,9 +125,9 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildHeader({
-    required String urlImage,
-    required String name,
-    required VoidCallback onClicked,
+    @required String urlImage,
+    @required String name,
+    @required VoidCallback onClicked,
   }) =>
       InkWell(
         onTap: null,
@@ -149,19 +150,17 @@ class NavigationDrawerWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                    onTap: onClicked,
-                    child: Icon(Icons.close, color: yellow)),
+                    onTap: onClicked, child: Icon(Icons.close, color: yellow)),
               ),
-
             ],
           ),
         ),
       );
 
   Widget buildMenuItem({
-    required String text,
-    required IconData icon,
-    VoidCallback? onClicked,
+    @required String text,
+    @required IconData icon,
+    VoidCallback onClicked,
   }) {
     final color = yellow;
     final hoverColor = yellow;

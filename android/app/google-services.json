@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "712977178309",
+    "project_id": "farmerskart-aa20a",
+    "storage_bucket": "farmerskart-aa20a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712977178309:android:473ce341e3f97f0f0bdaac",
+        "android_client_info": {
+          "package_name": "com.servicexpertz.shellcode2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712977178309-qflv66lbaeblv92muq5kdh91nvlpp6ko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuouZwAeqxLF3oWLaF6MGWSxzea3IoRys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712977178309-qflv66lbaeblv92muq5kdh91nvlpp6ko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

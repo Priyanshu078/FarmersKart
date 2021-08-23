@@ -1,27 +1,146 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication pages/signuppage.dart';
+import 'package:shellcode2/Authentication%20pages/signinpage.dart';
+import 'package:shellcode2/More%20pages/NoCenter.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
+import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/apiData/AllCenter.dart';
 
+
+
+bool centerAvailable=false;
 class OtpVerification extends StatefulWidget {
-  const OtpVerification({Key? key}) : super(key: key);
+  String phoneNo;
+  String name;
+  int flatNo;
+  String wing;
+  String address;
+  int pincode;
+  String password;
+  int gstNo;
+  String userType;
+
+  OtpVerification({Key key}) : super(key: key);
+
+  OtpVerification.phone({Key key, @required this.phoneNo}) : super(key: key);
+
+  OtpVerification.society(
+      {Key key,
+      @required this.phoneNo,
+      @required this.name,
+      @required this.flatNo,
+      @required this.wing,
+      @required this.address,
+      @required this.pincode,
+      @required this.password,
+      @required this.userType})
+      : super(key: key);
+
+  OtpVerification.shop(
+      {Key key,
+      @required this.phoneNo,
+      @required this.name,
+      @required this.address,
+      @required this.pincode,
+      @required this.gstNo,
+      @required this.password,
+      @required this.userType})
+      : super(key: key);
+
+  OtpVerification.hotel(
+      {Key key,
+      @required this.phoneNo,
+      @required this.name,
+      @required this.address,
+      @required this.pincode,
+      @required this.password,
+      @required this.userType})
+      : super(key: key);
 
   @override
   _OtpVerificationState createState() => _OtpVerificationState();
 }
 
 const String _heroAddTodo = 'add-todo-hero';
+
 class _OtpVerificationState extends State<OtpVerification> {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final phoneController = TextEditingController();
-  String title1 ='';
+  String phoneNumber = '';
+  String verificationID = "";
+  String smsCode = "";
+  UserCredential _userCredential;
+  int resendtoken = 0;
+  String firebaseToken = "";
+  bool loading = false;
+  bool registered = false;
+  String message = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    verifyPhoneNumber();
     _listenOtp();
   }
+
+  Future<String> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
+
+  void verifyPhoneNumber() async {
+    phoneNumber = '+91' + widget.phoneNo;
+    firebaseToken = await getToken();
+    try {
+      await firebaseAuth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {
+            showSnackBar("Verification Completed");
+          },
+          verificationFailed: (FirebaseAuthException exception) {
+            showSnackBar(exception.toString());
+          },
+          codeSent: (String verificationId, int resendToken) {
+            showSnackBar("OTP sent to your Phone Number");
+            setState(() {
+              verificationID = verificationId;
+              resendtoken = resendToken;
+            });
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {
+            showSnackBar("Time out");
+          });
+    } catch (e) {
+      showSnackBar(e.toString());
+    }
+  }
+
+  void showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(text)),
+    );
+  }
+
+  Future<void> signInWithPhoneNumber(
+      String verificationID, String smsCode) async {
+    try {
+      AuthCredential authCredential = PhoneAuthProvider.credential(
+          verificationId: verificationID, smsCode: smsCode);
+      _userCredential = await firebaseAuth.signInWithCredential(authCredential);
+      showSnackBar("Phone Number Verified");
+    } catch (e) {
+      showSnackBar(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,125 +148,244 @@ class _OtpVerificationState extends State<OtpVerification> {
       body: Container(
         child: Stack(
           children: [
-          Column(
-          children:[
-          Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80),),
-              gradient: LinearGradient(
-                colors: [left,middle,Colors.purple],
-              )
-          ),
-          child:
-          Center(
-            child: Text(
-              'OTP Verification', style: TextStyle(
-                color: Colors.white,
-                fontSize: 18
-            ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        Container(
-          padding: EdgeInsets.all(40),
-          child: Column(
-            children: [
-              Text(
-                'Enter the OTP sent to Your Number', style: TextStyle(color: Colors.black,fontSize: 18),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                  padding: EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                  child: PinFieldAutoFill(
-                    decoration: UnderlineDecoration(
-                        colorBuilder: FixedColorBuilder(Colors.purple)
-                    ),
-                    codeLength: 6,
-                    onCodeChanged: (val){
-
-                    },
-                  )
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Din't Receive the OTP ?",style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black
-                  ),),
-                  GestureDetector(
-                    onTap: (){
-                    },
-                    child: Text(" RESEND OTP",style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.purple
-                    ),),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                children:[
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: (){
-                        Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                          return _AddTodoPopupCard();
-                        }, settings:  ModalRoute.of(context)!.settings));
-                      },
-                      child: Text('VERIFY & PROCEED',style: TextStyle(color: Colors.white),),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.purple[600]),
-                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 15)),
-                          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 18))),
+            Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(80),
+                      ),
+                      gradient: LinearGradient(
+                        colors: [left, middle, Colors.purple],
+                      )),
+                  child: Center(
+                    child: Text(
+                      'OTP Verification',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  padding: EdgeInsets.all(40),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Enter the OTP sent to Your Number',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 10),
+                          child: PinFieldAutoFill(
+                            decoration: UnderlineDecoration(
+                                colorBuilder: FixedColorBuilder(Colors.purple)),
+                            codeLength: 6,
+                            onCodeChanged: (val) {
+                              smsCode = val;
+                            },
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Din't Receive the OTP ?",
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Text(
+                              " RESEND OTP",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.purple),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                signInWithPhoneNumber(verificationID, smsCode);
+                                print("firebase Token : $firebaseToken");
 
-        ],
-      ),
+                                 print(centerAvailable);
+
+                                 registerUser();
+                                 print(centerAvailable);
+                                Navigator.of(context).push(HeroDialogRoute(
+                                    builder: (context) {
+                                      return _AddTodoPopupCard(
+                                        registered: registered,
+                                        message: message,
+                                      );
+                                    },
+                                    settings: ModalRoute.of(context).settings));
+
+
+                              },
+                              child: Text(
+                                'VERIFY & PROCEED',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.purple[600]),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(vertical: 15)),
+                                  textStyle: MaterialStateProperty.all(
+                                      TextStyle(fontSize: 18))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             Positioned(
                 top: 140,
                 left: 140,
                 child: Container(
                     height: 120,
                     width: 120,
-                    child: Image.asset('assets/otp_image.png',fit: BoxFit.cover,))),
-
+                    child: Image.asset(
+                      'assets/otp_image.png',
+                      fit: BoxFit.cover,
+                    ))),
           ],
         ),
-
       ),
     );
   }
+
+void registerUser() async {
+    setState(() {
+      loading = true;
+    });
+    String name = " default name";
+    String email = " default email";
+    String phoneNo = widget.phoneNo;
+    String password = widget.password;
+    String userType = widget.userType;
+    String societyName;
+    if (userType == 'Society') {
+      societyName = widget.name;
+    } else {
+      societyName = "";
+    }
+    int flatNo = widget.flatNo;
+    String wing = widget.wing;
+    String address = widget.address;
+    int pincode = widget.pincode;
+    int gstNo = widget.gstNo;
+    String from = 'App';
+    http.Response response;
+
+
+    bool centerNameCheck=false;
+
+     for(int i=0;i<centerName.length;i++){
+
+           if(societyName==centerName[i])
+             {
+                centerNameCheck=true;
+                break;
+             }
+
+     }
+
+     setState(() {
+       centerAvailable=centerNameCheck;
+     });
+     if(centerNameCheck){
+
+       String url="$header/app_api/register.php?name=$name&email=$email&mobile=$phoneNo&password=$password&society_name=$societyName&flat_no=$flatNo&wing=$wing&address=$address&pincode=$pincode&gst_no=$gstNo&user_type=$userType&from=$from&firebase_token=$firebaseToken";
+       var uri = Uri.parse( url);
+
+
+       try {
+         response = await http.get(uri, headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+         });
+       } catch (e) {
+         print(e);
+       }
+       var jsonData = jsonDecode(response.body);
+       if (jsonData['code'] == 200) {
+         setState(() {
+           registered = true;
+         });
+       } else {
+         setState(() {
+           message = jsonData['msg'];
+         });
+         print(jsonData['msg']);
+       }
+
+     }else{
+
+       String url="$header/app_api/onlyregister.php?name=$name&email=$email&mobile=$phoneNo&password=$password&society_name=$societyName&flat_no=$flatNo&wing=$wing&address=$address&pincode=$pincode&gst_no=$gstNo&user_type=$userType&from=$from&firebase_token=$firebaseToken";
+         print(url);
+
+       var uri = Uri.parse( url);
+
+
+       try {
+         response = await http.get(uri, headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+         });
+       } catch (e) {
+         print(e);
+       }
+       var jsonData = jsonDecode(response.body);
+       if (jsonData['code'] == 200) {
+         setState(() {
+           registered = true;
+         });
+       } else {
+         setState(() {
+           message = jsonData['msg'];
+         });
+         print(jsonData['msg']);
+       }
+
+     }
+
+
+    setState(() {
+      loading = false;
+    });
+  }
 }
 
-void _listenOtp() async{
+void _listenOtp() async {
   await SmsAutoFill().listenForCode;
 }
 
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({
-    required WidgetBuilder builder,
-    required RouteSettings settings,
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
     bool fullscreenDialog = false,
   })  : _builder = builder,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
@@ -184,7 +422,20 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   String get barrierLabel => 'Popup dialog open';
 }
-class _AddTodoPopupCard extends StatelessWidget {
+
+class _AddTodoPopupCard extends StatefulWidget {
+  final bool registered;
+  final String message;
+  _AddTodoPopupCard({
+    Key key,
+    @required this.registered,
+    @required this.message,
+  }) : super(key: key);
+  @override
+  __AddTodoPopupCardState createState() => __AddTodoPopupCardState();
+}
+
+class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -196,7 +447,7 @@ class _AddTodoPopupCard extends StatelessWidget {
             color: lightbg,
             elevation: 2,
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -205,15 +456,17 @@ class _AddTodoPopupCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(CupertinoIcons.checkmark_circle_fill,color: Colors.green,),
+                        Icon(
+                          CupertinoIcons.checkmark_circle_fill,
+                          color: Colors.green,
+                        ),
                         Text(
                           ' Registered Successfully!',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
-                              fontWeight: FontWeight.w500
-                          ),
-                        ),
+                              fontWeight: FontWeight.w500),
+                        )
                       ],
                     ),
                     SizedBox(
@@ -222,27 +475,38 @@ class _AddTodoPopupCard extends StatelessWidget {
                     Text(
                       'Dear customer, Thank you for registering with us, your account is pending approval and you will be notified once it is approved.',
                       style: TextStyle(
-                        height: 1.5,
+                          height: 1.5,
                           color: Colors.black,
                           fontSize: 14,
-                          fontWeight: FontWeight.w400
-                      ),
+                          fontWeight: FontWeight.w400),
                     ),
                     SizedBox(
                       height: 15,
                     ),
                     GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+                      onTap: () {
+
+                        if(centerAvailable){
+
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => SignIn()));
+
+                        }else{
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoCenter()));
+                        }
+
+
                       },
                       child: Align(
                         alignment: Alignment.bottomRight,
-                        child: Text('OK',style: TextStyle(
-                            height: 1.5,
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400
-                        ),),
+                        child: Text(
+                          'OK',
+                          style: TextStyle(
+                              height: 1.5,
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
+                        ),
                       ),
                     )
                   ],

@@ -11,30 +11,31 @@ import 'package:shellcode2/home.dart';
 import 'package:shellcode2/sound_recorder.dart';
 
 class HandyOrder extends StatefulWidget {
-  const HandyOrder({Key? key}) : super(key: key);
+  const HandyOrder({Key key}) : super(key: key);
 
   @override
   _HandyOrderState createState() => _HandyOrderState();
 }
 
-String title2='';
-int choice=0;
+String title2 = '';
+int choice = 0;
 final ImagePicker _picker = ImagePicker();
-XFile? _imageFile;
+XFile _imageFile;
 
 class _HandyOrderState extends State<HandyOrder> {
   final recorder = SoundRecorder1();
   final _textController = TextEditingController();
-  Future getImage() async{
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+  Future getImage() async {
+    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
-      _imageFile= photo;
+      _imageFile = photo;
     });
   }
-  Future pickImage() async{
-    final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
+
+  Future pickImage() async {
+    final XFile photo = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      _imageFile= photo;
+      _imageFile = photo;
     });
   }
 
@@ -44,24 +45,26 @@ class _HandyOrderState extends State<HandyOrder> {
     final primary = isRecording ? Colors.red : Colors.purple;
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      children:[
+      children: [
         Container(
-          child: isRecording ? CountdownPage() :null ,
+          child: isRecording ? CountdownPage() : null,
         ),
         IconButton(
-        onPressed: ()async{
-          final isRecording = await recorder.toggleRecording();
-          setState(() {
-
-          });
-        },
-        icon: Icon(icon,color: primary,),),
-    ],
+          onPressed: () async {
+            final isRecording = await recorder.toggleRecording();
+            setState(() {});
+          },
+          icon: Icon(
+            icon,
+            color: primary,
+          ),
+        ),
+      ],
     );
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     recorder.init();
   }
@@ -83,131 +86,149 @@ class _HandyOrderState extends State<HandyOrder> {
         //brightness: Brightness.light,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [left,middle,Colors.purple]
-              )
-          ),
+              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
         ),
         leading: IconButton(
           onPressed: () {
-            _imageFile= null;
+            _imageFile = null;
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios,
-              size: 20,
-              color: yellow),
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: yellow),
         ),
-        title: Text('Handy Order',
+        title: Text(
+          'Handy Order',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18,
             color: Colors.white,
-          ),),
-
+          ),
+        ),
       ),
       body: SingleChildScrollView(
-        physics:  ScrollPhysics(),
+        physics: ScrollPhysics(),
         child: Container(
-        padding: EdgeInsets.only(top: 20.0),
-        child:
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Align(
-                alignment: Alignment.center,
-                child: Text('Click product list image & Upload',style: TextStyle(color: Colors.black,fontSize: 16),)),
-            SizedBox(
-              height: 20,
-            ),
-            Divider(color: Colors.grey,),
-            SizedBox(
-              height: 10,
-            ),
-            // ..camera
-            Center(
-              child: _imageFile == null?
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  color: bgcolor,
-                  height: 250,
-                  width: 330,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text('Click product list image & Upload',style: TextStyle(fontSize:12,color: Colors.grey),),
+          padding: EdgeInsets.only(top: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Click product list image & Upload',
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  )),
+              SizedBox(
+                height: 20,
+              ),
+              Divider(
+                color: Colors.grey,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // ..camera
+              Center(
+                child: _imageFile == null
+                    ? Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          color: bgcolor,
+                          height: 250,
+                          width: 330,
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'Click product list image & Upload',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    pickImage();
+                                  },
+                                  icon: Icon(CupertinoIcons.photo),
+                                  color: Colors.blueGrey,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    getImage();
+                                  },
+                                  icon: Icon(CupertinoIcons.camera_fill),
+                                  color: Colors.blueGrey,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          onPressed: (){
-                            pickImage();
-                          },
-                          icon: Icon(CupertinoIcons.photo),color: Colors.blueGrey,) ,
-                        IconButton(
-                          onPressed: (){
-                            getImage();
-                          },
-                          icon: Icon(CupertinoIcons.camera_fill),color: Colors.blueGrey,) ,
-                      ],
-                    ),
-                  ),
-                ),
-              ): Container(
-                color: bgcolor,
-                height: 250,
-                width: 300,
-                child: Stack(
-                  children: [
-                    Image.file(File(_imageFile!.path),filterQuality: FilterQuality.high,),
-                    Positioned(
-                      top: 5, right: 5, //give the values according to your requirement
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: (){
-                              pickImage();
-                            },
-                            icon: Icon(CupertinoIcons.photo),color: Colors.blueGrey,) ,
-                          IconButton(
-                            onPressed: (){
-                              getImage();
-                            },
-                            icon: Icon(CupertinoIcons.camera_fill),color: Colors.blueGrey,) ,
-                        ],
+                      )
+                    : Container(
+                        color: bgcolor,
+                        height: 250,
+                        width: 300,
+                        child: Stack(
+                          children: [
+                            Image.file(
+                              File(_imageFile.path),
+                              filterQuality: FilterQuality.high,
+                            ),
+                            Positioned(
+                              top: 5,
+                              right:
+                                  5, //give the values according to your requirement
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      pickImage();
+                                    },
+                                    icon: Icon(CupertinoIcons.photo),
+                                    color: Colors.blueGrey,
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      getImage();
+                                    },
+                                    icon: Icon(CupertinoIcons.camera_fill),
+                                    color: Colors.blueGrey,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              MaterialButton(
+                minWidth: double.infinity,
+                height: 30,
+                onPressed: null,
+                //() {
+                // Navigator.push(context,
+                //   MaterialPageRoute(builder: (context) => login2()));
+                //},
+                color: bgcolor,
+                elevation: 0,
+                disabledColor: bgcolor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            MaterialButton(
-              minWidth: double.infinity,
-              height: 30,
-              onPressed: null,
-              //() {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => login2()));
-              //},
-              color: bgcolor,
-              elevation: 0,
-              disabledColor: bgcolor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextField(
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                style: TextStyle(color: Colors.purple),
-                  cursorColor: Colors.purple,
-                  controller: _textController,
-                  decoration: InputDecoration(
+                child: TextField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    style: TextStyle(color: Colors.purple),
+                    cursorColor: Colors.purple,
+                    controller: _textController,
+                    decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepPurple),
                       ),
@@ -217,35 +238,34 @@ class _HandyOrderState extends State<HandyOrder> {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.deepPurple),
                       ),
-                      hintStyle: TextStyle( color: yellow ),
+                      hintStyle: TextStyle(color: yellow),
                       hintText: 'Type Your Product List...',
-                      labelStyle: new TextStyle(
-                          color: yellow
-                      ),
-
-                  )// Set Your Own Color
+                      labelStyle: new TextStyle(color: yellow),
+                    ) // Set Your Own Color
+                    ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Align(
-              alignment:Alignment.centerRight,
-              child: buildStart(),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Align(
-              alignment:Alignment.centerRight,
-              child: Text('Select Center List',style: TextStyle(color: Colors.purple),)
-            ),
-            SizedBox(
-              height: 70,
-            ),
-              ],
-            ),
-            ),
+              SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: buildStart(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Select Center List',
+                    style: TextStyle(color: Colors.purple),
+                  )),
+              SizedBox(
+                height: 70,
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -262,11 +282,12 @@ class _HandyOrderState extends State<HandyOrder> {
 }
 
 const String _heroAddTodo = 'add-todo-hero';
+
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({
-    required WidgetBuilder builder,
-    required RouteSettings settings,
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
     bool fullscreenDialog = false,
   })  : _builder = builder,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
@@ -305,11 +326,12 @@ class HeroDialogRoute<T> extends PageRoute<T> {
 }
 
 class Navigate extends StatefulWidget {
-  const Navigate({Key? key}) : super(key: key);
+  const Navigate({Key key}) : super(key: key);
 
   @override
   _NavigateState createState() => _NavigateState();
 }
+
 class _NavigateState extends State<Navigate> {
   @override
   Widget build(BuildContext context) {
@@ -330,53 +352,57 @@ class _NavigateState extends State<Navigate> {
             showUnselectedLabels: true,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon:  GestureDetector(
-                    onTap: (){
+                icon: GestureDetector(
+                    onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Home()));
                     },
                     child: Icon(Icons.home)),
-                title:  Text('Home'),
+                title: Text('Home'),
               ),
               BottomNavigationBarItem(
-                icon:  GestureDetector(
-                    onTap: (){
+                icon: GestureDetector(
+                    onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Category()));
                     },
                     child: Icon(Icons.list)),
-                title:  Text('Categories'),
+                title: Text('Categories'),
               ),
               BottomNavigationBarItem(
                   icon: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Wishlist()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Wishlist()));
                       },
-                      child: Icon(CupertinoIcons.heart)), title: Text('Wishlist')),
+                      child: Icon(CupertinoIcons.heart)),
+                  title: Text('Wishlist')),
             ],
           ),
         ));
   }
 }
+
 final pathToSaveAudio = 'audio.aac';
-class SoundRecorder{
-  FlutterSoundRecorder ? _audioRecorder;
+
+class SoundRecorder {
+  FlutterSoundRecorder _audioRecorder;
 
   Future _record() async {
-    await _audioRecorder!.startRecorder(toFile: pathToSaveAudio);
+    await _audioRecorder.startRecorder(toFile: pathToSaveAudio);
   }
 
   Future _stop() async {
-    await _audioRecorder!.stopRecorder();
+    await _audioRecorder.stopRecorder();
   }
 
   Future toggleRecording() async {
-    if (_audioRecorder!.isStopped) {
+    if (_audioRecorder.isStopped) {
       await _record();
-    }else{
+    } else {
       await _stop();
     }
   }
-
 }

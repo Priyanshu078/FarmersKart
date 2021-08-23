@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 
 class Search extends StatefulWidget {
-  const Search({Key? key}) : super(key: key);
+  const Search({Key key}) : super(key: key);
 
   @override
   _SearchState createState() => _SearchState();
@@ -10,7 +10,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final phoneController = TextEditingController();
-  String title1 ='';
+  String title1 = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,28 +19,24 @@ class _SearchState extends State<Search> {
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [left,middle,Colors.purple]
-              )
-          ),
+              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
         ),
         title: Row(
           children: [
-            Expanded(child: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [left,middle,Colors.purple]
-                  )
-              ),
-              child: Material(
-                borderRadius: BorderRadius.circular(5),
-                color: bgcolor,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                     /* Row(
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: [left, middle, Colors.purple])),
+                child: Material(
+                  borderRadius: BorderRadius.circular(5),
+                  color: bgcolor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /* Row(
                         children: [
                           Icon(Icons.search, color: yellow,),
                           MaterialButton(
@@ -71,29 +67,37 @@ class _SearchState extends State<Search> {
                           ),
                         ],
                       ),*/
-                      Row(
-                        children: [
-                          Icon(Icons.search, color: yellow,),
-                          Text('   '),
-                          Text('Search', style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                            color: Colors.grey[600],
-                          ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.keyboard_voice_outlined, color: yellow,)
-                        ],
-                      )
-
-                    ],
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: yellow,
+                            ),
+                            Text('   '),
+                            Text(
+                              'Search',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 18,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.keyboard_voice_outlined,
+                              color: yellow,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),)
+            )
           ],
         ),
       ),

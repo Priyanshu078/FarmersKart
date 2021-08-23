@@ -1,103 +1,108 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
+import 'package:shellcode2/Provider/data.dart';
+import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/apiData/add&removeUserfav.dart';
 import 'package:shellcode2/filter.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:shellcode2/search.dart';
 import '../colors.dart';
+import 'package:shellcode2/apiData/subCategory.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 const String _heroAddTodo = 'add-todo-hero';
 List<String> tempin = [];
 List<General> temp = [];
-int i=0;
-int j=0;
+
+String categoryId ;
+int j = 0;
+String title;
+
+
 
 class DetailPage extends StatefulWidget {
-  final int index;
-  DetailPage(this.index);
+  final String index;
+  final String subCategory;
+  DetailPage(this.index, this.subCategory);
+
   @override
   _DetailPageState createState() => _DetailPageState();
 }
+
 class _DetailPageState extends State<DetailPage> {
+  void generalfunc() {
 
-  void generalfunc (){
-    i = widget.index;
-    if (widget.index==0)
-      {
-        temp = freshVegetables;
-      }
-    else if (widget.index==1)
-      {
-        temp = List.from(grocery);
-      }
-    else if (widget.index==2)
-    {
-      temp = List.from(dairy);
-    }
-    else
-    {
-      temp = List.from(bakery);
-    }
+
+
   }
 
+  void chipfunc() {
 
-  void chipfunc (){
-    if (widget.index==0)
-    {
-      tempin = List.from(chipList0);
+    categoryId=widget.index;
+
+    if (widget.index == '1') {
+     {
+        title="Fresh Vegetables & fruits";
+     }
+    } else if (widget.index == '2') {
+      title="Grocery & Staples";
+    } else if (widget.index == 4) {
+      title="Dairy";
+    } else {
+      title="Bakery & Confectionery";
     }
-    else if (widget.index==1)
-    {
-      tempin = List.from(chipList1);
-    }
-    else if (widget.index==2)
-    {
-      tempin = List.from(chipList2);
-    }
-    else
-    {
-      tempin = List.from(chipList3);
-    }
+
+      String subCategory=widget.subCategory;
+      print(subCategory);
+      final split = subCategory.split(',');
+      final Map<int, String> values = {
+        for (int i = 0; i < split.length; i++)
+          i: split[i]
+      };
+      tempin=['All'];
+      for(int i=0;i<values.length;i++){
+        print(values[i]);
+        tempin.add(values[i]);
+      }
+
+
+
+
+
+
+
   }
-  List<String> chipList0 = [
-    "All",
-    "Cheese",
-    "Butter",
-    "Paneer",
-    "Lassi",
-    "Cream"
-  ];
-  List<String> chipList1 = [
-    "All",
-    "Cheese",
-    "Butter",
-    "Paneer",
-    "Lassi",
-    "Cream"
-  ];List<String> chipList2 = [
-    "All",
-    "Cheese",
-    "Butter",
-    "Paneer",
-    "Lassi",
-    "Cream"
-  ];List<String> chipList3 = [
-    "All",
-    "Cheese",
-    "Butter",
-    "Paneer",
-    "Lassi",
-    "Cream"
-  ];
+
+   void initState(){
+    super.initState();
+    chipfunc();
+    fetchSubCategotyProductApiData(categoryId.toString(),'All');
+
+
+    temp=[];
+    temp=subCategoryProductsList;
+    print(subCategoryProductsList.length);
+   }
+
+
+
+
+
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-      generalfunc();
-      chipfunc();
+    generalfunc();
+    chipfunc();
+
+    //Provider.of<APIData>(context,listen: false).initializeTemp(temp);
+    print('size');
+    print(temp.length);
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       backgroundColor: lightbg,
@@ -113,8 +118,7 @@ class _DetailPageState extends State<DetailPage> {
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
-              )
-          )
+              ))
         ],
         //brightness: Brightness.light,
         flexibleSpace: Container(
@@ -122,96 +126,118 @@ class _DetailPageState extends State<DetailPage> {
         ),
         title: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Text(detailservices[i].title,
+          child: Text(
+            title,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 18,
               color: Colors.white,
-            ),),
+            ),
+          ),
         ),
       ),
       body: Column(
-        children:[
+        children: [
           Container(
             height: 81,
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [left,middle,Colors.purple]
-                )
-            ),
+                gradient:
+                    LinearGradient(colors: [left, middle, Colors.purple])),
             child: Column(
-              children:[
+              children: [
                 Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0 , bottom: 8.0),
-                child: Material(
-                  borderRadius: BorderRadius.circular(5),
-                  color: bgcolor,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(30),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Search(),));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(Icons.search, color: yellow,),
-                              Text('   '),
-                              Text('Search', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                                color: Colors.grey[600],
-                              ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.keyboard_voice_outlined, color: yellow,)
-                            ],
-                          )
-
-                        ],
+                  padding: const EdgeInsets.only(
+                      left: 18.0, right: 18.0, top: 8.0, bottom: 8.0),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(5),
+                    color: bgcolor,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(30),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Search(),
+                        ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: yellow,
+                                ),
+                                Text('   '),
+                                Text(
+                                  'Search',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.keyboard_voice_outlined,
+                                  color: yellow,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
                 SizedBox(
                   height: 5,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('11 products', style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),),
+                      Consumer<APIData>(
+                        builder:(context,data,child){
+                          return  Text(
+                            '${data.temp.length} products',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          );
+                }
+
+                      ),
                       Material(
                         borderRadius: BorderRadius.circular(5),
                         color: bgcolor,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(30),
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Filter()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Filter()));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child:
-                                    Text('    Filter    ', style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                                    ),
+                            child: Text(
+                              '    Filter    ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 )
@@ -226,178 +252,283 @@ class _DetailPageState extends State<DetailPage> {
                 itemCount: 1,
                 itemBuilder: (context, index) => choiceChipWidget(tempin)),
           ),
-          Expanded(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: new ListView.builder(
+          Consumer<APIData>(
+            builder: (context,data,child){
+              return Expanded(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: new ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: temp.length,
+                      physics: ClampingScrollPhysics(),
 
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: temp.length,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, index){
-                    return InkWell(
-                      onTap: () {
-                        List temp2 = [temp[index].imageUrl,temp[index].title,temp[index].weight,temp[index].newrate,temp[index].description,temp[index].oldrate,temp[index].data];
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetails(temp2,0)));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  spreadRadius: 1,
-                                  blurRadius: 1,
-                                  offset: Offset(0, 1),
-                                  color: Colors.black38
-                              )
-                            ]
-                        ),
-                        child:
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(temp[index].imageUrl, fit: BoxFit.cover,),
-                              ),
-                            ),
-                            Container(
-                              width: 250,
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: IconButton(
-                                          onPressed: null,
-                                          icon: Icon(Icons.favorite_border_rounded,color: yellow,))),
-                                  Text(temp[index].title,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Colors.deepPurple,
-                                    ),),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  GestureDetector(
-                                   // borderRadius: BorderRadius.circular(20),
-                                    onTap: (){
-                                      Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                                        return _AddTodoPopupCard(index);
-                                      }, settings:  ModalRoute.of(context)!.settings));
-                                    },
-                                    child: Hero(
-                                      tag: _heroAddTodo,
-                                      child: Container(
+                      itemBuilder: (context, index) {
+
+                        bool flag=true;
+                        if((data.discountMoreThan15==false&&data.discountUpToRs15==false&&data.discountUpToRs5==false)||(data.discountUpToRs5==true&&temp[index].discount>5)||(data.discountUpToRs15==true&&temp[index].discount>15)||(data.discountMoreThan15==true&&temp[index].discount<15))
+                            flag=true;
+                        else
+                          flag=false;
+
+                        if(flag)
+                          {
+
+                              if((data.priceMoreThan300==false&&data.priceLessThan300==false&&data.priceLessThan100==false&&data.priceLessThan20==false)||(data.priceLessThan100==true&&temp[index].newrate<100)||(data.priceLessThan300==true&&temp[index].newrate<300)||(data.priceLessThan20==true&&temp[index].newrate<20)||(data.priceMoreThan300==true&&temp[index].newrate>300)){
+                                flag=true;
+                              }
+                              else
+                                flag=false;
+
+                          }
+
+                          if(flag==false)
+                            {
+                               return Container(
+                                 height: 0,
+                                 width: 0,
+                               ) ;
+                            }
+
+                        return InkWell(
+                          onTap: () {
+                            List temp2 = [
+                              temp[index].imageUrl,
+                              temp[index].title,
+                              temp[index].weight,
+                              temp[index].newrate,
+                              temp[index].description,
+                              temp[index].oldrate,
+                              temp[index].data
+                            ];
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductDetails(temp2, 0)));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            width: 150,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: Offset(0, 1),
+                                      color: Colors.black38)
+                                ]),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Container(
+                                    height: 70,
+                                    width: 70,
+                                    child:  CachedNetworkImage(
+                                      imageUrl: "http://uprank.live/farmerskart/images/product/${data.temp[index].imageUrl}",
+                                      imageBuilder: (context, imageProvider) => Container(
                                         decoration: BoxDecoration(
-                                            border: Border(
-                                              top: BorderSide(width: 2.0, color: Colors.purple),
-                                              left: BorderSide(width: 2.0, color: Colors.purple),
-                                              right: BorderSide(width: 2.0, color: Colors.purple),
-                                              bottom: BorderSide(width: 2.0, color: Colors.purple),
-                                            ),
-                                            borderRadius: BorderRadius.circular(5.0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(' ${temp[index].weight}', style: TextStyle(
-                                              fontSize: 14,
-                                              color: yellow,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                            ),
-                                            Icon(Icons.keyboard_arrow_down,color: yellow,)
-                                          ],
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                              colorFilter:
+                                              ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
                                         ),
                                       ),
+                                      placeholder: (context, url) => CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                ),
+                                Container(
+                                  width: 250,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("₹  ${temp[index].newrate}",
+                                      Align(
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                              onPressed: () async {
+                                                 setState(() {
+                                                    if(temp[index].fav==0)
+                                                      temp[index].fav=1;
+                                                    else
+                                                      temp[index].fav=0;
+
+                                                 });
+
+                                                   String msg;
+                                                 if(temp[index].fav==0)
+                                                  msg= await   removeUserFav(userId, temp[index].productId);
+                                                else
+                                                   msg=  await addUserFav(userId, temp[index].productId);
+
+                                                print(msg);
+
+
+                                              } ,
+                                              icon: Icon(
+                                                (temp[index].fav!=1)?Icons.favorite_border_rounded:Icons.favorite,
+                                                color: yellow,
+                                              ))),
+                                      Text(
+                                        temp[index].title,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.purple,
-                                        ),),
-                                      RatingBar.builder(
-                                        unratedColor: Colors.grey[300],
-                                        itemCount: 5,
-                                        initialRating: 0,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemSize: 18,
-                                        itemBuilder: (context, _) => Icon(
-                                          Icons.star,
-                                          size: 1.0,
-                                          color: yellow,
+                                          fontSize: 14,
+                                          color: Colors.deepPurple,
                                         ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      GestureDetector(
+                                        // borderRadius: BorderRadius.circular(20),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              HeroDialogRoute(
+                                                  builder: (context) {
+                                                    return _AddTodoPopupCard(index);
+                                                  },
+                                                  settings: ModalRoute.of(context)
+                                                      .settings));
                                         },
+                                        child: Hero(
+                                          tag: _heroAddTodo,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                top: BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.purple),
+                                                left: BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.purple),
+                                                right: BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.purple),
+                                                bottom: BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.purple),
+                                              ),
+                                              borderRadius:
+                                              BorderRadius.circular(5.0),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  ' ${temp[index].weight}',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: yellow,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  color: yellow,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "₹  ${temp[index].newrate}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12,
+                                              color: Colors.purple,
+                                            ),
+                                          ),
+                                          RatingBar.builder(
+                                            unratedColor: Colors.grey[300],
+                                            itemCount: 5,
+                                            initialRating: 0,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemSize: 18,
+                                            itemBuilder: (context, _) => Icon(
+                                              Icons.star,
+                                              size: 1.0,
+                                              color: yellow,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              print(rating);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: RaisedButton(
+                                          elevation: 0.0,
+                                          color: bgcolor,
+                                          onPressed: () {
+                                            setState(() {
+                                              selectedIndex = index;
+                                            });
+                                          },
+                                          child: selectedIndex == index
+                                              ? Container(
+                                            child: CustomStepper(
+                                              lowerLimit: 1,
+                                              upperLimit: 10,
+                                              value: 1,
+                                              stepValue: 1,
+                                              iconSize: 10,
+                                            ),
+                                          )
+                                              : Container(
+                                              height: 25,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(5.0),
+                                                color: Colors.purple[700],
+                                              ),
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "ADD",
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: Colors.white),
+                                                ),
+                                              )),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: RaisedButton(
-                                      elevation: 0.0,
-                                      color: bgcolor,
-                                      onPressed: (){
-                                        setState(() {
-                                          selectedIndex = index;
-                                        });
-                                      },
-                                      child: selectedIndex == index ? Container(
-                                        child: CustomStepper(lowerLimit: 1,upperLimit: 10,value: 1,stepValue: 1,iconSize: 10,),) : Container(
-                                          height: 25,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            color: Colors.purple[700],
-                                          ),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "ADD",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white
-                                              ),
-                                            ),
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              );
+            },
           ),
-      ],
+        ],
       ),
       bottomNavigationBar: Navigate(),
     );
@@ -405,11 +536,12 @@ class _DetailPageState extends State<DetailPage> {
 }
 
 class Navigate extends StatefulWidget {
-  const Navigate({Key? key}) : super(key: key);
+  const Navigate({Key key}) : super(key: key);
 
   @override
   _NavigateState createState() => _NavigateState();
 }
+
 class _NavigateState extends State<Navigate> {
   @override
   Widget build(BuildContext context) {
@@ -430,30 +562,33 @@ class _NavigateState extends State<Navigate> {
             showUnselectedLabels: true,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon:  GestureDetector(
-                    onTap: (){
+                icon: GestureDetector(
+                    onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Home()));
                     },
                     child: Icon(Icons.home)),
-                title:  Text('Home'),
+                title: Text('Home'),
               ),
               BottomNavigationBarItem(
-                icon:  GestureDetector(
-                    onTap: (){
+                icon: GestureDetector(
+                    onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Category()));
                     },
                     child: Icon(Icons.list)),
-                title:  Text('Categories'),
+                title: Text('Categories'),
               ),
               BottomNavigationBarItem(
                   icon: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Wishlist()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Wishlist()));
                       },
-                      child: Icon(CupertinoIcons.heart)), title: Text('Wishlist')),
+                      child: Icon(CupertinoIcons.heart)),
+                  title: Text('Wishlist')),
             ],
           ),
         ));
@@ -468,10 +603,13 @@ class choiceChipWidget extends StatefulWidget {
   @override
   _choiceChipWidgetState createState() => new _choiceChipWidgetState();
 }
+
 class _choiceChipWidgetState extends State<choiceChipWidget> {
-  String selectedChoice = "";
+
+  String selectedChoice = "All";
   _buildChoiceList() {
     List<Widget> choices = [];
+
     widget.reportList.forEach((item) {
       choices.add(Container(
         width: 80,
@@ -479,16 +617,28 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
         child: ChoiceChip(
           label: Text(item),
           labelStyle: TextStyle(
-              color: selectedChoice == item ? Colors.white : Colors.black, fontSize: 14.0),
+              color: selectedChoice == item ? Colors.white : Colors.black,
+              fontSize: 14.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
           backgroundColor: bgcolor,
           selectedColor: Colors.yellow[800],
           selected: selectedChoice == item,
-          onSelected: (selected) {
+          onSelected: (selected) async {
+          await  fetchSubCategotyProductApiData(categoryId.toString(),item);
             setState(() {
               selectedChoice = item;
+              print(item);
+
+
+             temp=[];
+            temp=subCategoryProductsList;
+
+            Provider.of<APIData>(context,listen: false).initializeTemp(temp);
+            print('size');
+            print(temp.length);
+
             });
           },
         ),
@@ -505,74 +655,14 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
   }
 }
 
-class Detailservices{
-  String title;
-  int cartCount;
-  //String classTitle;
-  Detailservices({
-    required this.title,
-    required this.cartCount,
-    //@required this.classTitle,
-  });
-}
-List<Detailservices> detailservices =[
-  Detailservices(title: 'Fresh Vegetables & fruits',cartCount: 500 ),
-  Detailservices(title: 'Grocery & Staples', cartCount: 41 ),
-  Detailservices(title: 'Dairy',cartCount: 124 ),
-  Detailservices(title: 'Bakery & Confectionery', cartCount: 500 ),
-];
-
-class General{
-  String title;
-  String imageUrl;
-  int weight;
-  int oldrate;
-  int newrate;
-  String description;
-  List<List> data;
-  General({
-    required this.title,
-    required this.weight,
-    required this.oldrate,
-    required this.newrate,
-    required this.imageUrl,
-    required this.description,
-    required this.data,
-    }
-      );
-}
-List<General> freshVegetables =[
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'freshVegetables',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-];
-List<General> grocery =[
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'grocery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-];
-List<General> dairy =[
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'dairy',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-];
-List<General> bakery =[
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  General(imageUrl: 'assets/bg.jpg',title: 'bakery',weight: 700, oldrate: 600,newrate: 600,description: ' ',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-];
 
 int n = 0;
+
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({
-    required WidgetBuilder builder,
-    required RouteSettings settings,
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
     bool fullscreenDialog = false,
   })  : _builder = builder,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
@@ -609,9 +699,10 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   String get barrierLabel => 'Popup dialog open';
 }
+
 class _AddTodoPopupCard extends StatelessWidget {
-  _AddTodoPopupCard(int s){
-    n =s;
+  _AddTodoPopupCard(int s) {
+    n = s;
   }
   @override
   Widget build(BuildContext context) {
@@ -624,36 +715,34 @@ class _AddTodoPopupCard extends StatelessWidget {
             color: lightbg,
             elevation: 2,
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                     Text(
-                    'Available quantities for',
-                       style: TextStyle(
-                         color: Colors.purple,
-                         fontSize: 14,
-                         fontWeight: FontWeight.w600
-                       ),
+                    Text(
+                      'Available quantities for',
+                      style: TextStyle(
+                          color: Colors.purple,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
                     ),
                     Text(
-                        'Farmerskart - ${temp[n].title}',
+                      'Farmerskart - ${temp[n].title}',
                       style: TextStyle(
-                        height: 2,
+                          height: 2,
                           color: Colors.purple,
                           fontSize: 18,
                           letterSpacing: 0.5,
-                          fontWeight: FontWeight.w700
-                      ),
+                          fontWeight: FontWeight.w700),
                     ),
                     const Divider(
                       color: Colors.orange,
                       thickness: 0.8,
                     ),
-                    for(int k=0; k<temp[n].data.length; k++) ...{
+                    for (int k = 0; k < temp[n].data.length; k++) ...{
                       Container(
                         height: 35,
                         decoration: BoxDecoration(
@@ -665,36 +754,44 @@ class _AddTodoPopupCard extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(5.0),
                             gradient: LinearGradient(
-                                colors: [left,middle,Colors.purple]
-                            )
-                        ),
+                                colors: [left, middle, Colors.purple])),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 25.0,right: 85.0),
-                          child:
-                          Row(
+                          padding:
+                              const EdgeInsets.only(left: 25.0, right: 85.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${temp[n].data[k][0]} -', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
+                              Text(
+                                '${temp[n].data[k][0]} -',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                               ),
+                              Spacer(
+                                flex: 2,
                               ),
-                              Spacer(flex: 2,),
-                              Text('₹${temp[n].data[k][1]}', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
-                                decoration: TextDecoration. lineThrough,
+                              Text(
+                                '₹${temp[n].data[k][1]}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                               ),
+                              Spacer(
+                                flex: 2,
                               ),
-                              Spacer(flex: 2,),
-                              Text('₹${temp[n].data[k][2]}', style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),),
-
+                              Text(
+                                '₹${temp[n].data[k][2]}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -715,14 +812,13 @@ class _AddTodoPopupCard extends StatelessWidget {
   }
 }
 
-
 class CustomStepper extends StatefulWidget {
   CustomStepper({
-    required this.lowerLimit,
-    required this.upperLimit,
-    required this.stepValue,
-    required this.iconSize,
-    required this.value,
+    @required this.lowerLimit,
+    @required this.upperLimit,
+    @required this.stepValue,
+    @required this.iconSize,
+    @required this.value,
   });
 
   final int lowerLimit;
@@ -734,16 +830,16 @@ class CustomStepper extends StatefulWidget {
   @override
   _CustomStepperState createState() => _CustomStepperState();
 }
-class _CustomStepperState extends State<CustomStepper> {
 
+class _CustomStepperState extends State<CustomStepper> {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 30,
       width: 100,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.purple),
-          borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Colors.purple),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -751,26 +847,28 @@ class _CustomStepperState extends State<CustomStepper> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.remove,
+              child: Icon(
+                Icons.remove,
                 color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.lowerLimit ? widget.lowerLimit : widget
-                      .value -= widget.stepValue;
-                },);},
+                setState(
+                  () {
+                    widget.value = widget.value == widget.lowerLimit
+                        ? widget.lowerLimit
+                        : widget.value -= widget.stepValue;
+                  },
+                );
+              },
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [left,middle,Colors.purple]
-                )
-              ),
+                  gradient:
+                      LinearGradient(colors: [left, middle, Colors.purple])),
               width: widget.iconSize,
               child: Center(
                 child: FittedBox(
@@ -790,15 +888,18 @@ class _CustomStepperState extends State<CustomStepper> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.add,
+              child: Icon(
+                Icons.add,
                 color: Colors.purple,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.upperLimit ? widget.upperLimit : widget.value += widget.stepValue;
-                },
+                setState(
+                  () {
+                    widget.value = widget.value == widget.upperLimit
+                        ? widget.upperLimit
+                        : widget.value += widget.stepValue;
+                  },
                 );
               },
             ),

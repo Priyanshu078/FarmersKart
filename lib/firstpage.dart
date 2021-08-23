@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
+import 'package:shellcode2/apiData/AllCenter.dart';
 import 'package:shellcode2/colors.dart';
-
+import 'package:shellcode2/apiData/BestSellingProducts.dart';
+import 'package:shellcode2/category.dart';
+import 'package:shellcode2/apiData/immunityBooster.dart';
+import 'package:shellcode2/apiData/festiveSpecial.dart';
 class FrontPage extends StatefulWidget {
-  const FrontPage({Key? key}) : super(key: key);
+  const FrontPage({Key key}) : super(key: key);
 
   @override
   _FrontPageState createState() => _FrontPageState();
 }
 
 class _FrontPageState extends State<FrontPage> {
-  List color=[Color.fromRGBO(177,156,217,20.0),Color.fromRGBO(150,111,214,20.0),Color.fromRGBO(111,45,168,20.0),Color.fromRGBO(75,0,130,20.0)];
+  List color = [
+    Color.fromRGBO(177, 156, 217, 20.0),
+    Color.fromRGBO(150, 111, 214, 20.0),
+    Color.fromRGBO(111, 45, 168, 20.0),
+    Color.fromRGBO(75, 0, 130, 20.0)
+  ];
+
+  @override
+  void initState(){
+    super.initState();
+    fetchDataByDistrictApi();
+    fetchBestProductApiData();
+    fetchImmunityBoosterProductApiData();
+    fetchFestiveSpecialProductApiData();
+    fetchAllCenter();
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +43,12 @@ class _FrontPageState extends State<FrontPage> {
           children: [
             Stack(
               children: <Widget>[
-                Image.asset('assets/opaque.png',fit: BoxFit.cover,
+                Image.asset(
+                  'assets/opaque.png',
+                  fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.7,),
+                  height: MediaQuery.of(context).size.height * 0.7,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 118.0),
                   child: Center(
@@ -38,16 +63,22 @@ class _FrontPageState extends State<FrontPage> {
                     top: 280,
                     left: 40,
                     child: Container(
-                        width: MediaQuery.of(context).size.width *0.8,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         height: 200,
-                        child: Image.asset('assets/farmersKartLogo.png',fit: BoxFit.cover,)))
+                        child: Image.asset(
+                          'assets/farmersKartLogo.png',
+                          fit: BoxFit.cover,
+                        )))
               ],
             ),
             Stack(
               children: <Widget>[
-                Image.asset('assets/bg_neww.png',fit: BoxFit.cover,
+                Image.asset(
+                  'assets/bg_neww.png',
+                  fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.3,),
+                  height: MediaQuery.of(context).size.height * 0.3,
+                ),
                 Positioned(
                     bottom: 70,
                     left: 150,
@@ -55,23 +86,31 @@ class _FrontPageState extends State<FrontPage> {
                       child: CircleAvatar(
                         backgroundColor: Colors.purple,
                         maxRadius: 50,
-                        child: IconButton(onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-
-                        },
-                            icon: Icon(Icons.arrow_forward_ios,color: Colors.white,size: 35,),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignIn()));
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                            size: 35,
+                          ),
                         ),
                       ),
                       elevation: 15.0,
                       shape: CircleBorder(),
                       clipBehavior: Clip.antiAlias,
-                    )
-                ),
+                    )),
               ],
             ),
           ],
         ),
       ),
     );
+
+
   }
 }

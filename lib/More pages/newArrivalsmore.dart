@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 
 class NewArrivals extends StatefulWidget {
-  const NewArrivals({Key? key}) : super(key: key);
+  const NewArrivals({Key key}) : super(key: key);
 
   @override
   _NewArrivalsState createState() => _NewArrivalsState();
@@ -23,10 +23,7 @@ class _NewArrivalsState extends State<NewArrivals> {
         //brightness: Brightness.light,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [left,middle,Colors.purple]
-              )
-          ),
+              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
         ),
         actions: [
           IconButton(
@@ -34,68 +31,86 @@ class _NewArrivalsState extends State<NewArrivals> {
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
-              )
-          )
+              ))
         ],
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios,
-              size: 20,
-              color: yellow),
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: yellow),
         ),
-        title: Text('New Arrivals',
+        title: Text(
+          'New Arrivals',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18,
             color: Colors.white,
-          ),),
-
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
           color: lightbg,
           padding: EdgeInsets.all(8.0),
           child: Padding(
-              padding: EdgeInsets.only(top: 18,bottom: 18),
+              padding: EdgeInsets.only(top: 18, bottom: 18),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
-                    for(int i=0; i<category.length; i++) ...{
+                  children: [
+                    for (int i = 0; i < category.length; i++) ...{
                       GestureDetector(
-                        onTap: (){
-
-                        },
+                        onTap: () {},
                         child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
                               color: bgcolor,
                             ),
-                            padding: EdgeInsets.only(left: 15.0,top: 10.0),
+                            padding: EdgeInsets.only(left: 15.0, top: 10.0),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(30),
-                              onTap: (){
-                                List temp1 = [category[i].imageUrl,category[i].title,category[i].weight,category[i].newrate,category[i].description,category[i].oldrate,category[i].data];
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetails(temp1,0)));
+                              onTap: () {
+                                List temp1 = [
+                                  category[i].imageUrl,
+                                  category[i].title,
+                                  category[i].weight,
+                                  category[i].newrate,
+                                  category[i].description,
+                                  category[i].oldrate,
+                                  category[i].data
+                                ];
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductDetails(temp1, 0)));
                               },
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.all(10),
                                     height: 80,
                                     width: 80,
-                                    child: Image.asset(category[i].imageUrl, fit: BoxFit.cover,),
+                                    child: Image.asset(
+                                      category[i].imageUrl,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                   Container(
                                     width: 250,
-                                    padding: const EdgeInsets.only(top: 8.0,bottom: 8.0,left: 18.0,right: 18.0),
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0,
+                                        bottom: 8.0,
+                                        left: 18.0,
+                                        right: 18.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[
-                                        Text('${category[i].title} ${category[i].weight}',
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${category[i].title} ${category[i].weight}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
@@ -105,7 +120,8 @@ class _NewArrivalsState extends State<NewArrivals> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text('₹ ${category[i].newrate}',
+                                        Text(
+                                          '₹ ${category[i].newrate}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
@@ -116,14 +132,15 @@ class _NewArrivalsState extends State<NewArrivals> {
                                           height: 5,
                                         ),
                                         GestureDetector(
-                                          onTap: (){
-                                            _BottomSheet(context,i);
+                                          onTap: () {
+                                            _BottomSheet(context, i);
                                           },
                                           child: Container(
                                               height: 25,
                                               width: 200,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
                                                 color: Colors.purple,
                                               ),
                                               child: Align(
@@ -132,35 +149,29 @@ class _NewArrivalsState extends State<NewArrivals> {
                                                   "ADD",
                                                   style: TextStyle(
                                                       fontSize: 10,
-                                                      color: Colors.white
-                                                  ),
+                                                      color: Colors.white),
                                                 ),
-                                              )
-                                          ),
+                                              )),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
-                            )
-                        ),
+                            )),
                       ),
                       SizedBox(
                         height: 10,
                       )
                     },
-                  ]
-              )
-          ),
+                  ])),
         ),
       ),
     );
   }
 }
 
-
-class Categories{
+class Categories {
   String imageUrl;
   String weight;
   String title;
@@ -169,22 +180,62 @@ class Categories{
   String description;
   List<List> data;
   Categories({
-    required this.imageUrl,
-    required this.title,
-    required this.newrate,
-    required this.oldrate,
-    required this.weight,
-    required this.description,
-    required this.data,
+    @required this.imageUrl,
+    @required this.title,
+    @required this.newrate,
+    @required this.oldrate,
+    @required this.weight,
+    @required this.description,
+    @required this.data,
   });
 }
 
-List<Categories> category =[
-  Categories(imageUrl: 'assets/bg.jpg',description:' ', title: 'Cucumber',oldrate: 5,newrate: 10,weight: '100 GM',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]),
-  Categories(imageUrl: 'assets/bg.jpg',description:' ', title: 'Apple',oldrate: 5,newrate: 10,weight: '100 GM',data: [['180 GM',200,197]]  ),
-  Categories(imageUrl: 'assets/bg.jpg',description:' ', title: 'Cheese',oldrate: 5,newrate: 10 ,weight: '100 GM',data: [['180 GM',200,197],['120 GM',100,157]] ),
-  Categories(imageUrl: 'assets/bg.jpg',description:' ', title: 'Orange',oldrate: 5,newrate: 10,weight: '100 GM',data: [['180 GM',200,197],['120 GM',100,157],['100 GM',50,100]]  ),
-
+List<Categories> category = [
+  Categories(
+      imageUrl: 'assets/bg.jpg',
+      description: ' ',
+      title: 'Cucumber',
+      oldrate: 5,
+      newrate: 10,
+      weight: '100 GM',
+      data: [
+        ['180 GM', 200, 197],
+        ['120 GM', 100, 157],
+        ['100 GM', 50, 100]
+      ]),
+  Categories(
+      imageUrl: 'assets/bg.jpg',
+      description: ' ',
+      title: 'Apple',
+      oldrate: 5,
+      newrate: 10,
+      weight: '100 GM',
+      data: [
+        ['180 GM', 200, 197]
+      ]),
+  Categories(
+      imageUrl: 'assets/bg.jpg',
+      description: ' ',
+      title: 'Cheese',
+      oldrate: 5,
+      newrate: 10,
+      weight: '100 GM',
+      data: [
+        ['180 GM', 200, 197],
+        ['120 GM', 100, 157]
+      ]),
+  Categories(
+      imageUrl: 'assets/bg.jpg',
+      description: ' ',
+      title: 'Orange',
+      oldrate: 5,
+      newrate: 10,
+      weight: '100 GM',
+      data: [
+        ['180 GM', 200, 197],
+        ['120 GM', 100, 157],
+        ['100 GM', 50, 100]
+      ]),
 ];
 
 void _BottomSheet(context, int j) {
@@ -206,16 +257,21 @@ void _BottomSheet(context, int j) {
               margin: EdgeInsets.all(10),
               height: 80,
               width: 80,
-              child: Image.asset(category[j].imageUrl, fit: BoxFit.cover,),
+              child: Image.asset(
+                category[j].imageUrl,
+                fit: BoxFit.cover,
+              ),
             ),
             Container(
               width: 250,
-              padding: const EdgeInsets.only(top: 8.0,bottom: 8.0,left: 18.0,right: 18.0),
+              padding: const EdgeInsets.only(
+                  top: 8.0, bottom: 8.0, left: 18.0, right: 18.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:[
-                  Text(category[j].title,
+                children: [
+                  Text(
+                    category[j].title,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
@@ -237,23 +293,24 @@ void _BottomSheet(context, int j) {
                         ),
                         borderRadius: BorderRadius.circular(5.0),
                         gradient: LinearGradient(
-                            colors: [left,middle,Colors.purple]
-                        )
-                    ),
+                            colors: [left, middle, Colors.purple])),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${category[j].description}', style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: Colors.white,
-                      ),
+                      child: Text(
+                        '${category[j].description}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Selling MRP: ₹ ${category[j].newrate}',
+                  Text(
+                    'Selling MRP: ₹ ${category[j].newrate}',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
@@ -263,7 +320,8 @@ void _BottomSheet(context, int j) {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('[Inclusive Of all taxes]',
+                  Text(
+                    '[Inclusive Of all taxes]',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
@@ -273,7 +331,13 @@ void _BottomSheet(context, int j) {
                   SizedBox(
                     height: 5,
                   ),
-                  CustomStepper(lowerLimit: 1,upperLimit: 10,value: 1,stepValue: 1,iconSize: 10,),
+                  CustomStepper(
+                    lowerLimit: 1,
+                    upperLimit: 10,
+                    value: 1,
+                    stepValue: 1,
+                    iconSize: 10,
+                  ),
                   SizedBox(
                     height: 5,
                   ),
@@ -290,20 +354,19 @@ void _BottomSheet(context, int j) {
                         ),
                         borderRadius: BorderRadius.circular(5.0),
                         gradient: LinearGradient(
-                            colors: [left,middle,Colors.purple]
-                        )
-                    ),
+                            colors: [left, middle, Colors.purple])),
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text('ADD TO CART', style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+                      child: Text(
+                        'ADD TO CART',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -314,14 +377,13 @@ void _BottomSheet(context, int j) {
   );
 }
 
-
 class CustomStepper extends StatefulWidget {
   CustomStepper({
-    required this.lowerLimit,
-    required this.upperLimit,
-    required this.stepValue,
-    required this.iconSize,
-    required this.value,
+    @required this.lowerLimit,
+    @required this.upperLimit,
+    @required this.stepValue,
+    @required this.iconSize,
+    @required this.value,
   });
 
   final int lowerLimit;
@@ -333,8 +395,8 @@ class CustomStepper extends StatefulWidget {
   @override
   _CustomStepperState createState() => _CustomStepperState();
 }
-class _CustomStepperState extends State<CustomStepper> {
 
+class _CustomStepperState extends State<CustomStepper> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -342,34 +404,35 @@ class _CustomStepperState extends State<CustomStepper> {
       width: 80,
       decoration: BoxDecoration(
           border: Border.all(color: Colors.purple),
-          borderRadius: BorderRadius.circular(5)
-      ),
+          borderRadius: BorderRadius.circular(5)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.remove,
+              child: Icon(
+                Icons.remove,
                 color: Colors.deepPurple,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.lowerLimit ? widget.lowerLimit : widget
-                      .value -= widget.stepValue;
-                },);},
+                setState(
+                  () {
+                    widget.value = widget.value == widget.lowerLimit
+                        ? widget.lowerLimit
+                        : widget.value -= widget.stepValue;
+                  },
+                );
+              },
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [left,middle,Colors.purple]
-                  )
-              ),
+                  gradient:
+                      LinearGradient(colors: [left, middle, Colors.purple])),
               width: widget.iconSize,
               child: Center(
                 child: FittedBox(
@@ -389,15 +452,18 @@ class _CustomStepperState extends State<CustomStepper> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              child: Icon(Icons.add,
+              child: Icon(
+                Icons.add,
                 color: Colors.purple,
                 size: widget.iconSize,
               ),
               onTap: () {
-                setState(() {
-                  widget.value =
-                  widget.value == widget.upperLimit ? widget.upperLimit : widget.value += widget.stepValue;
-                },
+                setState(
+                  () {
+                    widget.value = widget.value == widget.upperLimit
+                        ? widget.upperLimit
+                        : widget.value += widget.stepValue;
+                  },
                 );
               },
             ),
