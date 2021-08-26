@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/More%20pages/OrderSummary.dart';
+import 'package:shellcode2/More%20pages/complaints.dart';
+import 'package:shellcode2/More%20pages/feedback.dart';
+import 'package:shellcode2/More%20pages/invoice.dart';
+import 'package:shellcode2/More%20pages/trackOrder.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/orders.dart';
@@ -169,7 +173,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          OrderSummary()));
+                                                          OrderSummary.allOrders(
+                                                              allOrders:
+                                                                  snapshot.data[
+                                                                      index],
+                                                              index: 0)));
                                             },
                                             child: Card(
                                               shape: RoundedRectangleBorder(
@@ -178,7 +186,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                           10)),
                                               elevation: 10,
                                               child: Container(
-                                                  padding: EdgeInsets.all(30.0),
+                                                  padding: EdgeInsets.all(25.0),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -221,7 +229,18 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 BorderRadius
                                                                     .circular(
                                                                         30),
-                                                            onTap: () {},
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          Invoice(
+                                                                            data:
+                                                                                snapshot.data[index],
+                                                                            totalAmount:
+                                                                                totalAmount,
+                                                                          )));
+                                                            },
                                                             child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
@@ -338,7 +357,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              Complaints()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -396,7 +421,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              FeedBack()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -467,7 +498,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              TrackOrder()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -581,7 +618,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          OrderSummary()));
+                                                          OrderSummary.todaysOrder(
+                                                              todaysOrder:
+                                                                  snapshot.data[
+                                                                      index],
+                                                              index: 1)));
                                             },
                                             child: Card(
                                               shape: RoundedRectangleBorder(
@@ -633,7 +674,18 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 BorderRadius
                                                                     .circular(
                                                                         30),
-                                                            onTap: () {},
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          Invoice(
+                                                                            data:
+                                                                                snapshot.data[index],
+                                                                            totalAmount:
+                                                                                totalAmount,
+                                                                          )));
+                                                            },
                                                             child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
@@ -750,7 +802,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              Complaints()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -808,7 +866,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              FeedBack()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -879,7 +943,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              TrackOrder()));
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -979,340 +1049,368 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                         ConnectionState.done) {
                                       if (snapshot.hasData) {
                                         return ListView.builder(
-                                            itemCount: snapshot.data.length,
-                                            itemBuilder: (context, int index) {
-                                              totalAmount = 0;
-                                              for (int i = 0;
-                                                  i <
-                                                      snapshot
-                                                          .data[index].length;
-                                                  i++) {
-                                                totalAmount += double.parse(
-                                                    snapshot.data[index][i]
-                                                        .totalAmount);
-                                              }
-                                              return InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OrderSummary()));
-                                                },
-                                                child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  elevation: 10,
-                                                  child: Container(
-                                                      padding:
-                                                          EdgeInsets.all(30.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
-                                                            child: Container(
-                                                              height: 25,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                  top: BorderSide(
-                                                                      width:
-                                                                          1.0,
-                                                                      color: Colors
-                                                                          .greenAccent),
-                                                                  left: BorderSide(
-                                                                      width:
-                                                                          1.0,
-                                                                      color: Colors
-                                                                          .greenAccent),
-                                                                  right: BorderSide(
-                                                                      width:
-                                                                          1.0,
-                                                                      color: Colors
-                                                                          .greenAccent),
-                                                                  bottom: BorderSide(
-                                                                      width:
-                                                                          1.0,
-                                                                      color: Colors
-                                                                          .greenAccent),
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5.0),
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (context, int index) {
+                                            totalAmount = 0;
+                                            for (int i = 0;
+                                                i < snapshot.data[index].length;
+                                                i++) {
+                                              totalAmount += double.parse(
+                                                  snapshot.data[index][i]
+                                                      .totalAmount);
+                                            }
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OrderSummary.cancelledOrders(
+                                                                cancelledOrders:
+                                                                    snapshot.data[
+                                                                        index],
+                                                                index: 2)));
+                                              },
+                                              child: Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                elevation: 10,
+                                                child: Container(
+                                                    padding:
+                                                        EdgeInsets.all(25.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Align(
+                                                          alignment: Alignment
+                                                              .topRight,
+                                                          child: Container(
+                                                            height: 25,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border(
+                                                                top: BorderSide(
+                                                                    width: 1.0,
+                                                                    color: Colors
+                                                                        .greenAccent),
+                                                                left: BorderSide(
+                                                                    width: 1.0,
+                                                                    color: Colors
+                                                                        .greenAccent),
+                                                                right: BorderSide(
+                                                                    width: 1.0,
+                                                                    color: Colors
+                                                                        .greenAccent),
+                                                                bottom: BorderSide(
+                                                                    width: 1.0,
+                                                                    color: Colors
+                                                                        .greenAccent),
                                                               ),
-                                                              child: InkWell(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            30),
-                                                                onTap: () {},
-                                                                child: Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            5.0),
-                                                                    child: Text(
-                                                                      'Generate Invoice',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight: FontWeight
-                                                                              .normal,
-                                                                          color:
-                                                                              Colors.greenAccent),
-                                                                    )),
-                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                            ),
+                                                            child: InkWell(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30),
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            Invoice.cancelOrder(
+                                                                              data: snapshot.data[index],
+                                                                              totalAmount: totalAmount,
+                                                                              cancel: 1,
+                                                                            )));
+                                                              },
+                                                              child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          5.0),
+                                                                  child: Text(
+                                                                    'Generate Invoice',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .normal,
+                                                                        color: Colors
+                                                                            .greenAccent),
+                                                                  )),
                                                             ),
                                                           ),
-                                                          Text(
-                                                            'Order Number: ${snapshot.data[index][0].orderId}',
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          totalAmount > 240
-                                                              ? Text(
-                                                                  'Total Amount: ₹$totalAmount',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      color: Colors
-                                                                          .black),
-                                                                )
-                                                              : Text(
-                                                                  'Total Amount: ₹${totalAmount + 40}',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      color: Colors
-                                                                          .black),
-                                                                ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Text(
-                                                            '${snapshot.data[index][0].orderStatus}',
-                                                            style: TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Colors
-                                                                    .grey),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
-                                                                child:
-                                                                    Container(
-                                                                  height: 25,
-                                                                  width: 150,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    border:
-                                                                        Border(
-                                                                      top: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.orange),
-                                                                      left: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.orange),
-                                                                      right: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.orange),
-                                                                      bottom: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.orange),
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            5.0),
-                                                                  ),
-                                                                  child:
-                                                                      InkWell(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30),
-                                                                    onTap:
-                                                                        () {},
-                                                                    child: Align(
-                                                                        alignment: Alignment.center,
-                                                                        child: Text(
-                                                                          'Complaints',
-                                                                          style: TextStyle(
-                                                                              fontSize: 10,
-                                                                              fontWeight: FontWeight.normal,
-                                                                              color: Colors.black),
-                                                                        )),
-                                                                  ),
-                                                                ),
+                                                        ),
+                                                        Text(
+                                                          'Order Number: ${snapshot.data[index][0].orderId}',
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        totalAmount > 240
+                                                            ? Text(
+                                                                'Total Amount: ₹$totalAmount',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
+                                                              )
+                                                            : Text(
+                                                                'Total Amount: ₹${totalAmount + 40}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
                                                               ),
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
-                                                                child:
-                                                                    Container(
-                                                                  height: 25,
-                                                                  width: 150,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    border:
-                                                                        Border(
-                                                                      top: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.greenAccent),
-                                                                      left: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.greenAccent),
-                                                                      right: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.greenAccent),
-                                                                      bottom: BorderSide(
-                                                                          width:
-                                                                              1.0,
-                                                                          color:
-                                                                              Colors.greenAccent),
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            5.0),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          '${snapshot.data[index][0].orderStatus}',
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: Container(
+                                                                height: 25,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border:
+                                                                      Border(
+                                                                    top: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .orange),
+                                                                    left: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .orange),
+                                                                    right: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .orange),
+                                                                    bottom: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .orange),
                                                                   ),
-                                                                  child:
-                                                                      InkWell(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30),
-                                                                    onTap:
-                                                                        () {},
-                                                                    child: Align(
-                                                                        alignment: Alignment.center,
-                                                                        child: Text(
-                                                                          'Feedback',
-                                                                          style: TextStyle(
-                                                                              fontSize: 10,
-                                                                              fontWeight: FontWeight.normal,
-                                                                              color: Colors.black),
-                                                                        )),
-                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Container(
-                                                              height: 25,
-                                                              width: 150,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                border: Border(
-                                                                  top: BorderSide(
-                                                                      width:
-                                                                          2.0,
-                                                                      color: Colors
-                                                                          .blue),
-                                                                  left: BorderSide(
-                                                                      width:
-                                                                          2.0,
-                                                                      color: Colors
-                                                                          .blue),
-                                                                  right: BorderSide(
-                                                                      width:
-                                                                          2.0,
-                                                                      color: Colors
-                                                                          .blue),
-                                                                  bottom: BorderSide(
-                                                                      width:
-                                                                          2.0,
-                                                                      color: Colors
-                                                                          .blue),
+                                                                child: InkWell(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                Complaints()));
+                                                                  },
+                                                                  child: Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child:
+                                                                          Text(
+                                                                        'Complaints',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                10,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                            color: Colors.black),
+                                                                      )),
                                                                 ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5.0),
-                                                              ),
-                                                              child: InkWell(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            30),
-                                                                onTap: () {},
-                                                                child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child: Text(
-                                                                      'Track Order',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight: FontWeight
-                                                                              .normal,
-                                                                          color:
-                                                                              Colors.black),
-                                                                    )),
                                                               ),
                                                             ),
-                                                          )
-                                                        ],
-                                                      )),
-                                                ),
-                                              );
-                                            });
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: Container(
+                                                                height: 25,
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border:
+                                                                      Border(
+                                                                    top: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .greenAccent),
+                                                                    left: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .greenAccent),
+                                                                    right: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .greenAccent),
+                                                                    bottom: BorderSide(
+                                                                        width:
+                                                                            1.0,
+                                                                        color: Colors
+                                                                            .greenAccent),
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5.0),
+                                                                ),
+                                                                child: InkWell(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                FeedBack()));
+                                                                  },
+                                                                  child: Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child:
+                                                                          Text(
+                                                                        'Feedback',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                10,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                            color: Colors.black),
+                                                                      )),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Container(
+                                                            height: 25,
+                                                            width: 150,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border(
+                                                                top: BorderSide(
+                                                                    width: 2.0,
+                                                                    color: Colors
+                                                                        .blue),
+                                                                left: BorderSide(
+                                                                    width: 2.0,
+                                                                    color: Colors
+                                                                        .blue),
+                                                                right: BorderSide(
+                                                                    width: 2.0,
+                                                                    color: Colors
+                                                                        .blue),
+                                                                bottom: BorderSide(
+                                                                    width: 2.0,
+                                                                    color: Colors
+                                                                        .blue),
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                            ),
+                                                            child: InkWell(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30),
+                                                              onTap: () {},
+                                                              child: Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                    'Track Order',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            10,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .normal,
+                                                                        color: Colors
+                                                                            .black),
+                                                                  )),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )),
+                                              ),
+                                            );
+                                          },
+                                        );
                                       } else if (snapshot.hasError) {
                                         print(snapshot.error);
                                       } else {
