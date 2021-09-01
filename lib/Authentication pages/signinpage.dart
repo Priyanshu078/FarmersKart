@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication pages/forgotpwd.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
@@ -318,6 +320,7 @@ class _SignInState extends State<SignIn> {
   Future<void> Login() async {
     print(phoneNo);
     print(password);
+    // String firebaseToken = await getToken();
     if (password != null && phoneNo != null) {
       List<UserOfApp> userAccountData =
           await fetchLoginApiData(phoneNo, password);
@@ -326,8 +329,10 @@ class _SignInState extends State<SignIn> {
         authenticated = false;
       else {
         authenticated = true;
-        Provider.of<UserAccountDetails>(context, listen: false)
+        Provider.of<APIData>(context, listen: false)
             .initializeUser(userAccountData[0]);
+        // updateFirebaseToken(firebaseToken,
+        //     Provider.of<APIData>(context, listen: false).user.id);
         print(authenticated);
         if (authenticated) {
           Navigator.push(
@@ -335,6 +340,19 @@ class _SignInState extends State<SignIn> {
         }
       }
     }
+  }
+
+  Future<String> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
+
+  void updateFirebaseToken(String token, String id) async {
+    http.Response response;
+    String url =
+        "$header/app_api/updateFirebaseToken.php?token=$token&user_id=$id";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
   }
 
   Widget builder() {

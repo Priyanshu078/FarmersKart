@@ -77,3 +77,7 @@ class CenterData {
   CenterData(this.centerName, this.address, this.pincode, this.delFlag,
       this.deliveryDays, this.deliveryTime, this.id);
 }
+
+String get productName {
+  return productName;
+}

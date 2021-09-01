@@ -45,7 +45,8 @@ class _UserAccState extends State<UserAcc> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      encoding: Encoding.getByName('utf-8'),
+      body: {
         "name": _textController1.text,
         "society_name": _textController2.text,
         "email": _textController3.text,
@@ -56,7 +57,7 @@ class _UserAccState extends State<UserAcc> {
         "wing": _textController7.text,
         "flat_no": _textController6.text,
         "phoneNo": _textController4.text
-      }),
+      },
     );
     var jsonData = jsonDecode(response.body);
     print(jsonData);
@@ -64,8 +65,7 @@ class _UserAccState extends State<UserAcc> {
 
   @override
   Widget build(BuildContext context) {
-    UserOfApp user =
-        Provider.of<UserAccountDetails>(context, listen: false).user;
+    UserOfApp user = Provider.of<APIData>(context, listen: false).user;
     _textController1 = TextEditingController(text: '${user.name}');
     _textController2 = TextEditingController(text: '${user.societyName}');
     _textController3 = TextEditingController(text: '${user.email}');

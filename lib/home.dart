@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
 
   String getUserType() {
     String userType =
-        Provider.of<UserAccountDetails>(context, listen: false).user.userType;
+        Provider.of<APIData>(context, listen: false).user.userType;
     return userType;
   }
 
@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
                             style: TextStyle(color: Colors.green[800]),
                           ),
                           Text(
-                            '${Provider.of<UserAccountDetails>(context, listen: false).user.pincode}',
+                            '${Provider.of<APIData>(context, listen: false).user.pincode}',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],

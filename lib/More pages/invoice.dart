@@ -364,7 +364,7 @@ class _InvoiceState extends State<Invoice> {
   }
 
   Future generateInvoice() async {
-    String userId = Provider.of<UserAccountDetails>(context).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url =
         "$header/app_api/generateInvoice.php?user_id=u$userId&user_type=Society&order_id=${widget.data[0].orderId}";

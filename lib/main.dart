@@ -15,14 +15,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider(
-      create: (context)=>UserAccountDetails(),
-      child:  MaterialApp(
+      create: (context) => APIData(),
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: FrontPage(),
       ),
     );
-
   }
 }

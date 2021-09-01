@@ -479,8 +479,7 @@ void _BottomSheet(context, int j) {
 
 Future<bool> addOfferProductToCart(BuildContext context, int j) async {
   http.Response response;
-  String userId =
-      Provider.of<UserAccountDetails>(context, listen: false).user.id;
+  String userId = Provider.of<APIData>(context, listen: false).user.id;
   String productId = offerData[j].productPrice[0].p_Id;
   String Quantity = quantity.toString();
   String unitPrice = offerData[j].productPrice[0].discountedPrice;

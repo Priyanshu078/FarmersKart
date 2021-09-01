@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/CartProducts.dart';
 import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/apiData/coupon.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
+import 'package:shellcode2/deliveryAddress.dart';
 import 'package:shellcode2/home.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +25,7 @@ class _CartState extends State<Cart> {
   TextEditingController specificationController = new TextEditingController();
   TextEditingController couponController = new TextEditingController();
   String title1 = '';
-  double totalAmount = 0;
+  double totalCost = 0;
   double totalDiscount = 0;
 
   @override
@@ -34,10 +36,8 @@ class _CartState extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
-    String pincode =
-        Provider.of<UserAccountDetails>(context, listen: false).user.pincode;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    String pincode = Provider.of<APIData>(context, listen: false).user.pincode;
     return Scaffold(
       backgroundColor: lightbg,
       appBar: AppBar(
@@ -99,21 +99,27 @@ class _CartState extends State<Cart> {
                               child: ListView.builder(
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (context, int index) {
-                                    // try {
-                                    //   for (int i = 0;
-                                    //       i < snapshot.data[index].length;
-                                    //       i++) {
-                                    //     totalAmount += double.parse(snapshot
-                                    //         .data[index][i].totalAmount);
-                                    //     totalDiscount += (double.parse(snapshot
-                                    //             .data[index][i]
-                                    //             .unitOriginalPrice) -
-                                    //         double.parse(snapshot
-                                    //             .data[index][i].unitPrice));
-                                    //   }
-                                    // } catch (e) {
-                                    //   print(e);
-                                    // }
+                                    try {
+                                      double totalAmount = 0;
+                                      for (int i = 0;
+                                          i < snapshot.data[index].length;
+                                          i++) {
+                                        totalAmount += double.parse(snapshot
+                                            .data[index][i].totalAmount);
+                                        totalDiscount += (double.parse(snapshot
+                                                .data[index][i]
+                                                .unitOriginalPrice) -
+                                            double.parse(snapshot
+                                                .data[index][i].unitPrice));
+                                      }
+                                      setState(() {
+                                        totalCost = totalAmount;
+                                      });
+                                      print("totalCost");
+                                      print(totalCost);
+                                    } catch (e) {
+                                      print(e);
+                                    }
                                     if (snapshot.data.length == 0) {
                                       return Container();
                                     } else {
@@ -411,7 +417,9 @@ class _CartState extends State<Cart> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     elevation: 10,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      getCoupon();
+                                    },
                                   ),
                                 ),
                               ],
@@ -464,15 +472,15 @@ class _CartState extends State<Cart> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        totalAmount > 240.0
-                            ? Text("₹ " + (totalAmount - 40).toString())
+                        totalCost > 240.0
+                            ? Text("₹ " + (totalCost - 40).toString())
                             : Text(
-                                "₹ $totalAmount",
+                                "₹ $totalCost",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 15),
                                 textAlign: TextAlign.left,
                               ),
-                        totalAmount > 240.0
+                        totalCost > 240.0
                             ? Text(
                                 "Saved  ₹ " + (totalDiscount + 40).toString())
                             : Text(
@@ -500,8 +508,20 @@ class _CartState extends State<Cart> {
                           ),
                         ),
                         onPressed: () {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(userId)));
+                          if (Provider.of<APIData>(context, listen: false)
+                                  .address ==
+                              null) {
+                            Provider.of<APIData>(context, listen: false)
+                                .initializeAddress(
+                                    Provider.of<APIData>(context, listen: false)
+                                        .user
+                                        .address);
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DeliveryAddress()),
+                          );
                         }),
                   ),
                 ],
@@ -514,9 +534,23 @@ class _CartState extends State<Cart> {
     );
   }
 
+  // void applyCoupon() async {
+  //   http.Response response;
+  //   String url = "$header/app_api/applyCoupon.php?coupon=$couponController";
+  //   Uri uri = Uri.parse(url);
+  //   response = await http.get(uri);
+  //   var jsonData = jsonDecode(response.body);
+  //   if (jsonData["code"] == "200") {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text("Coupon Appied Successfully")));
+  //   } else {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
+  //   }
+  // }
+
   void addSpecification(String productId, String specification) async {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url =
         "$header/app_api/addProductSpecification.php?user_id=$userId&product_id=$productId&specification=$specification";
@@ -548,8 +582,7 @@ class _CartState extends State<Cart> {
   }
 
   Future<List> getCartProducts() async {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url = "$header/app_api/getCartProducts.php?user_id=$userId";
     Uri uri = Uri.parse(url);
@@ -696,6 +729,43 @@ class _CartState extends State<Cart> {
       differentCategoryData.add(dairy);
     }
     return differentCategoryData;
+  }
+
+  Future getCoupon() async {
+    List couponData = [];
+    String coupon = couponController.text;
+    http.Response response;
+    String url = "$header/app_api/getCoupon.php?coupon=$coupon";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text(jsonData["msg"] + "\n" + "Coupon applied successfully")));
+      for (var item in jsonData["coupon"]) {
+        Coupon coupon = new Coupon(
+            item["id"],
+            item["code"],
+            item["type"],
+            item["value"],
+            item["expiry"],
+            item["minimum_order_amount"],
+            item["del_flag"],
+            item["hidden_coupon"]);
+        couponData.add(coupon);
+      }
+      return couponData;
+    } else if (jsonData["code"] == "401") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
+    } else if (jsonData["code"] == "402") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
+    }
   }
 }
 

@@ -27,9 +27,17 @@ int val = 0;
 double totalAmount = 0;
 
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
+  TextEditingController _reasonController = new TextEditingController();
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _reasonController.dispose();
   }
 
   @override
@@ -425,8 +433,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              FeedBack()));
+                                                                          builder: (context) => FeedBack.totalOrder(
+                                                                                userId: Provider.of<APIData>(context, listen: false).user.id,
+                                                                                data: snapshot.data[index],
+                                                                                orderId: snapshot.data[index][0].orderId,
+                                                                              )));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -502,8 +513,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              TrackOrder()));
+                                                                          builder: (context) => TrackOrder(
+                                                                                products: snapshot.data[index],
+                                                                              )));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -562,7 +574,32 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AlertDialog(
+                                                                                title: Text(
+                                                                                  "Cancel Order",
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: TextStyle(color: Colors.amber[500]),
+                                                                                ),
+                                                                                content: TextField(decoration: InputDecoration(hintText: "Enter reason for cancel", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
+                                                                                actions: [
+                                                                                  TextButton(onPressed: () => Navigator.pop(context), child: Text("CANCEL")),
+                                                                                  TextButton(
+                                                                                      onPressed: () {
+                                                                                        cancelOrder(snapshot.data[index][0].orderId, _reasonController.text, snapshot.data[index][0].paymentOption);
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: Text("SUBMIT")),
+                                                                                ],
+                                                                              ),
+                                                                      barrierDismissible:
+                                                                          false);
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -870,8 +907,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              FeedBack()));
+                                                                          builder: (context) => FeedBack.todaysOrder(
+                                                                                userId: Provider.of<APIData>(context, listen: false).user.id,
+                                                                                data: snapshot.data[index],
+                                                                                orderId: snapshot.data[index][0].orderId,
+                                                                              )));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -947,8 +987,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              TrackOrder()));
+                                                                          builder: (context) => TrackOrder(
+                                                                                products: snapshot.data[index],
+                                                                              )));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -1007,7 +1048,32 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             30),
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AlertDialog(
+                                                                                title: Text(
+                                                                                  "Cancel Order",
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: TextStyle(color: Colors.amber[500]),
+                                                                                ),
+                                                                                content: TextField(controller: _reasonController, decoration: InputDecoration(hintText: "Enter reason for cancel", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
+                                                                                actions: [
+                                                                                  TextButton(onPressed: () => Navigator.pop(context), child: Text("CANCEL")),
+                                                                                  TextButton(
+                                                                                      onPressed: () {
+                                                                                        cancelOrder(snapshot.data[index][0].orderId, _reasonController.text, snapshot.data[index][0].paymentOption);
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: Text("SUBMIT")),
+                                                                                ],
+                                                                              ),
+                                                                      barrierDismissible:
+                                                                          false);
+                                                                },
                                                                 child: Align(
                                                                     alignment:
                                                                         Alignment
@@ -1325,8 +1391,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     Navigator.push(
                                                                         context,
                                                                         MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                FeedBack()));
+                                                                            builder: (context) => FeedBack.cancelledOrder(
+                                                                                  userId: Provider.of<APIData>(context, listen: false).user.id,
+                                                                                  data: snapshot.data[index],
+                                                                                  orderId: snapshot.data[index][0].orderId,
+                                                                                )));
                                                                   },
                                                                   child: Align(
                                                                       alignment:
@@ -1386,7 +1455,15 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   BorderRadius
                                                                       .circular(
                                                                           30),
-                                                              onTap: () {},
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            TrackOrder(
+                                                                              products: snapshot.data[index],
+                                                                            )));
+                                                              },
                                                               child: Align(
                                                                   alignment:
                                                                       Alignment
@@ -1433,9 +1510,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
     );
   }
 
+  void cancelOrder(String orderId, String reason, String paymentOption) async {
+    http.Response response;
+    String url =
+        "$header/app_api/cancel_order.php?order_id=$orderId&reason=$reason&payment_option=$paymentOption";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
+    }
+  }
+
   Future<List> getTotalOrders(BuildContext context) async {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url = "$header/app_api/get_all_user_orders.php?user_id=$userId";
     Uri uri = Uri.parse(url);
@@ -1511,8 +1603,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   }
 
   Future<List> getTodaysOrders(BuildContext context) async {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url = "$header/app_api/get_user_today_order.php?user_id=$userId";
     Uri uri = Uri.parse(url);
@@ -1589,8 +1680,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   }
 
   Future<List> getCancelOrders(BuildContext context) async {
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url = "$header/app_api/get_user_cancelled_order.php?user_id=$userId";
     Uri uri = Uri.parse(url);
@@ -1724,22 +1814,3 @@ class _NavigateState extends State<Navigate> {
         ));
   }
 }
-
-// class Categories {
-//   String orderNo;
-//   double amount;
-//   String status;
-//   //String classTitle;
-//   Categories({
-//     @required this.orderNo,
-//     @required this.amount,
-//     @required this.status,
-//   });
-// }
-
-// List<Categories> category1 = [
-//   Categories(orderNo: 'nlML00', amount: 198.00, status: 'Replacement Today'),
-//   Categories(orderNo: 'nlML00', amount: 198.00, status: 'Replacement Today'),
-//   Categories(orderNo: 'nlML00', amount: 198.00, status: 'Replacement Today'),
-//   Categories(orderNo: 'nlML00', amount: 198.00, status: 'Replacement Today'),
-// ];

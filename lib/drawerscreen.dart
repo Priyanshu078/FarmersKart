@@ -16,8 +16,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 15);
 
   String getUserName(BuildContext context) {
-    String userName =
-        Provider.of<UserAccountDetails>(context, listen: false).user.name;
+    String userName = Provider.of<APIData>(context, listen: false).user.name;
     if (userName.contains(" ")) {
       List name = userName.split(" ");
       userName = name[0] + "\n" + name[1];
@@ -94,13 +93,13 @@ class NavigationDrawerWidget extends StatelessWidget {
                     )),
                   ),
                   buildMenuItem(
-                    text: 'User Account',
-                    icon: Icons.account_circle,
-                    onClicked: () =>
+                      text: 'User Account',
+                      icon: Icons.account_circle,
+                      onClicked: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UserAcc(),
-                    )),
-                  ),
+                          builder: (context) => UserAcc(),
+                        ));
+                      }),
                   buildMenuItem(
                     text: 'Handy Order',
                     icon: Icons.assignment,

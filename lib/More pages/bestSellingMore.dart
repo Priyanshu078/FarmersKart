@@ -454,8 +454,7 @@ void _BottomSheet(context, int j) {
 
 Future<bool> addProductToCartbestSelling(BuildContext context, int j) async {
   http.Response response;
-  String userId =
-      Provider.of<UserAccountDetails>(context, listen: false).user.id;
+  String userId = Provider.of<APIData>(context, listen: false).user.id;
   String productId = bestProductCategory[j].data[0][0];
   String Quantity = quantity.toString();
   String unitPrice = bestProductCategory[j].newrate.toString() == ""

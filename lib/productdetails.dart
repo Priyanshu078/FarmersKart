@@ -383,8 +383,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   Future<bool> addProductToCart() async {
     http.Response response;
-    String userId =
-        Provider.of<UserAccountDetails>(context, listen: false).user.id;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
     String productId = widget.offers ? temp[6][0].p_Id : temp[6][0][0];
     print(productId);
     String Quantity = quantity.toString();
