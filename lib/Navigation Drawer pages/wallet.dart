@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/creditedWalletAmount.dart';
+import 'package:shellcode2/apiData/walletHistory.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -87,7 +88,7 @@ class _WalletState extends State<Wallet> {
                                         letterSpacing: 0.8),
                                   ),
                                   Text(
-                                    snapshot.data,
+                                    snapshot.data.toString(),
                                     style: TextStyle(
                                         color: Colors.deepPurple,
                                         fontSize: 18,
@@ -278,7 +279,88 @@ class _WalletState extends State<Wallet> {
                                     }
                                     return Container();
                                   }))
-                          : Container(),
+                          : Expanded(
+                              child: FutureBuilder(
+                                  future: getWalletHistory(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasData) {
+                                        return ListView.separated(
+                                            separatorBuilder: (context, index) {
+                                              return Divider(
+                                                height: 15,
+                                                color: Colors.black,
+                                              );
+                                            },
+                                            itemCount: snapshot.data.length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 8.0,
+                                                                    bottom:
+                                                                        8.0),
+                                                            child: Text(
+                                                                '${snapshot.data[index].orderID}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .black)),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 8.0,
+                                                                    bottom:
+                                                                        8.0),
+                                                            child: Text(
+                                                                "${snapshot.data[index].date.split(" ")[0]}"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Text(
+                                                            '- ${snapshot.data[index].amount}',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            });
+                                      } else if (snapshot.hasError) {
+                                        print(snapshot.error);
+                                      } else {
+                                        return Container();
+                                      }
+                                    }
+                                    return Container();
+                                  })),
                     ],
                   ),
                 );
@@ -293,7 +375,7 @@ class _WalletState extends State<Wallet> {
     );
   }
 
-  Future<String> walletAmount() async {
+  Future walletAmount() async {
     String userId = Provider.of<APIData>(context, listen: false).user.id;
     http.Response response;
     String url = "$header/app_api/getUserWallet.php?user_id=$userId";
@@ -319,5 +401,23 @@ class _WalletState extends State<Wallet> {
       }
     }
     return credit;
+  }
+
+  Future<List> getWalletHistory() async {
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    http.Response response;
+    String url = "$header/app_api/getWalletHistory.php?user_id=$userId";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    List debit = [];
+    if (jsonData["code"] == "200") {
+      for (var item in jsonData["order"]) {
+        WalletHistory walletHistory = new WalletHistory(
+            item["order_id"], item["created_date"], item["used_wallet_amount"]);
+        debit.add(walletHistory);
+      }
+    }
+    return debit;
   }
 }
