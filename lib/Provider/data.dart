@@ -22,10 +22,19 @@ class APIData extends ChangeNotifier {
   bool productRatingMoreThan3 = false;
   String userId;
   String address;
+  double totalAmount = 0.0;
+
   List<UserFavProductCategories> detailsByCategory = [];
 
   void initialUserFavProductCategories(List<UserFavProductCategories> list) {
     this.detailsByCategory = list;
+    notifyListeners();
+  }
+
+  void initializeTotalAmount(double totalAmount) {
+    if (totalAmount != null) {
+      this.totalAmount = totalAmount;
+    }
     notifyListeners();
   }
 

@@ -35,6 +35,12 @@ class _CartState extends State<Cart> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String userId = Provider.of<APIData>(context, listen: false).user.id;
     String pincode = Provider.of<APIData>(context, listen: false).user.pincode;
@@ -112,11 +118,26 @@ class _CartState extends State<Cart> {
                                             double.parse(snapshot
                                                 .data[index][i].unitPrice));
                                       }
-                                      setState(() {
-                                        totalCost = totalAmount;
-                                      });
-                                      print("totalCost");
-                                      print(totalCost);
+                                      print("Hello WOrld");
+                                      if (totalAmount > 240) {
+                                        Provider.of<APIData>(context,
+                                                listen: false)
+                                            .initializeTotalAmount(totalAmount);
+                                      } else {
+                                        Provider.of<APIData>(context,
+                                                listen: false)
+                                            .initializeTotalAmount(
+                                                totalAmount + 40);
+                                      }
+                                      print("totalAmount");
+                                      print(Provider.of<APIData>(context,
+                                              listen: false)
+                                          .totalAmount);
+                                      // setState(() {
+                                      //   totalCost = totalAmount;
+                                      // });
+                                      // print("totalCost");
+                                      // print(totalCost);
                                     } catch (e) {
                                       print(e);
                                     }
@@ -472,14 +493,17 @@ class _CartState extends State<Cart> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        totalCost > 240.0
-                            ? Text("₹ " + (totalCost - 40).toString())
-                            : Text(
-                                "₹ $totalCost",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                                textAlign: TextAlign.left,
-                              ),
+                        // totalCost > 240.0
+                        //     ? Text("₹ " + (totalCost - 40).toString())
+                        //     : Text(
+                        //         "₹ $totalCost",
+                        //         style: TextStyle(
+                        //             color: Colors.white, fontSize: 15),
+                        //         textAlign: TextAlign.left,
+                        //       ),
+                        Consumer<APIData>(builder: (context, amount, child) {
+                          return Text("₹ " + amount.totalAmount.toString());
+                        }),
                         totalCost > 240.0
                             ? Text(
                                 "Saved  ₹ " + (totalDiscount + 40).toString())
