@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:shellcode2/apiData/getUserFav.dart';
+// import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:shellcode2/apiData/loginApiData.dart';
-import 'package:shellcode2/apiData/BannerImagesAPI.dart';
-import 'package:shellcode2/apiData/subCategory.dart';
+import 'package:shellcode2/filter.dart';
+// import 'package:shellcode2/apiData/BannerImagesAPI.dart';
+// import 'package:shellcode2/apiData/subCategory.dart';
 
 import '../detailServiceList.dart';
 
@@ -23,13 +24,17 @@ class APIData extends ChangeNotifier {
   String userId;
   String address;
   double totalAmount = 0.0;
+  double discountAmount=0.0;
+  int quantity=1;
 
-  List<UserFavProductCategories> detailsByCategory = [];
 
-  void initialUserFavProductCategories(List<UserFavProductCategories> list) {
-    this.detailsByCategory = list;
-    notifyListeners();
-  }
+
+  // List<UserFavProductCategories> detailsByCategory = [];
+  //
+  // void initialUserFavProductCategories(List<UserFavProductCategories> list) {
+  //   this.detailsByCategory = list;
+  //   notifyListeners();
+  // }
 
   void initializeTotalAmount(double totalAmount) {
     if (totalAmount != null) {
@@ -37,6 +42,19 @@ class APIData extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void initializeTotalDiscount(double discountAmount) {
+    if (discountAmount != null) {
+      this.discountAmount = discountAmount;
+    }
+    notifyListeners();
+  }
+  void initializeQuantity(int value) {
+    if (value!= null) {
+      this.quantity = value;
+    }
+    notifyListeners();
+  }
+
 
   void initializeUser(UserOfApp user) {
     if (user != null) {

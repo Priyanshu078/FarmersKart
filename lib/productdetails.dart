@@ -25,7 +25,6 @@ class ProductDetails extends StatefulWidget {
 }
 
 List temp = [];
-int quantity = 1;
 
 class _ProductDetailsState extends State<ProductDetails> {
   int j = 0;
@@ -49,6 +48,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     te();
+    Provider.of<APIData>(context,listen: false).initializeQuantity(1);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
@@ -206,12 +206,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                         fontWeight: FontWeight.w500,
                         fontSize: 14),
                   ),
-                  Text(
-                    '${temp[3]}',
-                    style: TextStyle(
-                        color: Colors.deepPurple[800],
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14),
+                  Consumer<APIData>(
+                    builder: (context,data,child){
+
+                       print(data.quantity);
+                      return Text(
+                        '${int.parse(temp[3])*data.quantity}',
+                        style: TextStyle(
+                            color: Colors.deepPurple[800],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14),
+                      );
+
+                    },
+
                   ),
                 ],
               ),
@@ -463,6 +471,8 @@ class _CustomStepperState extends State<CustomStepper> {
                     widget.value = quantity == widget.lowerLimit
                         ? widget.lowerLimit
                         : quantity -= widget.stepValue;
+
+                    Provider.of<APIData>(context,listen: false).initializeQuantity(quantity);
                   },
                 );
               },
@@ -504,6 +514,8 @@ class _CustomStepperState extends State<CustomStepper> {
                     widget.value = quantity == widget.upperLimit
                         ? widget.upperLimit
                         : quantity += widget.stepValue;
+                    Provider.of<APIData>(context,listen: false).initializeQuantity(quantity);
+
                   },
                 );
               },

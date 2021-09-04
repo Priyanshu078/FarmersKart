@@ -32,6 +32,7 @@ class BestProductCategories {
 
 List<BestProductCategories> bestProductCategoryList = [];
 Future<List<Product>> fetchBestProductApiData() async {
+  print(BestProductsApi);
   http.Response response = await http.get(Uri.parse(BestProductsApi));
   if (response.statusCode == 200) {
     Map ApiData = jsonDecode(response.body);
