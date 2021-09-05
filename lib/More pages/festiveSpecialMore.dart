@@ -1,4 +1,5 @@
 import 'package:shellcode2/apiData/festiveSpecial.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,10 @@ class _FestiveSpecialState extends State<FestiveSpecial> {
         ),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -96,14 +100,17 @@ class _FestiveSpecialState extends State<FestiveSpecial> {
                                     height: 80,
                                     width: 80,
                                     child: CachedNetworkImage(
-                                      imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[i].imageUrl}",
-                                      imageBuilder: (context, imageProvider) => Container(
+                                      imageUrl:
+                                          "http://uprank.live/farmerskart/images/product/${festiveSpecialList[i].imageUrl}",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover,
-                                              colorFilter:
-                                              ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.transparent,
+                                                  BlendMode.colorBurn)),
                                         ),
                                       ),
                                     ),
@@ -200,15 +207,16 @@ void _BottomSheet(context, int j) {
               margin: EdgeInsets.all(10),
               height: 80,
               width: 80,
-              child:CachedNetworkImage(
-                imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[j].imageUrl}",
+              child: CachedNetworkImage(
+                imageUrl:
+                    "http://uprank.live/farmerskart/images/product/${festiveSpecialList[j].imageUrl}",
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
-                        colorFilter:
-                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                        colorFilter: ColorFilter.mode(
+                            Colors.transparent, BlendMode.colorBurn)),
                   ),
                 ),
               ),

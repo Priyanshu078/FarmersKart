@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,10 @@ class _BestSellingState extends State<BestSelling> {
         ),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -118,14 +122,18 @@ class _BestSellingState extends State<BestSelling> {
                                             MediaQuery.of(context).size.width /
                                                 5,
                                         child: CachedNetworkImage(
-                                          imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[i].imageUrl}",
-                                          imageBuilder: (context, imageProvider) => Container(
+                                          imageUrl:
+                                              "http://uprank.live/farmerskart/images/product/${bestProductCategory[i].imageUrl}",
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-                                                  colorFilter:
-                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn)),
                                             ),
                                           ),
                                         ),
@@ -297,14 +305,15 @@ void _BottomSheet(context, int j) {
               height: MediaQuery.of(context).size.height * 0.20,
               width: MediaQuery.of(context).size.width / 4,
               child: CachedNetworkImage(
-                imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[j].imageUrl}",
+                imageUrl:
+                    "http://uprank.live/farmerskart/images/product/${bestProductCategory[j].imageUrl}",
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
-                        colorFilter:
-                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                        colorFilter: ColorFilter.mode(
+                            Colors.transparent, BlendMode.colorBurn)),
                   ),
                 ),
               ),

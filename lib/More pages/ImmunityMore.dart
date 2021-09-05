@@ -1,17 +1,17 @@
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/apiData/immunityBooster.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 class ImmunityBooster extends StatefulWidget {
   const ImmunityBooster({Key key}) : super(key: key);
 
   @override
   _ImmunityBoosterState createState() => _ImmunityBoosterState();
 }
-
-
 
 class _ImmunityBoosterState extends State<ImmunityBooster> {
   @override
@@ -30,7 +30,10 @@ class _ImmunityBoosterState extends State<ImmunityBooster> {
         ),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -96,15 +99,18 @@ class _ImmunityBoosterState extends State<ImmunityBooster> {
                                     margin: EdgeInsets.all(10),
                                     height: 80,
                                     width: 80,
-                                    child:CachedNetworkImage(
-                                      imageUrl: "http://uprank.live/farmerskart/images/product/${immunityBoosterList[i].imageUrl}",
-                                      imageBuilder: (context, imageProvider) => Container(
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "http://uprank.live/farmerskart/images/product/${immunityBoosterList[i].imageUrl}",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover,
-                                              colorFilter:
-                                              ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.transparent,
+                                                  BlendMode.colorBurn)),
                                         ),
                                       ),
                                     ),
@@ -268,15 +274,16 @@ void _BottomSheet(context, int j) {
               margin: EdgeInsets.all(10),
               height: 80,
               width: 80,
-              child:CachedNetworkImage(
-                imageUrl: "http://uprank.live/farmerskart/images/product/${immunityBoosterList[j].imageUrl}",
+              child: CachedNetworkImage(
+                imageUrl:
+                    "http://uprank.live/farmerskart/images/product/${immunityBoosterList[j].imageUrl}",
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
-                        colorFilter:
-                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                        colorFilter: ColorFilter.mode(
+                            Colors.transparent, BlendMode.colorBurn)),
                   ),
                 ),
               ),

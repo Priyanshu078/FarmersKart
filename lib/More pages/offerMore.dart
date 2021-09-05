@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
+
 class OfferMore extends StatefulWidget {
   const OfferMore({Key key}) : super(key: key);
 
@@ -37,7 +39,10 @@ class _OfferMoreState extends State<OfferMore> {
         ),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -141,15 +146,19 @@ class _OfferMoreState extends State<OfferMore> {
                                       margin: EdgeInsets.all(15),
                                       height: 80,
                                       width: 80,
-                                      child:CachedNetworkImage(
-                                        imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[i].img}",
-                                        imageBuilder: (context, imageProvider) => Container(
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "http://uprank.live/farmerskart/images/product/${offerData[i].img}",
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: imageProvider,
                                                 fit: BoxFit.cover,
-                                                colorFilter:
-                                                ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                colorFilter: ColorFilter.mode(
+                                                    Colors.transparent,
+                                                    BlendMode.colorBurn)),
                                           ),
                                         ),
                                       ),
@@ -322,9 +331,18 @@ void _BottomSheet(context, int j) {
               margin: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height * 0.20,
               width: MediaQuery.of(context).size.width / 4,
-              child: Image.asset(
-                'assets/bg.jpg',
-                fit: BoxFit.cover,
+              child: CachedNetworkImage(
+                imageUrl:
+                    "http://uprank.live/farmerskart/images/product/${offerData[j].img}",
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Colors.transparent, BlendMode.colorBurn)),
+                  ),
+                ),
               ),
             ),
             Container(
