@@ -1,7 +1,9 @@
+import 'package:shellcode2/apiData/festiveSpecial.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NewArrivals extends StatefulWidget {
   const NewArrivals({Key key}) : super(key: key);
@@ -50,7 +52,6 @@ class _NewArrivalsState extends State<NewArrivals> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          width: MediaQuery.of(context).size.width,
           color: lightbg,
           padding: EdgeInsets.all(8.0),
           child: Padding(
@@ -58,7 +59,7 @@ class _NewArrivalsState extends State<NewArrivals> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (int i = 0; i < category.length; i++) ...{
+                    for (int i = 0; i < festiveSpecialList.length; i++) ...{
                       GestureDetector(
                         onTap: () {},
                         child: Container(
@@ -71,13 +72,13 @@ class _NewArrivalsState extends State<NewArrivals> {
                               borderRadius: BorderRadius.circular(30),
                               onTap: () {
                                 List temp1 = [
-                                  category[i].imageUrl,
-                                  category[i].title,
-                                  category[i].weight,
-                                  category[i].newrate,
-                                  category[i].description,
-                                  category[i].oldrate,
-                                  category[i].data
+                                  festiveSpecialList[i].imageUrl,
+                                  festiveSpecialList[i].title,
+                                  festiveSpecialList[i].weight,
+                                  festiveSpecialList[i].newrate,
+                                  festiveSpecialList[i].description,
+                                  festiveSpecialList[i].oldrate,
+                                  festiveSpecialList[i].data
                                 ];
                                 Navigator.push(
                                     context,
@@ -94,15 +95,21 @@ class _NewArrivalsState extends State<NewArrivals> {
                                     margin: EdgeInsets.all(10),
                                     height: 80,
                                     width: 80,
-                                    child: Image.asset(
-                                      category[i].imageUrl,
-                                      fit: BoxFit.cover,
+                                    child:  CachedNetworkImage(
+                                      imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[i].imageUrl}",
+                                      imageBuilder: (context, imageProvider) => Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                              colorFilter:
+                                              ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        3 /
-                                        5,
+                                    width: 250,
                                     padding: const EdgeInsets.only(
                                         top: 8.0,
                                         bottom: 8.0,
@@ -113,7 +120,7 @@ class _NewArrivalsState extends State<NewArrivals> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${category[i].title} ${category[i].weight}',
+                                          '${festiveSpecialList[i].title} ${festiveSpecialList[i].weight}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
@@ -124,7 +131,7 @@ class _NewArrivalsState extends State<NewArrivals> {
                                           height: 5,
                                         ),
                                         Text(
-                                          '₹ ${category[i].newrate}',
+                                          '₹ ${festiveSpecialList[i].newrate}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12,
@@ -174,72 +181,6 @@ class _NewArrivalsState extends State<NewArrivals> {
   }
 }
 
-class Categories {
-  String imageUrl;
-  String weight;
-  String title;
-  double newrate;
-  double oldrate;
-  String description;
-  List<List> data;
-  Categories({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.newrate,
-    @required this.oldrate,
-    @required this.weight,
-    @required this.description,
-    @required this.data,
-  });
-}
-
-List<Categories> category = [
-  Categories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cucumber',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-  Categories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Apple',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197]
-      ]),
-  Categories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cheese',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157]
-      ]),
-  Categories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Orange',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-];
 
 void _BottomSheet(context, int j) {
   showModalBottomSheet(
@@ -251,23 +192,30 @@ void _BottomSheet(context, int j) {
     builder: (BuildContext bc) {
       return Container(
         padding: EdgeInsets.all(8.0),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * .40,
+        height: MediaQuery.of(context).size.height * .30,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               margin: EdgeInsets.all(10),
-              height: MediaQuery.of(context).size.height * 0.20,
-              width: MediaQuery.of(context).size.width / 4,
-              child: Image.asset(
-                category[j].imageUrl,
-                fit: BoxFit.cover,
+              height: 80,
+              width: 80,
+              child:  CachedNetworkImage(
+                imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[j].imageUrl}",
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        colorFilter:
+                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                  ),
+                ),
               ),
             ),
             Container(
-              width: MediaQuery.of(context).size.width * 3 / 5,
+              width: 250,
               padding: const EdgeInsets.only(
                   top: 8.0, bottom: 8.0, left: 18.0, right: 18.0),
               child: Column(
@@ -275,7 +223,7 @@ void _BottomSheet(context, int j) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    category[j].title,
+                    festiveSpecialList[j].title,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
@@ -301,7 +249,7 @@ void _BottomSheet(context, int j) {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${category[j].description}',
+                        '${festiveSpecialList[j].description}',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
@@ -314,7 +262,7 @@ void _BottomSheet(context, int j) {
                     height: 5,
                   ),
                   Text(
-                    'Selling MRP: ₹ ${category[j].newrate}',
+                    'Selling MRP: ₹ ${festiveSpecialList[j].newrate}',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12,

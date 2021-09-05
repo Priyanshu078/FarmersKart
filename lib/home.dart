@@ -7,6 +7,8 @@ import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
+import 'package:shellcode2/apiData/festiveSpecial.dart';
+import 'package:shellcode2/apiData/immunityBooster.dart';
 import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
@@ -20,6 +22,9 @@ import 'package:shellcode2/search.dart';
 import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'apiData/BannerImagesAPI.dart';
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
 List offerData = offersData;
@@ -34,13 +39,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Data data = new Data();
   int _current = 0;
-  List imgList = [
-    'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1554321586-92083ba0a115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1536679545597-c2e5e1946495?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1543922596-b3bbaba80649?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1502943693086-33b5b1cfdf2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80'
-  ];
+  List imgList = [];
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -65,6 +64,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     requestPermission(_permission);
+    imgList=bannerImages;
   }
 
   String getUserType() {
@@ -278,6 +278,7 @@ class _HomeState extends State<Home> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
+                                  print(bestProductCategory[index].imageUrl);
                                   List temp1 = [
                                     bestProductCategory[index].imageUrl,
                                     bestProductCategory[index].title,
@@ -301,9 +302,19 @@ class _HomeState extends State<Home> {
                                           margin: EdgeInsets.all(10),
                                           height: 60,
                                           width: 60,
-                                          child: Image.asset(
-                                            bestProductCategory[index].imageUrl,
-                                            fit: BoxFit.cover,
+                                          child:CachedNetworkImage(
+                                            imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[index].imageUrl}",
+                                            imageBuilder: (context, imageProvider) => Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                    ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) => CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) => Icon(Icons.error),
                                           ),
                                         ),
                                         Text(
@@ -428,20 +439,21 @@ class _HomeState extends State<Home> {
                             ? ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: listCards2.length,
+                                itemCount: offerData.length,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
                                       List temp2 = [
-                                        listCards2[index].imageUrl,
-                                        listCards2[index].title,
-                                        listCards2[index].weight,
-                                        listCards2[index].newrate,
-                                        listCards2[index].description,
-                                        listCards2[index].oldrate,
-                                        listCards2[index].data,
-                                        listCards2[index].off
+                                        offerData[index].img,
+                                        offerData[index].title,
+                                        offerData[index].weight,
+                                        offerData[index].newrate,
+                                        offerData[index].description,
+                                        offerData[index].oldrate,
+                                        offerData[index].data,
+                                        offerData[index].off
                                       ];
+                                      print(offerData[index].img);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -459,9 +471,19 @@ class _HomeState extends State<Home> {
                                             margin: EdgeInsets.all(10),
                                             height: 80,
                                             width: 80,
-                                            child: Image.asset(
-                                              listCards2[index].imageUrl,
-                                              fit: BoxFit.cover,
+                                            child: CachedNetworkImage(
+                                              imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                              imageBuilder: (context, imageProvider) => Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                      colorFilter:
+                                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) => CircularProgressIndicator(),
+                                              errorWidget: (context, url, error) => Icon(Icons.error),
                                             ),
                                           ),
                                           SizedBox(
@@ -499,7 +521,7 @@ class _HomeState extends State<Home> {
                                                 child: Align(
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    '₹ ${listCards2[index].off} OFF',
+                                                    '₹ ${offerData[index].off} OFF',
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         color: Colors.white),
@@ -510,7 +532,7 @@ class _HomeState extends State<Home> {
                                             height: 3,
                                           ),
                                           Text(
-                                            listCards2[index].title,
+                                            offerData[index].title,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12,
@@ -521,7 +543,7 @@ class _HomeState extends State<Home> {
                                             height: 5,
                                           ),
                                           Text(
-                                            "₹  ${listCards2[index].newrate}",
+                                            "₹  ${offerData[index].newrate}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12,
@@ -561,7 +583,7 @@ class _HomeState extends State<Home> {
                                   return InkWell(
                                     onTap: () {
                                       List temp2 = [
-                                        'assets/bg.jpg',
+                                      offerData[index].img,
                                         offerData[index].name,
                                         offerData[index].productPrice[0].weight,
                                         offerData[index]
@@ -594,9 +616,17 @@ class _HomeState extends State<Home> {
                                             margin: EdgeInsets.all(10),
                                             height: 80,
                                             width: 80,
-                                            child: Image.asset(
-                                              'assets/bg.jpg',
-                                              fit: BoxFit.cover,
+                                            child:CachedNetworkImage(
+                                              imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                              imageBuilder: (context, imageProvider) => Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                      colorFilter:
+                                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           SizedBox(
@@ -732,18 +762,18 @@ class _HomeState extends State<Home> {
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: listCards3.length,
+                            itemCount: festiveSpecialList.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
                                   List temp1 = [
-                                    listCards3[index].imageUrl,
-                                    listCards3[index].title,
-                                    listCards3[index].weight,
-                                    listCards3[index].newrate,
-                                    listCards3[index].description,
-                                    listCards3[index].oldrate,
-                                    listCards3[index].data
+                                    festiveSpecialList[index].imageUrl,
+                                    festiveSpecialList[index].title,
+                                    festiveSpecialList[index].weight,
+                                    festiveSpecialList[index].newrate,
+                                    festiveSpecialList[index].description,
+                                    festiveSpecialList[index].oldrate,
+                                    festiveSpecialList[index].data
                                   ];
                                   Navigator.push(
                                       context,
@@ -762,16 +792,26 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.all(10),
                                         height: 80,
                                         width: 80,
-                                        child: Image.asset(
-                                          listCards3[index].imageUrl,
-                                          fit: BoxFit.cover,
+                                        child: CachedNetworkImage(
+                                          imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                  colorFilter:
+                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(
                                         height: 15,
                                       ),
                                       Text(
-                                        listCards3[index].title,
+                                        festiveSpecialList[index].title,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -782,7 +822,7 @@ class _HomeState extends State<Home> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "₹  ${listCards3[index].newrate}",
+                                        "₹  ${festiveSpecialList[index].newrate}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -869,8 +909,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    DetailPage(0)));
-                                      },
+                                                    DetailPage('1',"Fresh Vegitables,Leafy Vegetables,Extotic Vegetables,Fruits,Peeled or Cut vegitables,Flower")));                                      },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
                                         child: Column(
@@ -883,9 +922,17 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child: Image.asset(
-                                                'assets/bg.jpg',
-                                                fit: BoxFit.cover,
+                                              child:CachedNetworkImage(
+                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808379.png",
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -939,7 +986,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    DetailPage(1)));
+                                                    DetailPage('2',"Sauces & Mayos,Dips & Spreads")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -951,9 +998,17 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child: Image.asset(
-                                                'assets/bg.jpg',
-                                                fit: BoxFit.cover,
+                                              child: CachedNetworkImage(
+                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808537.png",
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -1015,7 +1070,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    DetailPage(2)));
+                                                    DetailPage('4',"Cheese,Butter,Paneer,Lassi,cream")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -1029,9 +1084,17 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child: Image.asset(
-                                                'assets/bg.jpg',
-                                                fit: BoxFit.cover,
+                                              child:CachedNetworkImage(
+                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808959.png",
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -1085,7 +1148,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    DetailPage(3)));
+                                                    DetailPage('9',"Rusk,Biscuits,Cake,Bread,Khari,Toast,chocolate,Chips")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -1097,9 +1160,17 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child: Image.asset(
-                                                'assets/bg.jpg',
-                                                fit: BoxFit.cover,
+                                              child:CachedNetworkImage(
+                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808502.png",
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -1199,18 +1270,18 @@ class _HomeState extends State<Home> {
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: listCards4.length,
+                            itemCount: festiveSpecialList.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
                                   List temp3 = [
-                                    listCards4[index].imageUrl,
-                                    listCards4[index].title,
-                                    listCards4[index].weight,
-                                    listCards4[index].newrate,
-                                    listCards4[index].description,
-                                    listCards4[index].oldrate,
-                                    listCards4[index].data
+                                    festiveSpecialList[index].imageUrl,
+                                    festiveSpecialList[index].title,
+                                    festiveSpecialList[index].weight,
+                                    festiveSpecialList[index].newrate,
+                                    festiveSpecialList[index].description,
+                                    festiveSpecialList[index].oldrate,
+                                    festiveSpecialList[index].data
                                   ];
                                   Navigator.push(
                                       context,
@@ -1229,16 +1300,26 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.all(10),
                                         height: 80,
                                         width: 80,
-                                        child: Image.asset(
-                                          listCards4[index].imageUrl,
-                                          fit: BoxFit.cover,
+                                        child:CachedNetworkImage(
+                                          imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                  colorFilter:
+                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(
                                         height: 15,
                                       ),
                                       Text(
-                                        listCards4[index].title,
+                                        festiveSpecialList[index].title,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -1249,7 +1330,7 @@ class _HomeState extends State<Home> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "₹  ${listCards4[index].newrate}",
+                                        "₹  ${festiveSpecialList[index].newrate}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -1329,18 +1410,18 @@ class _HomeState extends State<Home> {
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: listCards5.length,
+                            itemCount: immunityBoosterList.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
                                   List temp3 = [
-                                    listCards4[index].imageUrl,
-                                    listCards4[index].title,
-                                    listCards4[index].weight,
-                                    listCards4[index].newrate,
-                                    listCards4[index].description,
-                                    listCards4[index].oldrate,
-                                    listCards4[index].data
+                                    immunityBoosterList[index].imageUrl,
+                                    immunityBoosterList[index].title,
+                                    immunityBoosterList[index].weight,
+                                    immunityBoosterList[index].newrate,
+                                    immunityBoosterList[index].description,
+                                    immunityBoosterList[index].oldrate,
+                                    immunityBoosterList[index].data
                                   ];
                                   Navigator.push(
                                       context,
@@ -1359,16 +1440,26 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.all(10),
                                         height: 80,
                                         width: 80,
-                                        child: Image.asset(
-                                          listCards5[index].imageUrl,
-                                          fit: BoxFit.cover,
+                                        child:CachedNetworkImage(
+                                          imageUrl: "http://uprank.live/farmerskart/images/product/${immunityBoosterList[index].imageUrl}",
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                  colorFilter:
+                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(
                                         height: 15,
                                       ),
                                       Text(
-                                        listCards5[index].title,
+                                        immunityBoosterList[index].title,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -1379,7 +1470,7 @@ class _HomeState extends State<Home> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "₹  ${listCards5[index].newrate}",
+                                        "₹  ${immunityBoosterList[index].newrate}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
@@ -1485,277 +1576,3 @@ class _NavigateState extends State<Navigate> {
         ));
   }
 }
-
-class OfferCategories {
-  String imageUrl;
-  String weight;
-  String title;
-  double newrate;
-  double oldrate;
-  String description;
-  double off;
-  List<List> data;
-  OfferCategories({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.newrate,
-    @required this.oldrate,
-    @required this.weight,
-    @required this.description,
-    @required this.data,
-    @required this.off,
-  });
-}
-
-List<OfferCategories> listCards2 = [
-  OfferCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cucumber',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ],
-      off: 10),
-  OfferCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Apple',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197]
-      ],
-      off: 10),
-  OfferCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cheese',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157]
-      ],
-      off: 10),
-  OfferCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Orange',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ],
-      off: 10),
-];
-
-class NewArrivalCategories {
-  String imageUrl;
-  String weight;
-  String title;
-  double newrate;
-  double oldrate;
-  String description;
-  List<List> data;
-  NewArrivalCategories({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.newrate,
-    @required this.oldrate,
-    @required this.weight,
-    @required this.description,
-    @required this.data,
-  });
-}
-
-List<NewArrivalCategories> listCards3 = [
-  NewArrivalCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cucumber',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-  NewArrivalCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Apple',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197]
-      ]),
-  NewArrivalCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cheese',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157]
-      ]),
-  NewArrivalCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Orange',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-];
-
-class FestiveCategories {
-  String imageUrl;
-  String weight;
-  String title;
-  double newrate;
-  double oldrate;
-  String description;
-  List<List> data;
-  FestiveCategories({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.newrate,
-    @required this.oldrate,
-    @required this.weight,
-    @required this.description,
-    @required this.data,
-  });
-}
-
-List<FestiveCategories> listCards4 = [
-  FestiveCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cucumber',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-  FestiveCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Apple',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197]
-      ]),
-  FestiveCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cheese',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157]
-      ]),
-  FestiveCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Orange',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-];
-
-class ImmunityCategories {
-  String imageUrl;
-  String weight;
-  String title;
-  double newrate;
-  double oldrate;
-  String description;
-  List<List> data;
-  ImmunityCategories({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.newrate,
-    @required this.oldrate,
-    @required this.weight,
-    @required this.description,
-    @required this.data,
-  });
-}
-
-List<ImmunityCategories> listCards5 = [
-  ImmunityCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cucumber',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-  ImmunityCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Apple',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197]
-      ]),
-  ImmunityCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Cheese',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157]
-      ]),
-  ImmunityCategories(
-      imageUrl: 'assets/bg.jpg',
-      description: ' ',
-      title: 'Orange',
-      oldrate: 5,
-      newrate: 10,
-      weight: '100 GM',
-      data: [
-        ['180 GM', 200, 197],
-        ['120 GM', 100, 157],
-        ['100 GM', 50, 100]
-      ]),
-];

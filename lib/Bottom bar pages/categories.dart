@@ -5,7 +5,7 @@ import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/home.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 List<Categories> category = category1;
 
 class Category extends StatelessWidget {
@@ -55,18 +55,31 @@ class Category extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetailPage(i)));
+                                builder: (context) => DetailPage(category[i].categoryId,category[i].subCategory)));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+
                           Container(
                             margin: EdgeInsets.all(10),
                             height: 80,
                             width: 80,
-                            child: Image.asset(
-                              category[i].imageUrl,
-                              fit: BoxFit.cover,
+
+                            child: CachedNetworkImage(
+
+
+                              imageUrl: "http://uprank.live/farmerskart/images/category/${category[i].imageUrl}",
+
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                      colorFilter:
+                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                ),
+                              ),
                             ),
                           ),
                           Padding(

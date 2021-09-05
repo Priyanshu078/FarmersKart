@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
+import 'package:shellcode2/apiData/BannerImagesAPI.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:shellcode2/category.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
+
+import 'apiData/AllCenter.dart';
+import 'apiData/festiveSpecial.dart';
+import 'apiData/immunityBooster.dart';
 
 class FrontPage extends StatefulWidget {
   const FrontPage({Key key}) : super(key: key);
@@ -27,8 +32,12 @@ class _FrontPageState extends State<FrontPage> {
     super.initState();
     fetchDataByDistrictApi();
     fetchBestProductApiData();
+    fetchImmunityBoosterProductApiData();
+    fetchFestiveSpecialProductApiData();
+    fetchAllCenter();
     Data data = new Data();
     data.getOffersData();
+    fetchBannerImages();
   }
 
   @override

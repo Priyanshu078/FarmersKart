@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-// import 'package:shellcode2/apiData/getUserFav.dart';
+import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:shellcode2/apiData/loginApiData.dart';
 import 'package:shellcode2/filter.dart';
 // import 'package:shellcode2/apiData/BannerImagesAPI.dart';
-// import 'package:shellcode2/apiData/subCategory.dart';
+import 'package:shellcode2/apiData/subCategory.dart';
 
 import '../detailServiceList.dart';
 
@@ -29,12 +29,12 @@ class APIData extends ChangeNotifier {
 
 
 
-  // List<UserFavProductCategories> detailsByCategory = [];
-  //
-  // void initialUserFavProductCategories(List<UserFavProductCategories> list) {
-  //   this.detailsByCategory = list;
-  //   notifyListeners();
-  // }
+  List<UserFavProductCategories> detailsByCategory = [];
+
+  void initialUserFavProductCategories(List<UserFavProductCategories> list) {
+    this.detailsByCategory = list;
+    notifyListeners();
+  }
 
   void initializeTotalAmount(double totalAmount) {
     if (totalAmount != null) {

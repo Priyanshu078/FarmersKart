@@ -9,6 +9,7 @@ import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetails extends StatefulWidget {
   List temporary = [];
@@ -135,10 +136,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                           padding: EdgeInsets.all(10.0),
                           height: 200,
                           width: 200,
-                          child: Image.asset(
-                            temp[0],
-                            fit: BoxFit.cover,
-                          )),
+                          child:CachedNetworkImage(
+                            imageUrl: "http://uprank.live/farmerskart/images/product/${temp[0]}",
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    colorFilter:
+                                    ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                              ),
+                            ),
+                          )
+                      ),
                     ),
                   ],
                 ),
@@ -211,7 +221,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                        print(data.quantity);
                       return Text(
-                        '${int.parse(temp[3])*data.quantity}',
+                        '${(temp[3])*data.quantity}',
                         style: TextStyle(
                             color: Colors.deepPurple[800],
                             fontWeight: FontWeight.w500,
@@ -396,6 +406,9 @@ class _ProductDetailsState extends State<ProductDetails> {
     print(productId);
     String Quantity = quantity.toString();
     print(Quantity);
+    print('templenth');
+    print(temp[6][0][0]);
+    print('${temp[6][0][2]}');
     String unitPrice = widget.offers
         ? temp[6][0].discountedPrice
         : temp[6][0][3] == ""
@@ -413,6 +426,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     print(originalPrice);
     String url =
         "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
+    print(url);
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
@@ -618,6 +632,7 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                       thickness: 0.8,
                     ),
                     for (int k = 0; k < temp[6].length; k++) ...{
+
                       Container(
                         height: 35,
                         decoration: BoxDecoration(

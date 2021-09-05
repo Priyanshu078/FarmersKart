@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:cached_network_image/cached_network_image.dart';
 class OfferMore extends StatefulWidget {
   const OfferMore({Key key}) : super(key: key);
 
@@ -80,7 +80,7 @@ class _OfferMoreState extends State<OfferMore> {
                             borderRadius: BorderRadius.circular(30),
                             onTap: () {
                               List temp1 = [
-                                'assets/bg.jpg',
+                                offerData[i].img,
                                 offerData[i].name,
                                 offerData[i].productPrice[0].weight,
                                 offerData[i].productPrice[0].discountedPrice,
@@ -141,9 +141,17 @@ class _OfferMoreState extends State<OfferMore> {
                                       margin: EdgeInsets.all(15),
                                       height: 80,
                                       width: 80,
-                                      child: Image.asset(
-                                        'assets/bg.jpg',
-                                        fit: BoxFit.cover,
+                                      child:CachedNetworkImage(
+                                        imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[i].img}",
+                                        imageBuilder: (context, imageProvider) => Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                                colorFilter:
+                                                ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],

@@ -65,7 +65,7 @@ Future<List<Product>> fetchBestProductApiData() async {
         newRate = double.parse(BestProductsPrice[0].discountedPrice);
 
       bestProductCategoryList.add(BestProductCategories(
-          imageUrl: 'assets/bg.jpg',
+          imageUrl: BestProducts[i].img,
           title: BestProducts[i].name,
           newrate: newRate,
           oldrate: double.parse(BestProductsPrice[0].originalPrice),

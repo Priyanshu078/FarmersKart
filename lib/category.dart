@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shellcode2/Bottom bar pages/categories.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 
-import 'apiData/Constants.dart';
+
 
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
@@ -24,9 +25,10 @@ Future<List<kategory>> fetchDataByDistrictApi() async {
     list = data.map((json) => kategory.fromJson(json)).toList();
 
     for (int i = 0; i < list.length; i++) {
-      category1.add(Categories(imageUrl: 'assets/bg.jpg', title: list[i].name));
+      category1.add(Categories(imageUrl: list[i].logo, title: list[i].name,subCategory: list[i].subcategory,categoryId: list[i].id));
 
-      print(list[i].name);
+
+      print(list[i].logo);
     }
 
     return list;
@@ -37,19 +39,18 @@ Future<List<kategory>> fetchDataByDistrictApi() async {
 class Categories {
   String imageUrl;
   String title;
+  String subCategory;
+  String categoryId;
   //String classTitle;
   Categories({
     @required this.imageUrl,
     @required this.title,
+    @required this.subCategory,
+    @required this.categoryId,
   });
 }
 
-List<Categories> category1 = [
-  // Categories(imageUrl: 'assets/bg.jpg', title: 'Fresh Vegetables & fruit'),
-  // Categories(imageUrl: 'assets/bg.jpg', title: 'Grocery & Staples'),
-  // Categories(imageUrl: 'assets/bg.jpg', title: 'Dairy'),
-  // Categories(imageUrl: 'assets/bg.jpg', title: 'Bakery & Confectionery'),
-];
+List<Categories> category1 = [];
 
 class Welcome {
   Welcome({
@@ -61,15 +62,15 @@ class Welcome {
   String code;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-        category: List<kategory>.from(
-            json["category"].map((x) => kategory.fromJson(x))),
-        code: json["code"],
-      );
+    category: List<kategory>.from(
+        json["category"].map((x) => kategory.fromJson(x))),
+    code: json["code"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "category": List<dynamic>.from(category.map((x) => x.toJson())),
-        "code": code,
-      };
+    "category": List<dynamic>.from(category.map((x) => x.toJson())),
+    "code": code,
+  };
 }
 
 class kategory {
@@ -88,18 +89,18 @@ class kategory {
   String subcategory;
 
   factory kategory.fromJson(Map<String, dynamic> json) => kategory(
-        id: json["id"],
-        name: json["name"],
-        delFlag: json["del_flag"],
-        logo: json["logo"],
-        subcategory: json["subcategory"],
-      );
+    id: json["id"],
+    name: json["name"],
+    delFlag: json["del_flag"],
+    logo: json["logo"],
+    subcategory: json["subcategory"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "del_flag": delFlag,
-        "logo": logo,
-        "subcategory": subcategory,
-      };
+    "id": id,
+    "name": name,
+    "del_flag": delFlag,
+    "logo": logo,
+    "subcategory": subcategory,
+  };
 }

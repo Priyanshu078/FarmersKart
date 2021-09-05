@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
 int quantity = 1;
@@ -116,9 +117,17 @@ class _BestSellingState extends State<BestSelling> {
                                         width:
                                             MediaQuery.of(context).size.width /
                                                 5,
-                                        child: Image.asset(
-                                          bestProductCategory[i].imageUrl,
-                                          fit: BoxFit.cover,
+                                        child: CachedNetworkImage(
+                                          imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[i].imageUrl}",
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                  colorFilter:
+                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -287,9 +296,17 @@ void _BottomSheet(context, int j) {
               margin: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height * 0.20,
               width: MediaQuery.of(context).size.width / 4,
-              child: Image.asset(
-                bestProductCategory[j].imageUrl,
-                fit: BoxFit.cover,
+              child: CachedNetworkImage(
+                imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[j].imageUrl}",
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        colorFilter:
+                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                  ),
+                ),
               ),
             ),
             Container(

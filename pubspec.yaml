@@ -47,7 +47,6 @@ dependencies:
   cached_network_image: ^3.1.0
   razorpay_flutter: ^1.2.7
   firebase_auth: ^3.1.0
-  flutter_facebook_login: ^3.0.0
   google_sign_in: ^5.1.0
 
 dev_dependencies:
