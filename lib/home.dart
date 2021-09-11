@@ -64,7 +64,11 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     requestPermission(_permission);
-    imgList=bannerImages;
+    imgList = bannerImages;
+    if (Provider.of<APIData>(context, listen: false).centerId == null) {
+      Provider.of<APIData>(context, listen: false).initializeCenterId(
+          Provider.of<APIData>(context, listen: false).user.centerId);
+    }
   }
 
   String getUserType() {
@@ -302,19 +306,28 @@ class _HomeState extends State<Home> {
                                           margin: EdgeInsets.all(10),
                                           height: 60,
                                           width: 60,
-                                          child:CachedNetworkImage(
-                                            imageUrl: "http://uprank.live/farmerskart/images/product/${bestProductCategory[index].imageUrl}",
-                                            imageBuilder: (context, imageProvider) => Container(
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "http://uprank.live/farmerskart/images/product/${bestProductCategory[index].imageUrl}",
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: imageProvider,
                                                     fit: BoxFit.cover,
                                                     colorFilter:
-                                                    ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                        ColorFilter.mode(
+                                                            Colors.transparent,
+                                                            BlendMode
+                                                                .colorBurn)),
                                               ),
                                             ),
-                                            placeholder: (context, url) => CircularProgressIndicator(),
-                                            errorWidget: (context, url, error) => Icon(Icons.error),
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           ),
                                         ),
                                         Text(
@@ -472,18 +485,28 @@ class _HomeState extends State<Home> {
                                             height: 80,
                                             width: 80,
                                             child: CachedNetworkImage(
-                                              imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
-                                              imageBuilder: (context, imageProvider) => Container(
+                                              imageUrl:
+                                                  "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                       image: imageProvider,
                                                       fit: BoxFit.cover,
                                                       colorFilter:
-                                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                          ColorFilter.mode(
+                                                              Colors
+                                                                  .transparent,
+                                                              BlendMode
+                                                                  .colorBurn)),
                                                 ),
                                               ),
-                                              placeholder: (context, url) => CircularProgressIndicator(),
-                                              errorWidget: (context, url, error) => Icon(Icons.error),
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
                                             ),
                                           ),
                                           SizedBox(
@@ -583,7 +606,7 @@ class _HomeState extends State<Home> {
                                   return InkWell(
                                     onTap: () {
                                       List temp2 = [
-                                      offerData[index].img,
+                                        offerData[index].img,
                                         offerData[index].name,
                                         offerData[index].productPrice[0].weight,
                                         offerData[index]
@@ -616,15 +639,22 @@ class _HomeState extends State<Home> {
                                             margin: EdgeInsets.all(10),
                                             height: 80,
                                             width: 80,
-                                            child:CachedNetworkImage(
-                                              imageUrl: "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
-                                              imageBuilder: (context, imageProvider) => Container(
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                       image: imageProvider,
                                                       fit: BoxFit.cover,
                                                       colorFilter:
-                                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                          ColorFilter.mode(
+                                                              Colors
+                                                                  .transparent,
+                                                              BlendMode
+                                                                  .colorBurn)),
                                                 ),
                                               ),
                                             ),
@@ -793,18 +823,24 @@ class _HomeState extends State<Home> {
                                         height: 80,
                                         width: 80,
                                         child: CachedNetworkImage(
-                                          imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
-                                          imageBuilder: (context, imageProvider) => Container(
+                                          imageUrl:
+                                              "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-                                                  colorFilter:
-                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn)),
                                             ),
                                           ),
-                                          placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(
@@ -908,8 +944,10 @@ class _HomeState extends State<Home> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPage('1',"Fresh Vegitables,Leafy Vegetables,Extotic Vegetables,Fruits,Peeled or Cut vegitables,Flower")));                                      },
+                                                builder: (context) => DetailPage(
+                                                    '1',
+                                                    "Fresh Vegitables,Leafy Vegetables,Extotic Vegetables,Fruits,Peeled or Cut vegitables,Flower")));
+                                      },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
                                         child: Column(
@@ -922,15 +960,22 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child:CachedNetworkImage(
-                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808379.png",
-                                                imageBuilder: (context, imageProvider) => Container(
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/category/1625808379.png",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
                                                         colorFilter:
-                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
                                                   ),
                                                 ),
                                               ),
@@ -985,8 +1030,9 @@ class _HomeState extends State<Home> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPage('2',"Sauces & Mayos,Dips & Spreads")));
+                                                builder: (context) => DetailPage(
+                                                    '2',
+                                                    "Sauces & Mayos,Dips & Spreads")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -999,14 +1045,21 @@ class _HomeState extends State<Home> {
                                               height: 100,
                                               width: 100,
                                               child: CachedNetworkImage(
-                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808537.png",
-                                                imageBuilder: (context, imageProvider) => Container(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/category/1625808537.png",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
                                                         colorFilter:
-                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
                                                   ),
                                                 ),
                                               ),
@@ -1069,8 +1122,9 @@ class _HomeState extends State<Home> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPage('4',"Cheese,Butter,Paneer,Lassi,cream")));
+                                                builder: (context) => DetailPage(
+                                                    '4',
+                                                    "Cheese,Butter,Paneer,Lassi,cream")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -1084,15 +1138,22 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child:CachedNetworkImage(
-                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808959.png",
-                                                imageBuilder: (context, imageProvider) => Container(
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/category/1625808959.png",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
                                                         colorFilter:
-                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
                                                   ),
                                                 ),
                                               ),
@@ -1147,8 +1208,9 @@ class _HomeState extends State<Home> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPage('9',"Rusk,Biscuits,Cake,Bread,Khari,Toast,chocolate,Chips")));
+                                                builder: (context) => DetailPage(
+                                                    '9',
+                                                    "Rusk,Biscuits,Cake,Bread,Khari,Toast,chocolate,Chips")));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(10),
@@ -1160,15 +1222,22 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.all(10),
                                               height: 100,
                                               width: 100,
-                                              child:CachedNetworkImage(
-                                                imageUrl: "http://uprank.live/farmerskart/images/category/1625808502.png",
-                                                imageBuilder: (context, imageProvider) => Container(
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/category/1625808502.png",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
                                                         colorFilter:
-                                                        ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
                                                   ),
                                                 ),
                                               ),
@@ -1300,19 +1369,25 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.all(10),
                                         height: 80,
                                         width: 80,
-                                        child:CachedNetworkImage(
-                                          imageUrl: "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
-                                          imageBuilder: (context, imageProvider) => Container(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-                                                  colorFilter:
-                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn)),
                                             ),
                                           ),
-                                          placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(
@@ -1440,19 +1515,25 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.all(10),
                                         height: 80,
                                         width: 80,
-                                        child:CachedNetworkImage(
-                                          imageUrl: "http://uprank.live/farmerskart/images/product/${immunityBoosterList[index].imageUrl}",
-                                          imageBuilder: (context, imageProvider) => Container(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "http://uprank.live/farmerskart/images/product/${immunityBoosterList[index].imageUrl}",
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-                                                  colorFilter:
-                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn)),
                                             ),
                                           ),
-                                          placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
                                       ),
                                       SizedBox(

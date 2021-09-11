@@ -8,6 +8,7 @@ import 'package:shellcode2/filter.dart';
 import 'package:shellcode2/apiData/subCategory.dart';
 
 import '../detailServiceList.dart';
+import '../paymentOption.dart';
 
 class APIData extends ChangeNotifier {
   UserOfApp user;
@@ -24,10 +25,16 @@ class APIData extends ChangeNotifier {
   String userId;
   String address;
   double totalAmount = 0.0;
-  double discountAmount=0.0;
-  int quantity=1;
-
-
+  double discountAmount = 0.0;
+  int quantity = 1;
+  String centerId;
+  double walletAmount = 0;
+  bool walletUsed = false;
+  bool onlinePayment = false;
+  bool cashOnDelivery = false;
+  Payment choice;
+  double deliveryCharges = 40.0;
+  double walletAmountUsed = 0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -36,25 +43,101 @@ class APIData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeTotalAmount(double totalAmount) {
-    if (totalAmount != null) {
-      this.totalAmount = totalAmount;
+  void changeDeliveryCharges(double deliveryCharges) {
+    if (deliveryCharges != null) {
+      this.deliveryCharges = deliveryCharges;
     }
     notifyListeners();
   }
+
+  void initializeWalletAmount(double amount) {
+    if (amount != null) {
+      walletAmount = amount;
+    }
+    notifyListeners();
+  }
+
+  void initializepaymentChoice(Payment value) {
+    choice = value;
+    notifyListeners();
+  }
+
+  void preferOnlinePayment() {
+    onlinePayment = true;
+    cashOnDelivery = false;
+    notifyListeners();
+  }
+
+  void preferCOD() {
+    cashOnDelivery = true;
+    onlinePayment = false;
+    notifyListeners();
+  }
+
+  void useWallet() {
+    walletUsed = !walletUsed;
+    notifyListeners();
+    print("total Amount $totalAmount");
+    if (walletUsed == true) {
+      if (walletAmount < totalAmount) {
+        walletAmountUsed = (walletAmount).toDouble();
+        totalAmount -= walletAmount;
+      } else {
+        walletAmountUsed = totalAmount;
+        totalAmount = 0;
+      }
+    } else {
+      if (walletAmount < totalAmount) {
+        totalAmount += walletAmountUsed;
+        walletAmountUsed = 0;
+      } else if (totalAmount == 0) {
+        totalAmount = walletAmountUsed;
+        walletAmountUsed = 0;
+      } else {
+        totalAmount += walletAmountUsed;
+        walletAmountUsed = 0;
+      }
+    }
+    initializeTotalAmount(totalAmount);
+    print("total Amount $totalAmount");
+    walletAmountUsedWhenPaying(walletAmountUsed);
+    print("wallet amount used $walletAmountUsed");
+  }
+
+  void initializeCenterId(String centerId) {
+    if (centerId != null) {
+      this.centerId = centerId;
+    }
+    notifyListeners();
+  }
+
+  void walletAmountUsedWhenPaying(double walletAmountUsed) {
+    if (walletAmountUsed != null) {
+      this.walletAmountUsed = walletAmountUsed;
+    }
+    notifyListeners();
+  }
+
+  void initializeTotalAmount(double amount) {
+    if (amount != null) {
+      this.totalAmount = amount;
+    }
+    notifyListeners();
+  }
+
   void initializeTotalDiscount(double discountAmount) {
     if (discountAmount != null) {
       this.discountAmount = discountAmount;
     }
     notifyListeners();
   }
+
   void initializeQuantity(int value) {
-    if (value!= null) {
+    if (value != null) {
       this.quantity = value;
     }
     notifyListeners();
   }
-
 
   void initializeUser(UserOfApp user) {
     if (user != null) {

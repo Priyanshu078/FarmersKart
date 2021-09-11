@@ -23,6 +23,7 @@ String selectedChoice = "";
 class _WalletState extends State<Wallet> {
   String transactionId = "";
   Razorpay _razorpay;
+  double walletamount = 0;
   TextEditingController moneyController = new TextEditingController();
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _WalletState extends State<Wallet> {
   void dispose() {
     super.dispose();
     _razorpay.clear();
+    moneyController.dispose();
   }
 
   void initiateRazorpay() {
@@ -144,14 +146,17 @@ class _WalletState extends State<Wallet> {
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 0.8),
                                     ),
-                                    Text(
-                                      snapshot.data.toString(),
-                                      style: TextStyle(
-                                          color: Colors.deepPurple,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.8),
-                                    )
+                                    Consumer<APIData>(
+                                        builder: (context, wallet, child) {
+                                      return Text(
+                                        wallet.walletAmount.toString(),
+                                        style: TextStyle(
+                                            color: Colors.deepPurple,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 0.8),
+                                      );
+                                    })
                                   ],
                                 )
                               ],
@@ -192,6 +197,7 @@ class _WalletState extends State<Wallet> {
                                     child: TextField(
                                       controller: moneyController,
                                       cursorColor: Colors.purple[600],
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                           hintText: "Amount (₹)"),
                                     ),
@@ -452,6 +458,10 @@ class _WalletState extends State<Wallet> {
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
+    walletamount = double.parse(jsonData["total"]);
+    print(walletamount);
+    Provider.of<APIData>(context, listen: false)
+        .initializeWalletAmount(walletamount);
     return jsonData["total"];
   }
 
@@ -501,7 +511,24 @@ class _WalletState extends State<Wallet> {
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
-      showSnackBar("Amount Added to the wallet");
+      updateUserWallet();
+    }
+  }
+
+  void updateUserWallet() async {
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    http.Response response;
+    double amount = walletamount + double.parse(moneyController.text);
+    print(amount);
+    Provider.of<APIData>(context, listen: false).initializeWalletAmount(amount);
+    print(Provider.of<APIData>(context, listen: false).walletAmount);
+    String url =
+        "$header/app_api/updateUserWallet.php?id=$userId&amount=$amount";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      showSnackBar("Amount added to wallet");
     }
   }
 

@@ -28,12 +28,16 @@ class _CartState extends State<Cart> {
   String title1 = '';
   double totalCost = 0;
   double totalDiscount = 0;
+  double deliveryCharges = 40.00;
+  List productOrderId = [];
+  String couponId = "";
+  String couponCode = "";
+  String couponValue = "";
 
   @override
   void initState() {
     // getCartProducts();
     super.initState();
-
   }
 
   @override
@@ -44,554 +48,542 @@ class _CartState extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
-
-
-      // if (totalAmount > 240) {
-      //   Provider.of<APIData>(context,
-      //       listen: false)
-      //       .initializeTotalAmount(totalAmount);
-      // } else {
-      //   Provider.of<APIData>(context,
-      //       listen: false)
-      //       .initializeTotalAmount(
-      //       totalAmount + 40);
-      // }
-      //        print('ishan');
+    // if (totalAmount > 240) {
+    //   Provider.of<APIData>(context,
+    //       listen: false)
+    //       .initializeTotalAmount(totalAmount);
+    // } else {
+    //   Provider.of<APIData>(context,
+    //       listen: false)
+    //       .initializeTotalAmount(
+    //       totalAmount + 40);
+    // }
+    //        print('ishan');
 
     String userId = Provider.of<APIData>(context, listen: false).user.id;
     String pincode = Provider.of<APIData>(context, listen: false).user.pincode;
-    return   Scaffold(
-          backgroundColor: lightbg,
-          appBar: AppBar(
-            centerTitle: true,
-            titleSpacing: 0.0,
-            elevation: 0,
-            //brightness: Brightness.light,
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [left, middle, Colors.purple])),
-            ),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios, size: 20, color: yellow),
-            ),
-            title: Text(
-              'Review Basket',
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
+    return Scaffold(
+      backgroundColor: lightbg,
+      appBar: AppBar(
+        centerTitle: true,
+        titleSpacing: 0.0,
+        elevation: 0,
+        //brightness: Brightness.light,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: yellow),
+        ),
+        title: Text(
+          'Review Basket',
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 18,
+            color: Colors.white,
           ),
-          body: Column(
+        ),
+      ),
+      body: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                    ),
-                  ),
-                  Text(
-                    "Deliver to ",
-                    style: TextStyle(fontSize: 15, color: Colors.green),
-                  ),
-                  Text(
-                    "$pincode",
-                    style: TextStyle(fontSize: 15),
-                  )
-                ],
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.location_on,
+                  color: Colors.red,
+                ),
               ),
-              Expanded(
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FutureBuilder(
-                            future: getCartProducts(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                if (snapshot.hasData) {
-                                  return Expanded(
-                                      child: ListView.builder(
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, int index) {
-                                            try {
-                                              double totalAmount = 0;
-                                              for (int i = 0;
-                                              i < snapshot.data[index].length;
-                                              i++) {
-                                                totalAmount += double.parse(snapshot
-                                                    .data[index][i].totalAmount);
-                                                totalDiscount += (double.parse(snapshot
-                                                    .data[index][i]
-                                                    .unitOriginalPrice) -
-                                                    double.parse(snapshot
-                                                        .data[index][i].unitPrice));
-                                              }
-                                              print("Hello WOrld");
-                                              // if (totalAmount > 240) {
-                                              //   Provider.of<APIData>(context,
-                                              //       listen: false)
-                                              //       .initializeTotalAmount(totalAmount);
-                                              // } else {
-                                              //   Provider.of<APIData>(context,
-                                              //       listen: false)
-                                              //       .initializeTotalAmount(
-                                              //       totalAmount + 40);
-                                              // }
+              Text(
+                "Deliver to ",
+                style: TextStyle(fontSize: 15, color: Colors.green),
+              ),
+              Text(
+                "$pincode",
+                style: TextStyle(fontSize: 15),
+              )
+            ],
+          ),
+          Expanded(
+              child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                FutureBuilder(
+                    future: getCartProducts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return Expanded(
+                              child: ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, int index) {
+                                    try {
+                                      double totalAmount = 0;
+                                      for (int i = 0;
+                                          i < snapshot.data[index].length;
+                                          i++) {
+                                        totalAmount += double.parse(snapshot
+                                            .data[index][i].totalAmount);
+                                        totalDiscount += (double.parse(snapshot
+                                                .data[index][i]
+                                                .unitOriginalPrice) -
+                                            double.parse(snapshot
+                                                .data[index][i].unitPrice));
+                                      }
+                                      print("Hello WOrld");
+                                      // if (totalAmount > 240) {
+                                      //   Provider.of<APIData>(context,
+                                      //       listen: false)
+                                      //       .initializeTotalAmount(totalAmount);
+                                      // } else {
+                                      //   Provider.of<APIData>(context,
+                                      //       listen: false)
+                                      //       .initializeTotalAmount(
+                                      //       totalAmount + 40);
+                                      // }
 
-
-                                              print(totalAmount);
-                                              print(Provider.of<APIData>(context,
-                                                  listen: false).totalAmount);
-
-                                            } catch (e) {
-                                              print(e);
-                                            }
-                                            if (snapshot.data.length == 0) {
-                                              return Container();
-                                            } else {
-                                              return Container(
-                                                child: Column(children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          snapshot.data[index][0]
-                                                              .categoryName,
-                                                          style: TextStyle(
-                                                              color: Colors.purple[600],
-                                                              fontWeight:
-                                                              FontWeight.bold),
-                                                        ),
-                                                        Text(
-                                                          snapshot.data[index].length
-                                                              .toString() +
-                                                              " Items",
-                                                          style: TextStyle(
-                                                              color: Colors.purple[600],
-                                                              fontWeight:
-                                                              FontWeight.bold),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.all(8.0),
-                                                    child: Container(
+                                      print(totalAmount);
+                                      print(Provider.of<APIData>(context,
+                                              listen: false)
+                                          .totalAmount);
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                    if (snapshot.data.length == 0) {
+                                      return Container();
+                                    } else {
+                                      return Container(
+                                        child: Column(children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  snapshot.data[index][0]
+                                                      .categoryName,
+                                                  style: TextStyle(
+                                                      color: Colors.purple[600],
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  snapshot.data[index].length
+                                                          .toString() +
+                                                      " Items",
+                                                  style: TextStyle(
+                                                      color: Colors.purple[600],
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Container(
+                                              child: Column(
+                                                children: [
+                                                  for (int i = 0;
+                                                      i <
+                                                          snapshot.data[index]
+                                                              .length;
+                                                      i++) ...{
+                                                    Container(
+                                                      color: Colors.white,
                                                       child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          for (int i = 0;
-                                                          i <
-                                                              snapshot.data[index]
-                                                                  .length;
-                                                          i++) ...{
-                                                            Container(
-                                                              color: Colors.white,
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                        const EdgeInsets
+                                                          Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
                                                                             .all(
-                                                                            8.0),
-                                                                        child:
-                                                                        Image.asset(
-                                                                          "assets/bg.jpg",
-                                                                          scale: 2.5,
-                                                                        ),
-                                                                      ),
-                                                                      Column(
-                                                                        mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                        crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                        children: [
-                                                                          Padding(
-                                                                              padding:
-                                                                              EdgeInsets.all(
-                                                                                  8),
-                                                                              child:
-                                                                              Text(
-                                                                                snapshot
-                                                                                    .data[index][i]
-                                                                                    .productName.toString(),
-                                                                                style: TextStyle(
-                                                                                    color:
-                                                                                    Colors.purple[600],
-                                                                                    fontSize: 15),
-                                                                              )),
-                                                                          Padding(
-                                                                              padding:
-                                                                              EdgeInsets.all(
-                                                                                  8),
-                                                                              child:
-                                                                              Text(
-                                                                                snapshot
-                                                                                    .data[index][i]
-                                                                                    .weight,
-                                                                                style: TextStyle(
-                                                                                    color:
-                                                                                    Colors.amber[600],
-                                                                                    fontSize: 15),
-                                                                              )),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                        8.0),
+                                                                child:
+                                                                    Image.asset(
+                                                                  "assets/bg.jpg",
+                                                                  scale: 2.5,
+                                                                ),
+                                                              ),
+                                                              Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
                                                                   Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        right: MediaQuery.of(
-                                                                            context)
-                                                                            .size
-                                                                            .width /
-                                                                            8),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                      children: [
-                                                                        SizedBox(
-                                                                          width: 10,
-                                                                        ),
-                                                                        Text(
-                                                                          "₹ ${snapshot.data[index][i].unitPrice}",
-                                                                          style: TextStyle(
-                                                                              color: Colors
-                                                                                  .purple[
-                                                                              600],
-                                                                              fontSize:
-                                                                              15),
-                                                                        ),
-                                                                        snapshot.data[index][i].unitPrice ==
-                                                                            snapshot
-                                                                                .data[index][
-                                                                            i]
-                                                                                .unitOriginalPrice
-                                                                            ? Text("")
-                                                                            : Text(
-                                                                            "₹ ${snapshot.data[index][i].unitOriginalPrice}",
-                                                                            style: TextStyle(
-                                                                                color: Colors.purple[
-                                                                                600],
-                                                                                fontSize:
-                                                                                15,
-                                                                                decoration:
-                                                                                TextDecoration.lineThrough)),
-                                                                        IconButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(
-                                                                                      () {
-                                                                                    deleteFromCart(snapshot
-                                                                                        .data[index][i]
-                                                                                        .id);
-                                                                                  });
-                                                                            },
-                                                                            icon: Icon(Icons
-                                                                                .delete)),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 15,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        right: MediaQuery.of(
-                                                                            context)
-                                                                            .size
-                                                                            .width /
-                                                                            10),
-                                                                    child: Align(
-                                                                      alignment: Alignment
-                                                                          .centerRight,
+                                                                      padding: EdgeInsets.only(
+                                                                          top:
+                                                                              8,
+                                                                          left:
+                                                                              8,
+                                                                          bottom:
+                                                                              8),
                                                                       child:
-                                                                      CustomStepper(
-                                                                        lowerLimit: 1,
-                                                                        upperLimit: 10,
-                                                                        value: 1,
-                                                                        stepValue: 1,
-                                                                        iconSize: 10,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 15,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Flexible(
-                                                                        flex: 2,
-                                                                        child: Padding(
-                                                                          padding:
-                                                                          EdgeInsets
-                                                                              .all(
-                                                                              8.0),
-                                                                          child:
-                                                                          TextField(
-                                                                            controller:
-                                                                            specificationController,
-                                                                            decoration:
-                                                                            InputDecoration(
-                                                                              hintText:
-                                                                              "Enter specification",
-                                                                              border: OutlineInputBorder(
-                                                                                  borderRadius:
-                                                                                  BorderRadius.circular(10)),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Flexible(
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .only(
-                                                                              left:
-                                                                              8.0),
-                                                                          child: MaterialButton(
-                                                                              minWidth: MediaQuery.of(context).size.width / 4,
-                                                                              color: Colors.purple[600],
-                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                                                              elevation: 10,
-                                                                              child: Text(
-                                                                                "SAVE",
-                                                                                style: TextStyle(
-                                                                                    color:
-                                                                                    Colors.white,
-                                                                                    fontSize: 15),
-                                                                              ),
-                                                                              onPressed: () {
-                                                                                addSpecification(
-                                                                                    snapshot.data[index][i].productId,
-                                                                                    specificationController.text);
-                                                                              }),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  )
+                                                                          Text(
+                                                                        snapshot
+                                                                            .data[index][i]
+                                                                            .productName
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.purple[600],
+                                                                            fontSize: 15),
+                                                                      )),
+                                                                  Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              8),
+                                                                      child:
+                                                                          Text(
+                                                                        snapshot
+                                                                            .data[index][i]
+                                                                            .weight,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.amber[600],
+                                                                            fontSize: 15),
+                                                                      )),
                                                                 ],
                                                               ),
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(
+                                                                right: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    8),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Text(
+                                                                  "₹ ${snapshot.data[index][i].unitPrice}",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                              .purple[
+                                                                          600],
+                                                                      fontSize:
+                                                                          15),
+                                                                ),
+                                                                snapshot.data[index][i].unitPrice ==
+                                                                        snapshot
+                                                                            .data[index][
+                                                                                i]
+                                                                            .unitOriginalPrice
+                                                                    ? Text("")
+                                                                    : Text(
+                                                                        "₹ ${snapshot.data[index][i].unitOriginalPrice}",
+                                                                        style: TextStyle(
+                                                                            color: Colors.purple[
+                                                                                600],
+                                                                            fontSize:
+                                                                                15,
+                                                                            decoration:
+                                                                                TextDecoration.lineThrough)),
+                                                                IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      setState(
+                                                                          () {
+                                                                        deleteFromCart(snapshot
+                                                                            .data[index][i]
+                                                                            .id);
+                                                                      });
+                                                                    },
+                                                                    icon: Icon(Icons
+                                                                        .delete)),
+                                                              ],
                                                             ),
-                                                            SizedBox(
-                                                              height: 10,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(
+                                                                right: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    10),
+                                                            child: Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child:
+                                                                  CustomStepper(
+                                                                lowerLimit: 1,
+                                                                upperLimit: 10,
+                                                                value: int.parse(
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                            [i]
+                                                                        .quantity),
+                                                                stepValue: 1,
+                                                                iconSize: 10,
+                                                              ),
                                                             ),
-                                                          },
+                                                          ),
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Flexible(
+                                                                flex: 2,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child:
+                                                                      TextField(
+                                                                    controller:
+                                                                        specificationController,
+                                                                    decoration:
+                                                                        InputDecoration(
+                                                                      hintText:
+                                                                          "Enter specification",
+                                                                      border: OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10)),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Flexible(
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          8.0),
+                                                                  child: MaterialButton(
+                                                                      minWidth: MediaQuery.of(context).size.width / 4,
+                                                                      color: Colors.purple[600],
+                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                                                      elevation: 10,
+                                                                      child: Text(
+                                                                        "SAVE",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontSize: 15),
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        addSpecification(
+                                                                            snapshot.data[index][i].productId,
+                                                                            specificationController.text);
+                                                                      }),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
                                                       ),
                                                     ),
-                                                  ),
-                                                ]),
-                                              );
-                                            }
-                                          }
-                                          )
-                                  );
-
-                                } else if (snapshot.hasError) {
-                                  print(snapshot.error);
-                                } else {
-                                  if (snapshot.data.length == 0) {
-                                    return Container();
-                                  } else {
-                                    return CircularProgressIndicator();
-                                  }
-                                }
-                              }
-                              return Expanded(child: Container());
-                            }
-
-                            ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white,
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 6,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          flex: 2,
-                                          child: TextField(
-                                            controller: couponController,
-                                            decoration: InputDecoration(
-                                              hintText: "Enter Coupon Code",
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  },
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Flexible(
-                                          child: MaterialButton(
-                                            minWidth:
-                                            MediaQuery.of(context).size.width / 3,
-                                            color: Colors.purple[600],
-                                            child: Text(
-                                              "Apply",
-                                              style: TextStyle(
-                                                  fontSize: 15, color: Colors.white),
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            elevation: 10,
-                                            onPressed: () {
-                                              getCoupon();
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                        ]),
+                                      );
+                                    }
+                                  }));
+                        } else if (snapshot.hasError) {
+                          print(snapshot.error);
+                        } else {
+                          if (snapshot.data.length == 0) {
+                            return Container();
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        }
+                      }
+                      return Expanded(child: Container());
+                    }),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  flex: 2,
+                                  child: TextField(
+                                    controller: couponController,
+                                    decoration: InputDecoration(
+                                      hintText: "Enter Coupon Code",
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Delivery Charge",
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        Text(
-                                          "₹ 40.00",
-                                          style: TextStyle(
-                                              fontSize: 15, color: Colors.purple[600]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
+                                ),
+                                Flexible(
+                                  child: MaterialButton(
+                                    minWidth:
+                                        MediaQuery.of(context).size.width / 3,
+                                    color: Colors.purple[600],
                                     child: Text(
-                                      "Delivery charges can be waived off on addition of items worth Rs.200",
-                                      style:
-                                      TextStyle(fontSize: 15, color: Colors.green),
+                                      "Apply",
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.white),
                                     ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    elevation: 10,
+                                    onPressed: () {
+                                      getCoupon();
+                                    },
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Delivery Charge",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Consumer<APIData>(
+                                    builder: (context, charges, child) {
+                                  return Text(
+                                    "₹ ${charges.deliveryCharges}",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.purple[600]),
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              "Delivery charges can be waived off on addition of items worth Rs.200",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Container(
+              color: Colors.amber[600],
+              height: MediaQuery.of(context).size.height / 9,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Consumer<APIData>(builder: (context, data, child) {
+                          return Flexible(
+                              child: Text("₹ " + data.totalAmount.toString()));
+                        }),
+                        Consumer<APIData>(builder: (context, data, child) {
+                          return Flexible(
+                              child: Text("Saved  ₹ " +
+                                  data.discountAmount.toString()));
+                        }),
                       ],
                     ),
-                  )),
-              Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Container(
-                  color: Colors.amber[600],
-                  height: MediaQuery.of(context).size.height / 9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-
-                            Consumer<APIData>(builder: (context,data,child){
-                              print('hey');
-                              return Flexible(
-
-                                  child: Text("₹ " + data.totalAmount.toString()));
-                            }),
-
-
-
-                            Consumer<APIData>(builder: (context,data,child){
-
-                              return Flexible(
-
-                                  child: Text("Saved  ₹ " + data.discountAmount.toString()));
-                            }),
-
-
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: MaterialButton(
-                            height:
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: MaterialButton(
+                        height:
                             (MediaQuery.of(context).size.height / 9) * 2 / 3,
-                            minWidth: MediaQuery.of(context).size.width / 3,
-                            color: Colors.purple[600],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 10,
-                            child: Text(
-                              "PLACE ORDER",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () {
-                              if (Provider.of<APIData>(context, listen: false)
+                        minWidth: MediaQuery.of(context).size.width / 3,
+                        color: Colors.purple[600],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 10,
+                        child: Text(
+                          "PLACE ORDER",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          print(Provider.of<APIData>(context, listen: false)
+                              .centerId);
+                          if (Provider.of<APIData>(context, listen: false)
                                   .address ==
-                                  null) {
-                                Provider.of<APIData>(context, listen: false)
-                                    .initializeAddress(
+                              null) {
+                            Provider.of<APIData>(context, listen: false)
+                                .initializeAddress(
                                     Provider.of<APIData>(context, listen: false)
                                         .user
                                         .address);
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DeliveryAddress()),
-                              );
-                            }),
-                      ),
-                    ],
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DeliveryAddress(
+                                    totalAmount: totalAmount,
+                                    productOrderId: productOrderId,
+                                    deliveryCharges: deliveryCharges,
+                                    couponCode: couponCode,
+                                    couponId: couponId,
+                                    couponValue: couponValue)),
+                          );
+                        }),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-          bottomNavigationBar: Navigate(),
-        );
-
-
+        ],
+      ),
+      bottomNavigationBar: Navigate(),
+    );
   }
-
-  // void applyCoupon() async {
-  //   http.Response response;
-  //   String url = "$header/app_api/applyCoupon.php?coupon=$couponController";
-  //   Uri uri = Uri.parse(url);
-  //   response = await http.get(uri);
-  //   var jsonData = jsonDecode(response.body);
-  //   if (jsonData["code"] == "200") {
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text("Coupon Appied Successfully")));
-  //   } else {
-  //     ScaffoldMessenger.of(context)
-  //         .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
-  //   }
-  // }
 
   void addSpecification(String productId, String specification) async {
     String userId = Provider.of<APIData>(context, listen: false).user.id;
@@ -637,7 +629,6 @@ class _CartState extends State<Cart> {
     List productCategories = [];
     if (jsonData["code"] == "200") {
       for (int i = 0; i < cartproductsList.length; i++) {
-
         String category = cartproductsList[i]["category_name"];
         if (!productCategories.contains(category)) {
           productCategories.add(category);
@@ -775,46 +766,50 @@ class _CartState extends State<Cart> {
       differentCategoryData.add(dairy);
     }
 
-
-
-    totalAmount=0;
-    if(differentCategoryData.length!=0){
-      for (int i = 0;
-      i < differentCategoryData.length;
-      i++) {
-        for(int j=0;j<differentCategoryData[i].length;j++){
+    totalAmount = 0;
+    totalDiscount = 0;
+    if (differentCategoryData.length != 0) {
+      for (int i = 0; i < differentCategoryData.length; i++) {
+        for (int j = 0; j < differentCategoryData[i].length; j++) {
           totalAmount += double.parse(differentCategoryData[i][j].totalAmount);
-          totalDiscount += (double.parse(differentCategoryData[i][j]
-              .unitOriginalPrice) -
-              double.parse(differentCategoryData[i][j].unitPrice));
+          totalDiscount +=
+              (double.parse(differentCategoryData[i][j].unitOriginalPrice) -
+                  double.parse(differentCategoryData[i][j].unitPrice));
+          if (!productOrderId.contains(differentCategoryData[i][j].id)) {
+            productOrderId.add(differentCategoryData[i][j].id);
+          }
         }
-
       }
       print("Hello WOrld 2");
-      if (totalAmount > 240) {
-        Provider.of<APIData>(context,
-            listen: false)
+      print(productOrderId);
+      if (totalAmount > 200) {
+        Provider.of<APIData>(context, listen: false)
             .initializeTotalAmount(totalAmount);
 
-        Provider.of<APIData>(context,
-            listen: false)
-            .initializeTotalDiscount(totalDiscount+40);
-      } else {
-        Provider.of<APIData>(context,
-            listen: false)
-            .initializeTotalAmount(
-            totalAmount + 40);
+        Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
+            totalDiscount +
+                Provider.of<APIData>(context, listen: false).deliveryCharges);
 
-        Provider.of<APIData>(context,
-            listen: false)
+        Provider.of<APIData>(context, listen: false).changeDeliveryCharges(0);
+      } else {
+        Provider.of<APIData>(context, listen: false).changeDeliveryCharges(40);
+        Provider.of<APIData>(context, listen: false).initializeTotalAmount(
+            totalAmount +
+                Provider.of<APIData>(context, listen: false).deliveryCharges);
+
+        Provider.of<APIData>(context, listen: false)
             .initializeTotalDiscount(totalDiscount);
       }
-
+    } else {
+      Provider.of<APIData>(context, listen: false)
+          .initializeTotalAmount(totalAmount);
+      print(Provider.of<APIData>(context, listen: false).totalAmount);
+      Provider.of<APIData>(context, listen: false)
+          .initializeTotalDiscount(totalDiscount);
     }
 
-
-      print(totalAmount);
-     // Provider.of<APIData>(context,listen: false).initializeTotalAmount(totalAmount);
+    print(totalAmount);
+    // Provider.of<APIData>(context,listen: false).initializeTotalAmount(totalAmount);
     return differentCategoryData;
   }
 
@@ -873,8 +868,6 @@ class CustomStepper extends StatefulWidget {
 
   @override
   _CustomStepperState createState() => _CustomStepperState();
-
-
 }
 
 class _CustomStepperState extends State<CustomStepper> {
@@ -898,14 +891,11 @@ class _CustomStepperState extends State<CustomStepper> {
                 size: 20,
               ),
               onTap: () {
-
                 setState(
-
                   () {
                     widget.value = widget.value == widget.lowerLimit
                         ? widget.lowerLimit
                         : widget.value -= widget.stepValue;
-
                   },
                 );
               },

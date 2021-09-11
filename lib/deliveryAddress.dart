@@ -10,7 +10,21 @@ import 'colors.dart';
 import 'home.dart';
 
 class DeliveryAddress extends StatefulWidget {
-  const DeliveryAddress({Key key}) : super(key: key);
+  String couponId;
+  String couponCode;
+  String couponValue;
+  List productOrderId;
+  double deliveryCharges;
+  double totalAmount;
+  DeliveryAddress(
+      {Key key,
+      @required this.totalAmount,
+      @required this.productOrderId,
+      @required this.deliveryCharges,
+      @required this.couponCode,
+      @required this.couponId,
+      @required this.couponValue})
+      : super(key: key);
 
   @override
   _DeliveryAddressState createState() => _DeliveryAddressState();
@@ -18,6 +32,13 @@ class DeliveryAddress extends StatefulWidget {
 
 class _DeliveryAddressState extends State<DeliveryAddress> {
   String address;
+  bool selected = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +60,15 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
           ),
         ),
       ),
-      bottomNavigationBar: Navigate(),
+      bottomNavigationBar: Navigate(
+        totalAmount: widget.totalAmount,
+        deliveryCharges: widget.deliveryCharges,
+        selected: selected,
+        couponId: widget.couponId,
+        couponCode: widget.couponCode,
+        couponValue: widget.couponValue,
+        productOrderId: widget.productOrderId,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -87,7 +116,8 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                     onChanged: (value) async {
                       setState(() {
                         address = value;
-                        print(address);
+                        selected = true;
+                        print(selected);
                       });
                     },
                     activeColor: Colors.purple,
@@ -103,7 +133,23 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
 }
 
 class Navigate extends StatefulWidget {
-  const Navigate({Key key}) : super(key: key);
+  double totalAmount;
+  double deliveryCharges;
+  bool selected;
+  String couponId;
+  String couponCode;
+  String couponValue;
+  List productOrderId;
+  Navigate(
+      {Key key,
+      @required this.totalAmount,
+      @required this.deliveryCharges,
+      @required this.selected,
+      @required this.couponId,
+      @required this.couponCode,
+      @required this.couponValue,
+      @required this.productOrderId})
+      : super(key: key);
 
   @override
   _NavigateState createState() => _NavigateState();
@@ -129,13 +175,15 @@ class _NavigateState extends State<Navigate> {
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      '70.0',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    Consumer<APIData>(builder: (context, amount, child) {
+                      return Text(
+                        (amount.totalAmount).toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      );
+                    }),
                     Spacer(),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -151,10 +199,24 @@ class _NavigateState extends State<Navigate> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PaymentOption()));
+                        double totalAmount =
+                            widget.totalAmount + widget.deliveryCharges;
+                        if (widget.selected) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentOption(
+                                        totalAmount: totalAmount,
+                                        couponId: widget.couponId,
+                                        couponCode: widget.couponCode,
+                                        couponValue: widget.couponValue,
+                                        deliveryCharges: widget.deliveryCharges,
+                                        productOrderId: widget.productOrderId,
+                                      )));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please select the address")));
+                        }
                       },
                     )
                   ],

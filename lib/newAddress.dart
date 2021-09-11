@@ -137,6 +137,8 @@ class _NewAddressState extends State<NewAddress> {
                                                                 snapshot
                                                                     .data[index]
                                                                     .pincode;
+                                                            String id = snapshot
+                                                                .data[index].id;
                                                             societyNameController
                                                                     .text =
                                                                 centerName;
@@ -144,6 +146,12 @@ class _NewAddressState extends State<NewAddress> {
                                                                 .text = address;
                                                             pincodeController
                                                                 .text = pincode;
+                                                            Provider.of<APIData>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .initializeCenterId(
+                                                                    id);
                                                             Navigator.pop(
                                                                 context);
                                                           },
@@ -337,7 +345,8 @@ class _NewAddressState extends State<NewAddress> {
             item["pincode"],
             item["del_flag"],
             item["delivery_days"],
-            item["delivery_time"]);
+            item["delivery_time"],
+            item["id"]);
         centersData.add(centers);
       }
     }
