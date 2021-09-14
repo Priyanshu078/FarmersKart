@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/apiData/allProducts.dart';
+import 'package:shellcode2/apiData/loginApiData.dart';
 import 'package:shellcode2/colors.dart';
+import 'package:http/http.dart' as http;
 
 class Search extends StatefulWidget {
   const Search({Key key}) : super(key: key);
@@ -15,91 +21,19 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgcolor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [left, middle, Colors.purple])),
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: [left, middle, Colors.purple])),
-                child: Material(
-                  borderRadius: BorderRadius.circular(5),
-                  color: bgcolor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /* Row(
-                        children: [
-                          Icon(Icons.search, color: yellow,),
-                          MaterialButton(
-                            minWidth: double.infinity,
-                            height: 50,
-                            onPressed: null,
-                            child: TextField(
-                              controller: phoneController,
-                              style: TextStyle(
-                                  height: 1.5,color: Colors.purple
-                              ),
-                              cursorColor: Colors.purpleAccent,
-                              decoration: InputDecoration(
-                                hintText: "Search",
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintStyle: Theme.of(context).textTheme.caption!.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: yellow, // Set Your Own Color
-                                ),
-                              ),
-                              onChanged: (value) => title1 = value,
-                            ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
-                          ),
-                        ],
-                      ),*/
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: yellow,
-                            ),
-                            Text('   '),
-                            Text(
-                              'Search',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.keyboard_voice_outlined,
-                              color: yellow,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+      appBar: AppBar(),
+      body: FutureBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }
+          return Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

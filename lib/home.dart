@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,9 @@ import 'package:shellcode2/More%20pages/ImmunityMore.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
+import 'package:shellcode2/apiData/allProducts.dart';
 import 'package:shellcode2/apiData/festiveSpecial.dart';
 import 'package:shellcode2/apiData/immunityBooster.dart';
 import 'package:shellcode2/cart.dart';
@@ -23,7 +27,7 @@ import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:http/http.dart' as http;
 import 'apiData/BannerImagesAPI.dart';
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
@@ -37,6 +41,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List allProducts = [];
   Data data = new Data();
   int _current = 0;
   List imgList = [];
@@ -63,6 +68,7 @@ class _HomeState extends State<Home> {
 
   void initState() {
     super.initState();
+    getAllProducts();
     requestPermission(_permission);
     imgList = bannerImages;
     if (Provider.of<APIData>(context, listen: false).centerId == null) {
@@ -120,18 +126,21 @@ class _HomeState extends State<Home> {
                     color: bgcolor,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () {},
+                      onTap: () {
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => Search(),
+                        // ));
+                        showSearch(
+                            context: context,
+                            delegate: SearchProducts(allProducts));
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Search(),
-                                ));
-                              },
+                              onTap: () {},
                               child: Row(
                                 children: [
                                   Icon(
@@ -1594,6 +1603,138 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: Navigate(),
     );
+  }
+
+  Future<List> getAllProducts() async {
+    allProducts = [];
+    http.Response response;
+    String usertype = "Society";
+    String url = "$header/app_api/getAllProducts.php?user_type=$usertype";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      for (var item1 in jsonData["product"]) {
+        List productprice = [];
+        for (var item2 in item1["product_price"]) {
+          Price price = new Price(
+              item2["p_id"],
+              item2["user_type"],
+              item2["original_price"],
+              item2["discount"].toString(),
+              item2["discounted_price"],
+              item2["weight"],
+              item2["unit"]);
+          productprice.add(price);
+        }
+        AllProducts allProduct = new AllProducts(
+            productprice,
+            item1["category_name"],
+            item1["id"],
+            item1["category"],
+            item1["subcategory"],
+            item1["name"],
+            item1["img"],
+            item1["description"],
+            item1["del_flag"],
+            item1["rating"]);
+        allProducts.add(allProduct);
+      }
+    }
+    print(allProducts[0].name);
+    return allProducts;
+  }
+}
+
+class SearchProducts extends SearchDelegate<String> {
+  List products;
+  SearchProducts(this.products);
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    // actions for appbar
+    return [
+      IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.mic,
+            color: Colors.amber[400],
+          ))
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    // leading icon on the left part of the app bar
+    return Icon(
+      Icons.search,
+      color: Colors.amber[400],
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    // show results based on the selection
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    // show when someone searches for something
+    List suggestionList = [];
+    if (query.isNotEmpty) {
+      for (int i = 0; i < products.length; i++) {
+        if (products[i].name.toString().startsWith(query) ||
+            products[i].name.toString().startsWith(query.toUpperCase()) ||
+            products[i].name.toString().startsWith(query.toLowerCase()) ||
+            products[i]
+                .name
+                .toString()
+                .contains(query.substring(1, query.length))) {
+          suggestionList.add(products[i]);
+        }
+      }
+    }
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(suggestionList[index].name.toString()),
+            onTap: () {
+              List temp = [
+                suggestionList[index].img,
+                suggestionList[index].name,
+                suggestionList[index].price[0].weight,
+                suggestionList[index].price[0].discountedPrice,
+                suggestionList[index].description,
+                suggestionList[index].price[0].originalPrice,
+                suggestionList[index].price,
+                suggestionList[index].price[0].discount
+              ];
+              if (suggestionList[index].price[0].discountedPrice.toString() ==
+                  "") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetails.search(temp, 0, true, false)));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetails.search(temp, 1, true, true)));
+              }
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider(height: 10, color: Colors.black);
+        },
+        itemCount: suggestionList.length);
+    throw UnimplementedError();
   }
 }
 

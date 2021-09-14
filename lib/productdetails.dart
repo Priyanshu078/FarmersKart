@@ -16,12 +16,15 @@ class ProductDetails extends StatefulWidget {
   List temporary = [];
   int k = 0;
   bool offers = false;
+  bool discountAvailable = false;
   // ProductDetails(List cat,int j){
   // this.temporary = cat;
   // this.k = j;
   //}
   ProductDetails(this.temporary, this.k);
   ProductDetails.offers(this.temporary, this.k, this.offers);
+  ProductDetails.search(
+      this.temporary, this.k, this.offers, this.discountAvailable);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -50,6 +53,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     te();
+    print(temp);
     Provider.of<APIData>(context, listen: false).initializeQuantity(1);
     return Scaffold(
       backgroundColor: bgcolor,
@@ -105,7 +109,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       alignment: Alignment.topLeft,
                       child: j == 0
                           ? null
-                          : new Container(
+                          : Container(
                               height: 40,
                               width: 80,
                               padding: EdgeInsets.all(4.0),
@@ -179,7 +183,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 alignment: Alignment.centerLeft,
                 child: j == 0
                     ? null
-                    : new Row(
+                    : Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -225,13 +229,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ? Consumer<APIData>(
                           builder: (context, data, child) {
                             print(data.quantity);
-                            return Text(
-                              '${int.parse(temp[3]) * data.quantity}',
-                              style: TextStyle(
-                                  color: Colors.deepPurple[800],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                            );
+                            return widget.discountAvailable
+                                ? Text(
+                                    '${int.parse(temp[3]) * data.quantity}',
+                                    style: TextStyle(
+                                        color: Colors.deepPurple[800],
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14),
+                                  )
+                                : Text(
+                                    '${int.parse(temp[5]) * data.quantity}',
+                                    style: TextStyle(
+                                        color: Colors.deepPurple[800],
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14),
+                                  );
                           },
                         )
                       : Consumer<APIData>(
@@ -275,7 +287,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                 height: 10,
               ),
               Container(
-                height: 25,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     border: Border(
@@ -420,7 +431,9 @@ class _ProductDetailsState extends State<ProductDetails> {
     String productId = widget.offers ? temp[6][0].p_Id : temp[6][0][0];
     String Quantity = quantity.toString();
     String unitPrice = widget.offers
-        ? temp[6][0].discountedPrice
+        ? widget.discountAvailable
+            ? temp[6][0].discountedPrice
+            : temp[6][0].originalPrice
         : temp[6][0][3] == ""
             ? temp[6][0][2]
             : temp[6][0][3];
@@ -432,6 +445,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         widget.offers ? temp[6][0].originalPrice : temp[6][0][2];
     String url =
         "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
+    print(url);
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
@@ -699,14 +713,16 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                 flex: 2,
                               ),
                               widget.offers
-                                  ? Text(
-                                      "${temp[6][k].discountedPrice}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      ),
-                                    )
+                                  ? temp[6][k].discountedPrice == ""
+                                      ? Container()
+                                      : Text(
+                                          "${temp[6][k].discountedPrice}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        )
                                   : Text(
                                       '₹${temp[6][k][3]}',
                                       style: TextStyle(
