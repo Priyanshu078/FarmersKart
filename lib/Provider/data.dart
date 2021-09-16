@@ -35,6 +35,13 @@ class APIData extends ChangeNotifier {
   Payment choice;
   double deliveryCharges = 40.0;
   double walletAmountUsed = 0;
+  String name;
+  String societyName;
+  String email;
+  String pincode;
+  String wing;
+  String flat;
+  String mobile;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -230,6 +237,55 @@ class APIData extends ChangeNotifier {
     this.discountMoreThan15 = false;
     this.discountUpToRs15 = false;
 
+    notifyListeners();
+  }
+
+  void initializeName(String name) {
+    if (name != null) {
+      this.name = name;
+    }
+    notifyListeners();
+  }
+
+  void initializeSocietyName(String societyName) {
+    if (societyName != null) {
+      this.societyName = societyName;
+    }
+    notifyListeners();
+  }
+
+  void initializeEmail(String email) {
+    if (email != null) {
+      this.email = email;
+    }
+    notifyListeners();
+  }
+
+  void initializeMobileNo(String mobile) {
+    if (mobile != null) {
+      this.mobile = mobile;
+    }
+    notifyListeners();
+  }
+
+  void initializeFlatNo(String flat) {
+    if (flat != null) {
+      this.flat = flat;
+    }
+    notifyListeners();
+  }
+
+  void initializeWing(String wing) {
+    if (wing != null) {
+      this.wing = wing;
+    }
+    notifyListeners();
+  }
+
+  void initializePincode(String pincode) {
+    if (pincode != null) {
+      this.pincode = pincode;
+    }
     notifyListeners();
   }
 }

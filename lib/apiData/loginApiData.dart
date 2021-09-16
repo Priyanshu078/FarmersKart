@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -11,8 +12,7 @@ String welcomeToJson(Welcome data) => json.encode(data.toJson());
 List<UserOfApp> user;
 
 String Login = '$header/app_api/login.php?';
-Future<List<UserOfApp>> fetchLoginApiData(
-    String mobile, String password) async {
+Future<List> fetchLoginApiData(String mobile, String password) async {
   String url = Login + 'mobile=$mobile&password=$password';
   http.Response response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
@@ -22,11 +22,47 @@ Future<List<UserOfApp>> fetchLoginApiData(
     print(apiData);
     String code = apiData['code'];
     print(code);
-    List<dynamic> data = apiData['user'];
+    List data = apiData['user'];
     print(data);
-
+    List<UserOfApp> userData = [];
     if (code == '200') {
-      user = data.map((e) => UserOfApp.fromJson(e)).toList();
+      for (var item in data) {
+        List<CenterOfStore> centerList = [];
+        // for (var center in item["center"]) {
+        //   CenterOfStore centerOfStore = new CenterOfStore(
+        //       centerName: center["center_name"].toString(),
+        //       address: center["address"].toString(),
+        //       pincode: center["pincode"].toString(),
+        //       delFlag: center["del_flag"].toString(),
+        //       deliveryDays: center["delivery_days"].toString(),
+        //       deliveryTime: center["delivery_time"].toString(),
+        //       id: center["id"].toString());
+        //   centerList.add(centerOfStore);
+        // }
+        UserOfApp userOfApp = new UserOfApp(
+            id: item["id"],
+            name: item["name"],
+            email: item["email"],
+            mobile: item["mobile"],
+            password: item["password"],
+            isActive: item["is_active"],
+            delFlag: item["del_flag"],
+            firebaseToken: item["firebase_token"],
+            userType: item["user_type"],
+            address: item["address"],
+            societyName: item["society_name"],
+            flatNo: item["flat_no"],
+            wing: item["wing"],
+            pincode: item["pincode"],
+            gstNo: item["gst_no"],
+            createdAt: DateTime.parse(item["created_at"]),
+            from: item["from"],
+            imageName: item["image_name"],
+            centerId: item["center_id"],
+            center: centerList);
+        userData.add(userOfApp);
+      }
+      user = userData;
       print(user);
     } else
       print(code);
@@ -58,26 +94,26 @@ class Welcome {
 
 class UserOfApp {
   UserOfApp({
-    this.id,
-    this.name,
-    this.email,
-    this.mobile,
-    this.password,
-    this.isActive,
-    this.delFlag,
-    this.firebaseToken,
-    this.userType,
-    this.address,
-    this.societyName,
-    this.flatNo,
-    this.wing,
-    this.pincode,
-    this.gstNo,
-    this.createdAt,
-    this.from,
-    this.imageName,
-    this.centerId,
-    this.center,
+    @required this.id,
+    @required this.name,
+    @required this.email,
+    @required this.mobile,
+    @required this.password,
+    @required this.isActive,
+    @required this.delFlag,
+    @required this.firebaseToken,
+    @required this.userType,
+    @required this.address,
+    @required this.societyName,
+    @required this.flatNo,
+    @required this.wing,
+    @required this.pincode,
+    @required this.gstNo,
+    @required this.createdAt,
+    @required this.from,
+    @required this.imageName,
+    @required this.centerId,
+    @required this.center,
   });
 
   String id;
@@ -151,13 +187,13 @@ class UserOfApp {
 
 class CenterOfStore {
   CenterOfStore({
-    this.centerName,
-    this.address,
-    this.pincode,
-    this.delFlag,
-    this.deliveryDays,
-    this.deliveryTime,
-    this.id,
+    @required this.centerName,
+    @required this.address,
+    @required this.pincode,
+    @required this.delFlag,
+    @required this.deliveryDays,
+    @required this.deliveryTime,
+    @required this.id,
   });
 
   String centerName;

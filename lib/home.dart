@@ -1496,6 +1496,7 @@ class _HomeState extends State<Home> {
                             scrollDirection: Axis.horizontal,
                             itemCount: immunityBoosterList.length,
                             itemBuilder: (context, index) {
+                              print(immunityBoosterList);
                               return InkWell(
                                 onTap: () {
                                   List temp3 = [
@@ -1641,7 +1642,7 @@ class _HomeState extends State<Home> {
         allProducts.add(allProduct);
       }
     }
-    print(allProducts[0].name);
+    print(allProducts);
     return allProducts;
   }
 }

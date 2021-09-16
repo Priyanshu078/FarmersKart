@@ -370,7 +370,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                       context,
                                                                       MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              Complaints()));
+                                                                              Complaints(orderID: snapshot.data[index].orderId.toString())));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -853,7 +853,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                       Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(
-                                                                              builder: (context) => Complaints()));
+                                                                              builder: (context) => Complaints(
+                                                                                    orderID: snapshot.data[index].orderId,
+                                                                                  )));
                                                                     },
                                                                     child: Align(
                                                                         alignment: Alignment.center,
@@ -1119,6 +1121,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                   snapshot.data[index][i]
                                                       .totalAmount);
                                             }
+                                            print(snapshot.data[index]);
                                             return InkWell(
                                               onTap: () {
                                                 Navigator.push(
@@ -1319,8 +1322,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     Navigator.push(
                                                                         context,
                                                                         MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                Complaints()));
+                                                                            builder: (context) => Complaints(
+                                                                                  orderID: snapshot.data[index],
+                                                                                )));
                                                                   },
                                                                   child: Align(
                                                                       alignment:

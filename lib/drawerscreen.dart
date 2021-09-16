@@ -7,6 +7,7 @@ import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/myOrders.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/userAcc.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/wallet.dart';
+import 'package:shellcode2/apiData/loginApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 import 'package:provider/provider.dart';
@@ -96,6 +97,24 @@ class NavigationDrawerWidget extends StatelessWidget {
                       text: 'User Account',
                       icon: Icons.account_circle,
                       onClicked: () {
+                        UserOfApp user =
+                            Provider.of<APIData>(context, listen: false).user;
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeName(user.name);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeSocietyName(user.societyName);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeEmail(user.email);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeMobileNo(user.mobile);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeAddress(user.address);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeFlatNo(user.flatNo);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializeWing(user.wing);
+                        Provider.of<APIData>(context, listen: false)
+                            .initializePincode(user.pincode);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UserAcc(),
                         ));
