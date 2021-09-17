@@ -61,7 +61,7 @@ class _UserAccState extends State<UserAcc> {
       'flat_no': flatController.text,
       'phoneNo': phoneController.text,
     });
-    http.Response responseImage;
+    http.StreamedResponse responseImage;
     if (_imageFile != null) {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.files.add(http.MultipartFile(
@@ -69,18 +69,16 @@ class _UserAccState extends State<UserAcc> {
           File(_imageFile.path).readAsBytes().asStream(),
           File(_imageFile.path).lengthSync(),
           filename: _imageFile.path));
-      var responseImage = await request.send();
+      responseImage = await request.send();
       print(responseImage.statusCode);
     }
-    // var jsonData = jsonDecode(responseImage);
-    // print(jsonData);
-    // }
     var responseData = await dio.post(url,
         data: formData,
         options: Options(headers: {
           "Accept": "application/json",
           "Content-Type": "multipart/form-data"
         }));
+    print(responseData.statusCode);
     if (_imageFile != null) {
       if (responseData.statusCode == 200 && responseImage.statusCode == 200) {
         ScaffoldMessenger.of(context)
@@ -163,7 +161,11 @@ class _UserAccState extends State<UserAcc> {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: Colors.grey),
                       child: _imageFile == null
-                          ? Container()
+                          ? Image.file(
+                              File(
+                                  "http://localhost/app_api/files/${Provider.of<APIData>(context, listen: false).image}"),
+                              filterQuality: FilterQuality.high,
+                            )
                           : Image.file(
                               File(_imageFile.path),
                               filterQuality: FilterQuality.high,

@@ -99,24 +99,53 @@ class NavigationDrawerWidget extends StatelessWidget {
                       onClicked: () {
                         UserOfApp user =
                             Provider.of<APIData>(context, listen: false).user;
-                        Provider.of<APIData>(context, listen: false)
-                            .initailizeImage(user.imageName);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeName(user.name);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeSocietyName(user.societyName);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeEmail(user.email);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeMobileNo(user.mobile);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeAddress(user.address);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeFlatNo(user.flatNo);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializeWing(user.wing);
-                        Provider.of<APIData>(context, listen: false)
-                            .initializePincode(user.pincode);
+                        if (Provider.of<APIData>(context, listen: false)
+                                    .image ==
+                                null &&
+                            Provider.of<APIData>(context, listen: false)
+                                    .name ==
+                                null &&
+                            Provider.of<APIData>(context,
+                                        listen: false)
+                                    .societyName ==
+                                null &&
+                            Provider.of<APIData>(context, listen: false)
+                                    .email ==
+                                null &&
+                            Provider.of<APIData>(context,
+                                        listen: false)
+                                    .mobile ==
+                                null &&
+                            Provider.of<APIData>(context,
+                                        listen: false)
+                                    .address ==
+                                null &&
+                            Provider.of<APIData>(context, listen: false).flat ==
+                                null &&
+                            Provider.of<APIData>(context, listen: false).wing ==
+                                null &&
+                            Provider.of<APIData>(context, listen: false)
+                                    .pincode ==
+                                null) {
+                          Provider.of<APIData>(context, listen: false)
+                              .initailizeImage(user.imageName);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeName(user.name);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeSocietyName(user.societyName);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeEmail(user.email);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeMobileNo(user.mobile);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeAddress(user.address);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeFlatNo(user.flatNo);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializeWing(user.wing);
+                          Provider.of<APIData>(context, listen: false)
+                              .initializePincode(user.pincode);
+                        }
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UserAcc(),
                         ));
