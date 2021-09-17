@@ -18,14 +18,21 @@ class UserAcc extends StatefulWidget {
   _UserAccState createState() => _UserAccState();
 }
 
-final ImagePicker _picker = ImagePicker();
-XFile _imageFile;
-
 class _UserAccState extends State<UserAcc> {
+  final ImagePicker _picker = ImagePicker();
+  XFile _imageFile;
+  Dio dio = new Dio();
   Future pickImage() async {
     final XFile photo = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _imageFile = photo;
+      if (_imageFile != null) {
+        Provider.of<APIData>(context, listen: false)
+            .initailizeImage(_imageFile.name);
+      }
+
+      // print(Provider.of<APIData>(context, listen: false).image);
+      print(_imageFile.path);
     });
   }
 
@@ -39,58 +46,79 @@ class _UserAccState extends State<UserAcc> {
   TextEditingController pincodeController = new TextEditingController();
 
   Future updateData() async {
-    Dio dio = new Dio();
     String url = "$header/app_api/updateProfile.php?apicall=uploadpic";
-    Uri uri = Uri.parse("$header/app_api/updateProfile.php?apicall=uploadpic");
-    Map<String, dynamic> data = {
-      "name": nameController.text,
-      "society_name": societyController.text,
-      "email": emailController.text,
-      "address": addressController.text,
-      "image_name": "",
-      "pincode": pincodeController.text,
-      "gst_no": "",
-      "wing": wingController.text,
-      "flat_no": flatController.text,
-      "phoneNo": phoneController.text
-    };
-    // http.Response response = await http.post(
-    //   url,
-    //   headers: <String, String>{
-    //     "Accept": "application/json",
-    //     "Content-Type": "application/x-www-form-urlencoded"
-    //   },
-    //   encoding: Encoding.getByName('utf-8'),
-    //   body: body,
-    // );
-    var response = await dio.post(url,
-        data: data,
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    var formData = new FormData.fromMap({
+      'name': nameController.text,
+      'society_name': societyController.text,
+      'email': emailController.text,
+      'user_id': userId,
+      'address': addressController.text,
+      'image_name': _imageFile != null ? _imageFile.name : '',
+      'pincode': pincodeController.text,
+      'gst_no': '',
+      'wing': wingController.text,
+      'flat_no': flatController.text,
+      'phoneNo': phoneController.text,
+    });
+    http.Response responseImage;
+    if (_imageFile != null) {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.files.add(http.MultipartFile(
+          'pic',
+          File(_imageFile.path).readAsBytes().asStream(),
+          File(_imageFile.path).lengthSync(),
+          filename: _imageFile.path));
+      var responseImage = await request.send();
+      print(responseImage.statusCode);
+    }
+    // var jsonData = jsonDecode(responseImage);
+    // print(jsonData);
+    // }
+    var responseData = await dio.post(url,
+        data: formData,
         options: Options(headers: {
           "Accept": "application/json",
-          "Content-Type": "application/form-data"
+          "Content-Type": "multipart/form-data"
         }));
-    var jsonData = jsonDecode(response.data);
-    print(jsonData);
+    if (_imageFile != null) {
+      if (responseData.statusCode == 200 && responseImage.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
+      }
+    } else {
+      if (responseData.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
+      }
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _textController1.text = null;
+    nameController.text = Provider.of<APIData>(context, listen: false).name;
+    societyController.text =
+        Provider.of<APIData>(context, listen: false).societyName;
+    emailController.text = Provider.of<APIData>(context, listen: false).email;
+    phoneController.text = Provider.of<APIData>(context, listen: false).mobile;
+    addressController.text =
+        Provider.of<APIData>(context, listen: false).address;
+    flatController.text = Provider.of<APIData>(context, listen: false).flat;
+    wingController.text = Provider.of<APIData>(context, listen: false).wing;
+    pincodeController.text =
+        Provider.of<APIData>(context, listen: false).pincode;
   }
 
   @override
   Widget build(BuildContext context) {
-    // _textController1 = TextEditingController(text: '${user.name}');
-    // _textController2 = TextEditingController(text: '${user.societyName}');
-    // _textController3 = TextEditingController(text: '${user.email}');
-    // _textController4 = TextEditingController(text: '${user.mobile}');
-    // _textController5 = TextEditingController(text: '${user.address}');
-    // _textController6 = TextEditingController(text: '${user.flatNo}');
-    // _textController7 = TextEditingController(text: '${user.wing}');
-    // _textController8 = TextEditingController(text: '${user.pincode}');
-    // print(user.pincode);
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
@@ -125,13 +153,67 @@ class _UserAccState extends State<UserAcc> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.grey),
+                      child: _imageFile == null
+                          ? Container()
+                          : Image.file(
+                              File(_imageFile.path),
+                              filterQuality: FilterQuality.high,
+                            ),
+                    ),
+                    Positioned(
+                      height: 175,
+                      width: 175,
+                      child: IconButton(
+                        iconSize: 25,
+                        splashColor: Colors.grey,
+                        highlightColor: Colors.grey,
+                        onPressed: () {
+                          pickImage();
+                        },
+                        icon: Icon(CupertinoIcons.photo),
+                        color: Colors.blueGrey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(
                 height: 45,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
+              TextField(
+                cursorColor: Colors.purple,
+                controller: nameController,
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey),
+                    ),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueGrey),
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.purple,
+                    ),
+                    labelStyle: new TextStyle(color: Colors.purple)),
+                onChanged: (value) {},
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
                   cursorColor: Colors.purple,
-                  controller: nameController,
+                  controller: societyController,
                   decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.blueGrey),
@@ -145,179 +227,152 @@ class _UserAccState extends State<UserAcc> {
                       hintStyle: TextStyle(
                         color: Colors.purple,
                       ),
-                      hintText: data.name.toString(),
-                      labelStyle: new TextStyle(color: Colors.purple)),
-                  onChanged: (value) {
-                    // _textController1.text = value;
-                  },
-                );
-              }),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: societyController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.societyName.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: emailController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.email.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: phoneController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.mobile.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: addressController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: addressController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.address.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: flatController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: flatController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.flat.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: wingController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 15,
               ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: wingController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.wing.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
-              SizedBox(
-                height: 15,
-              ),
-              Consumer<APIData>(builder: (context, data, child) {
-                return TextField(
-                    cursorColor: Colors.purple,
-                    controller: pincodeController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                        ),
-                        hintStyle: TextStyle(
-                          color: Colors.purple,
-                        ),
-                        hintText: data.pincode.toString(),
-                        labelStyle: new TextStyle(color: Colors.purple)));
-              }),
+              TextField(
+                  cursorColor: Colors.purple,
+                  controller: pincodeController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey),
+                      ),
+                      hintStyle: TextStyle(
+                        color: Colors.purple,
+                      ),
+                      labelStyle: new TextStyle(color: Colors.purple))),
               SizedBox(
                 height: 25,
               ),
               GestureDetector(
                 onTap: () {
+                  if (_imageFile != null) {
+                    Provider.of<APIData>(context, listen: false)
+                        .initailizeImage(_imageFile.name.toString());
+                  }
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeName(nameController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeSocietyName(societyController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeEmail(emailController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeMobileNo(phoneController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeAddress(addressController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeFlatNo(flatController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializeWing(wingController.text);
+                  Provider.of<APIData>(context, listen: false)
+                      .initializePincode(pincodeController.text);
                   updateData();
                 },
                 child: Container(
@@ -347,35 +402,3 @@ class _UserAccState extends State<UserAcc> {
     );
   }
 }
-
-/*
-/*
-Stack(
-                children: [
-                  Positioned(
-                    top: 80,
-                    left: 80,
-                    child:
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey
-                      ),
-                      child:  _imageFile==null?Container(): Image.file(File(_imageFile!.path),filterQuality: FilterQuality.high,),
-                    ),
-                  ),
-                  Positioned(
-                    top: 500,
-                    left: 200,
-                    child: IconButton(
-                      onPressed: (){
-                        pickImage();
-                      },
-                      icon: Icon(CupertinoIcons.photo),color: Colors.blueGrey,) ,
-                  ),
-                ],
-              ),
- */
- */

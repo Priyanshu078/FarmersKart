@@ -42,6 +42,7 @@ class APIData extends ChangeNotifier {
   String wing;
   String flat;
   String mobile;
+  String image;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -238,6 +239,12 @@ class APIData extends ChangeNotifier {
     this.discountUpToRs15 = false;
 
     notifyListeners();
+  }
+
+  void initailizeImage(String image){
+    if(image != null){
+      this.image = image;
+    }
   }
 
   void initializeName(String name) {

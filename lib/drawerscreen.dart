@@ -100,6 +100,8 @@ class NavigationDrawerWidget extends StatelessWidget {
                         UserOfApp user =
                             Provider.of<APIData>(context, listen: false).user;
                         Provider.of<APIData>(context, listen: false)
+                            .initailizeImage(user.imageName);
+                        Provider.of<APIData>(context, listen: false)
                             .initializeName(user.name);
                         Provider.of<APIData>(context, listen: false)
                             .initializeSocietyName(user.societyName);
