@@ -56,7 +56,7 @@ class _FrontPageState extends State<FrontPage> {
                   height: MediaQuery.of(context).size.height * 0.7,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 118.0),
+                  padding: const EdgeInsets.only(top: 120.0),
                   child: Center(
                     child: Text("Welcome To \nFarmerskart",
                         style: TextStyle(
@@ -66,11 +66,11 @@ class _FrontPageState extends State<FrontPage> {
                   ),
                 ),
                 Positioned(
-                    top: 280,
-                    left: 40,
+                    top: MediaQuery.of(context).size.height * 0.35,
+                    left: MediaQuery.of(context).size.width * 0.1,
                     child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        height: 200,
+                        height: MediaQuery.of(context).size.width * 0.52,
                         child: Image.asset(
                           'assets/farmersKartLogo.png',
                           fit: BoxFit.cover,
@@ -86,12 +86,12 @@ class _FrontPageState extends State<FrontPage> {
                   height: MediaQuery.of(context).size.height * 0.3,
                 ),
                 Positioned(
-                    bottom: 70,
-                    left: 150,
+                    bottom: MediaQuery.of(context).size.height * 0.1,
+                    left: MediaQuery.of(context).size.width * 0.35,
                     child: Card(
                       child: CircleAvatar(
                         backgroundColor: Colors.purple,
-                        maxRadius: 50,
+                        maxRadius: 55,
                         child: IconButton(
                           onPressed: () {
                             Navigator.push(

@@ -6,6 +6,7 @@ import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import '../colors.dart';
 import '../home.dart';
+import 'package:http/http.dart' as http;
 
 class Complaints extends StatefulWidget {
   String orderID;
@@ -18,7 +19,7 @@ class Complaints extends StatefulWidget {
 class _ComplaintsState extends State<Complaints> {
   bool overAll = true;
   bool individual = false;
-  var id = "a6ecMO";
+  // var id = "a6ecMO";
   File pic;
 
   var currentText = TextStyle(color: Colors.white, fontWeight: FontWeight.w400);
@@ -47,6 +48,12 @@ class _ComplaintsState extends State<Complaints> {
   void initState() {
     super.initState();
     add();
+  }
+
+  void sendComplaint() {
+    http.Response complaintResponse;
+    http.StreamedResponse imageResponse;
+    String url = "";
   }
 
   @override
@@ -239,7 +246,7 @@ class _ComplaintsState extends State<Complaints> {
                               },
                             ),
                             Text(
-                              'ID: $id',
+                              'ID: ${widget.orderID}',
                               style: TextStyle(color: Colors.orange),
                             )
                           ],

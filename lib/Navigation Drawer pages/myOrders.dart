@@ -370,7 +370,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                       context,
                                                                       MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              Complaints(orderID: snapshot.data[index].orderId.toString())));
+                                                                              Complaints(orderID: snapshot.data[index][0].orderId)));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -854,7 +854,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           context,
                                                                           MaterialPageRoute(
                                                                               builder: (context) => Complaints(
-                                                                                    orderID: snapshot.data[index].orderId,
+                                                                                    orderID: snapshot.data[index][0].orderId,
                                                                                   )));
                                                                     },
                                                                     child: Align(
@@ -1323,7 +1323,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (context) => Complaints(
-                                                                                  orderID: snapshot.data[index],
+                                                                                  orderID: snapshot.data[index][0].orderId,
                                                                                 )));
                                                                   },
                                                                   child: Align(

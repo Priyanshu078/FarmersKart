@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -161,10 +162,24 @@ class _UserAccState extends State<UserAcc> {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: Colors.grey),
                       child: _imageFile == null
-                          ? Image.file(
-                              File(
-                                  "http://localhost/app_api/files/${Provider.of<APIData>(context, listen: false).image}"),
-                              filterQuality: FilterQuality.high,
+                          ? CachedNetworkImage(
+                              imageUrl:
+                                  "http://192.168.43.156/app_api/files/${Provider.of<APIData>(context, listen: false).image}",
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.fill,
+                                      colorFilter: ColorFilter.mode(
+                                          Colors.transparent,
+                                          BlendMode.colorBurn)),
+                                ),
+                              ),
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             )
                           : Image.file(
                               File(_imageFile.path),
