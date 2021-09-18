@@ -369,8 +369,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              Complaints(orderID: snapshot.data[index][0].orderId)));
+                                                                          builder: (context) => Complaints(
+                                                                                orderID: snapshot.data[index][0].orderId,
+                                                                                productsOrder: snapshot.data[index],
+                                                                              )));
                                                                 },
                                                                 child: Align(
                                                                     alignment:
@@ -855,6 +857,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           MaterialPageRoute(
                                                                               builder: (context) => Complaints(
                                                                                     orderID: snapshot.data[index][0].orderId,
+                                                                                    productsOrder: snapshot.data[index],
                                                                                   )));
                                                                     },
                                                                     child: Align(
@@ -1324,6 +1327,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                         MaterialPageRoute(
                                                                             builder: (context) => Complaints(
                                                                                   orderID: snapshot.data[index][0].orderId,
+                                                                                  productsOrder: snapshot.data[index],
                                                                                 )));
                                                                   },
                                                                   child: Align(

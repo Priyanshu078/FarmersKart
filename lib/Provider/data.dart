@@ -112,6 +112,13 @@ class APIData extends ChangeNotifier {
     print("wallet amount used $walletAmountUsed");
   }
 
+  void initializeUserId(String userId) {
+    if (userId != null) {
+      this.userId = userId;
+    }
+    notifyListeners();
+  }
+
   void initializeCenterId(String centerId) {
     if (centerId != null) {
       this.centerId = centerId;
@@ -241,8 +248,8 @@ class APIData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initailizeImage(String image){
-    if(image != null){
+  void initailizeImage(String image) {
+    if (image != null) {
       this.image = image;
     }
   }

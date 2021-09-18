@@ -49,53 +49,52 @@ class _UserAccState extends State<UserAcc> {
   Future updateData() async {
     String url = "$header/app_api/updateProfile.php?apicall=uploadpic";
     String userId = Provider.of<APIData>(context, listen: false).user.id;
-    var formData = new FormData.fromMap({
-      'name': nameController.text,
-      'society_name': societyController.text,
-      'email': emailController.text,
-      'user_id': userId,
-      'address': addressController.text,
-      'image_name': _imageFile != null ? _imageFile.name : '',
-      'pincode': pincodeController.text,
-      'gst_no': '',
-      'wing': wingController.text,
-      'flat_no': flatController.text,
-      'phoneNo': phoneController.text,
-    });
-    http.StreamedResponse responseImage;
+    var formData;
     if (_imageFile != null) {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.files.add(http.MultipartFile(
-          'pic',
-          File(_imageFile.path).readAsBytes().asStream(),
-          File(_imageFile.path).lengthSync(),
-          filename: _imageFile.path));
-      responseImage = await request.send();
-      print(responseImage.statusCode);
+      formData = new FormData.fromMap({
+        'name': nameController.text,
+        'society_name': societyController.text,
+        'email': emailController.text,
+        'user_id': userId,
+        'address': addressController.text,
+        'image_name': _imageFile.name,
+        'pincode': pincodeController.text,
+        'gst_no': '',
+        'wing': wingController.text,
+        'flat_no': flatController.text,
+        'phoneNo': phoneController.text,
+        'pic': await MultipartFile.fromFile(_imageFile.path,
+            filename: _imageFile.name),
+      });
+    } else {
+      formData = new FormData.fromMap({
+        'name': nameController.text,
+        'society_name': societyController.text,
+        'email': emailController.text,
+        'user_id': userId,
+        'address': addressController.text,
+        'image_name': Provider.of<APIData>(context, listen: false).image,
+        'pincode': pincodeController.text,
+        'gst_no': '',
+        'wing': wingController.text,
+        'flat_no': flatController.text,
+        'phoneNo': phoneController.text,
+      });
     }
+
     var responseData = await dio.post(url,
         data: formData,
         options: Options(headers: {
           "Accept": "application/json",
           "Content-Type": "multipart/form-data"
         }));
-    print(responseData.statusCode);
-    if (_imageFile != null) {
-      if (responseData.statusCode == 200 && responseImage.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
-      }
+    var jsonData = jsonDecode(responseData.data);
+    if (jsonData["code"] == "200") {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Updated Successfully")));
     } else {
-      if (responseData.statusCode == 200) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Updated Successfully")));
-      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
     }
   }
 

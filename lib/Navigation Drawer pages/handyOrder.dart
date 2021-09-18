@@ -23,7 +23,7 @@ final ImagePicker _picker = ImagePicker();
 XFile _imageFile;
 
 class _HandyOrderState extends State<HandyOrder> {
-  final recorder = SoundRecorder1();
+  final recorder = new SoundRecorder1();
   final _textController = TextEditingController();
   Future getImage() async {
     final XFile photo = await _picker.pickImage(source: ImageSource.camera);

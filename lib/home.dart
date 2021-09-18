@@ -75,6 +75,10 @@ class _HomeState extends State<Home> {
       Provider.of<APIData>(context, listen: false).initializeCenterId(
           Provider.of<APIData>(context, listen: false).user.centerId);
     }
+    if (Provider.of<APIData>(context, listen: false).userId == null) {
+      Provider.of<APIData>(context, listen: false).initializeUserId(
+          Provider.of<APIData>(context, listen: false).user.id);
+    }
   }
 
   String getUserType() {
