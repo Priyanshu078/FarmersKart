@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shellcode2/colors.dart';
@@ -299,6 +300,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                   child: ListView.builder(
                       itemCount: widget.allOrders.length,
                       itemBuilder: (context, int index) {
+                        print(widget.allOrders[index].productImage);
                         return Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
@@ -311,14 +313,41 @@ class _OrderSummaryState extends State<OrderSummary> {
                                   child: Row(
                                     children: [
                                       Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Image.asset(
-                                          "assets/bg.jpg",
-                                          scale: 3,
+                                        alignment: Alignment.topLeft,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: Container(
+                                            height: 75,
+                                            width: 75,
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "http://uprank.live/farmerskart/images/product/${widget.allOrders[index].productImage}",
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.fill,
+                                                      colorFilter:
+                                                          ColorFilter.mode(
+                                                              Colors
+                                                                  .transparent,
+                                                              BlendMode
+                                                                  .colorBurn)),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 16),
+                                      Flexible(
                                         child: Text(
                                           "${widget.allOrders[index].productName} ${widget.allOrders[index].weight}",
                                           style: TextStyle(
@@ -612,13 +641,40 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         children: [
                                           Align(
                                             alignment: Alignment.topCenter,
-                                            child: Image.asset(
-                                              "assets/bg.jpg",
-                                              scale: 3,
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8.0),
+                                              child: Container(
+                                                height: 75,
+                                                width: 75,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "http://uprank.live/farmerskart/images/product/${widget.todaysOrder[index].productImage}",
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fill,
+                                                          colorFilter:
+                                                              ColorFilter.mode(
+                                                                  Colors
+                                                                      .transparent,
+                                                                  BlendMode
+                                                                      .colorBurn)),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 16),
+                                          Flexible(
                                             child: Text(
                                               "${widget.todaysOrder[index].productName} ${widget.todaysOrder[index].weight}",
                                               style: TextStyle(
@@ -914,13 +970,40 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         children: [
                                           Align(
                                             alignment: Alignment.topCenter,
-                                            child: Image.asset(
-                                              "assets/bg.jpg",
-                                              scale: 3,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 75,
+                                                width: 75,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "http://uprank.live/farmerskart/images/product/${widget.cancelledOrders[index].productImage}",
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fill,
+                                                          colorFilter:
+                                                              ColorFilter.mode(
+                                                                  Colors
+                                                                      .transparent,
+                                                                  BlendMode
+                                                                      .colorBurn)),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 16),
+                                          Flexible(
                                             child: Text(
                                               "${widget.cancelledOrders[index].productName} ${widget.cancelledOrders[index].weight}",
                                               style: TextStyle(

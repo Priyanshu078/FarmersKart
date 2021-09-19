@@ -1,12 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
+import 'package:shellcode2/Provider/data.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/countupTimeforRecording.dart';
+import 'package:shellcode2/deliveryAddress.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/sound_recorder.dart';
 
@@ -24,7 +30,8 @@ XFile _imageFile;
 
 class _HandyOrderState extends State<HandyOrder> {
   final recorder = new SoundRecorder1();
-  final _textController = TextEditingController();
+  final _textController = new TextEditingController();
+  Dio dio = new Dio();
   Future getImage() async {
     final XFile photo = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
@@ -40,23 +47,24 @@ class _HandyOrderState extends State<HandyOrder> {
   }
 
   Widget buildStart() {
-    final isRecording = recorder.isRecording;
-    final icon = isRecording ? Icons.stop : Icons.mic;
-    final primary = isRecording ? Colors.red : Colors.purple;
+    // final isRecording = recorder.isRecording;
+    // final icon = isRecording ? Icons.stop : Icons.mic;
+    // final primary = isRecording ? Colors.red : Colors.purple;
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          child: isRecording ? CountdownPage() : null,
-        ),
+            // child: isRecording ? CountdownPage() : null,
+            ),
         IconButton(
           onPressed: () async {
-            final isRecording = await recorder.toggleRecording();
+            // final isRecording = await recorder.toggleRecording();
+            // print(isRecording);
             setState(() {});
           },
           icon: Icon(
-            icon,
-            color: primary,
+            Icons.mic,
+            color: Colors.purple[600],
           ),
         ),
       ],
@@ -66,13 +74,58 @@ class _HandyOrderState extends State<HandyOrder> {
   @override
   void initState() {
     super.initState();
-    recorder.init();
+    // recorder.init();
   }
 
   @override
   void dispose() {
-    recorder.dispose();
     super.dispose();
+    _imageFile = null;
+    // recorder.dispose();
+  }
+
+  void placeHandyOrder(BuildContext context) async {
+    String userId = Provider.of<APIData>(context, listen: false).userId;
+    String centerId = Provider.of<APIData>(context, listen: false).centerId;
+    String url = "$header/app_api/addHandyOrder.php?apicall=uploadpic";
+    FormData formData;
+    if (_imageFile != null) {
+      formData = new FormData.fromMap({
+        "user_id": userId,
+        "center_id": centerId,
+        "audio_file": "audio",
+        "delivery_time": "",
+        "image_name": _imageFile.name,
+        "product_list": _textController.text,
+        "pic": await MultipartFile.fromFile(_imageFile.path,
+            filename: _imageFile.name),
+        "audio": "",
+      });
+    } else {
+      formData = new FormData.fromMap({
+        "user_id": userId,
+        "center_id": centerId,
+        "audio_file": "audio",
+        "delivery_time": "",
+        "image_name": "",
+        "product_list": _textController.text,
+        "pic": "",
+        "audio": "",
+      });
+    }
+    Response response = await dio.post(url,
+        data: formData,
+        options: Options(headers: {
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data"
+        }));
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Handy Order Submitted")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
+    }
   }
 
   @override
@@ -256,9 +309,18 @@ class _HandyOrderState extends State<HandyOrder> {
               ),
               Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    'Select Center List',
-                    style: TextStyle(color: Colors.purple),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DeliveryAddress.handyOrder(1)));
+                    },
+                    child: Text(
+                      'Select Center List',
+                      style: TextStyle(color: Colors.purple),
+                    ),
                   )),
               SizedBox(
                 height: 70,
@@ -271,6 +333,7 @@ class _HandyOrderState extends State<HandyOrder> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Add your onPressed code here!
+          placeHandyOrder(context);
         },
         label: const Text('SUBMIT'),
         icon: const Icon(Icons.thumb_up),

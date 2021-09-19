@@ -8,6 +8,7 @@ import 'package:shellcode2/More%20pages/ImmunityMore.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
+import 'package:shellcode2/Notifications.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
 import 'package:shellcode2/apiData/allProducts.dart';
@@ -104,7 +105,16 @@ class _HomeState extends State<Home> {
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
-              ))
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Notifications()));
+              },
+              icon: Icon(
+                Icons.notifications,
+                color: yellow,
+              )),
         ],
         flexibleSpace: Container(
           decoration: BoxDecoration(

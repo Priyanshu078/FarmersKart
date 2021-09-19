@@ -10,6 +10,7 @@ import 'colors.dart';
 import 'home.dart';
 
 class DeliveryAddress extends StatefulWidget {
+  int id;
   String couponId;
   String couponCode;
   String couponValue;
@@ -25,6 +26,7 @@ class DeliveryAddress extends StatefulWidget {
       @required this.couponId,
       @required this.couponValue})
       : super(key: key);
+  DeliveryAddress.handyOrder(this.id);
 
   @override
   _DeliveryAddressState createState() => _DeliveryAddressState();
@@ -60,15 +62,17 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
           ),
         ),
       ),
-      bottomNavigationBar: Navigate(
-        totalAmount: widget.totalAmount,
-        deliveryCharges: widget.deliveryCharges,
-        selected: selected,
-        couponId: widget.couponId,
-        couponCode: widget.couponCode,
-        couponValue: widget.couponValue,
-        productOrderId: widget.productOrderId,
-      ),
+      bottomNavigationBar: widget.id == 1
+          ? Navigate.handyOrder(widget.id)
+          : Navigate(
+              totalAmount: widget.totalAmount,
+              deliveryCharges: widget.deliveryCharges,
+              selected: selected,
+              couponId: widget.couponId,
+              couponCode: widget.couponCode,
+              couponValue: widget.couponValue,
+              productOrderId: widget.productOrderId,
+            ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -133,6 +137,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
 }
 
 class Navigate extends StatefulWidget {
+  int id;
   double totalAmount;
   double deliveryCharges;
   bool selected;
@@ -150,6 +155,7 @@ class Navigate extends StatefulWidget {
       @required this.couponValue,
       @required this.productOrderId})
       : super(key: key);
+  Navigate.handyOrder(this.id);
 
   @override
   _NavigateState createState() => _NavigateState();
@@ -163,64 +169,70 @@ class _NavigateState extends State<Navigate> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                color: Colors.amberAccent.shade400,
-                child: Row(
-                  children: [
-                    Text(
-                      '₹ ',
-                      style: TextStyle(
-                          color: Colors.purple,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Consumer<APIData>(builder: (context, amount, child) {
-                      return Text(
-                        (amount.totalAmount).toString(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      );
-                    }),
-                    Spacer(),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        child: Text(
-                          'MAKE PAYMENT',
-                          style: TextStyle(fontSize: 18),
+            widget.id == 1
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    color: Colors.amberAccent.shade400,
+                    child: Row(
+                      children: [
+                        Text(
+                          '₹ ',
+                          style: TextStyle(
+                              color: Colors.purple,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      onPressed: () {
-                        double totalAmount =
-                            widget.totalAmount + widget.deliveryCharges;
-                        if (widget.selected) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentOption(
-                                        totalAmount: totalAmount,
-                                        couponId: widget.couponId,
-                                        couponCode: widget.couponCode,
-                                        couponValue: widget.couponValue,
-                                        deliveryCharges: widget.deliveryCharges,
-                                        productOrderId: widget.productOrderId,
-                                      )));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Please select the address")));
-                        }
-                      },
-                    )
-                  ],
-                )),
+                        Consumer<APIData>(builder: (context, amount, child) {
+                          return Text(
+                            (amount.totalAmount).toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          );
+                        }),
+                        Spacer(),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.purple,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            child: Text(
+                              'MAKE PAYMENT',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          onPressed: () {
+                            double totalAmount =
+                                widget.totalAmount + widget.deliveryCharges;
+                            if (widget.selected) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentOption(
+                                            totalAmount: totalAmount,
+                                            couponId: widget.couponId,
+                                            couponCode: widget.couponCode,
+                                            couponValue: widget.couponValue,
+                                            deliveryCharges:
+                                                widget.deliveryCharges,
+                                            productOrderId:
+                                                widget.productOrderId,
+                                          )));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Please select the address")));
+                            }
+                          },
+                        )
+                      ],
+                    )),
             ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30.0),

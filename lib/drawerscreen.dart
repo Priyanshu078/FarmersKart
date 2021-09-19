@@ -13,8 +13,17 @@ import 'package:shellcode2/home.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  @override
+  _NavigationDrawerWidgetState createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = EdgeInsets.symmetric(horizontal: 15);
+
+  String getImageUrl(BuildContext context) {
+    return "http://192.168.43.156/app_api/files/${Provider.of<APIData>(context, listen: false).image}";
+  }
 
   String getUserName(BuildContext context) {
     String userName = Provider.of<APIData>(context, listen: false).user.name;
@@ -27,9 +36,6 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = 'Sarah Abs';
-    final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
     return Drawer(
       child: Container(
         decoration: BoxDecoration(
@@ -37,17 +43,11 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             buildHeader(
-              urlImage: urlImage,
+              urlImage: getImageUrl(context),
               name: getUserName(context),
               onClicked: () {
                 Navigator.pop(context);
               },
-              /* onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => UserPage(
-                  name: 'Sarah Abs',
-                  urlImage: urlImage,
-                ),
-              )),*/
             ),
             Container(
               padding: padding,
