@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -207,16 +208,39 @@ class _CartState extends State<Cart> {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    Image.asset(
-                                                                  "assets/bg.jpg",
-                                                                  scale: 2.5,
-                                                                ),
-                                                              ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 75,
+                                                                    width: 75,
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          "http://uprank.live/farmerskart/images/product/${snapshot.data[index][i].productImage}",
+                                                                      imageBuilder:
+                                                                          (context, imageProvider) =>
+                                                                              Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          image: DecorationImage(
+                                                                              image: imageProvider,
+                                                                              fit: BoxFit.fill,
+                                                                              colorFilter: ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                                        ),
+                                                                      ),
+                                                                      placeholder:
+                                                                          (context, url) =>
+                                                                              CircularProgressIndicator(),
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          Icon(Icons
+                                                                              .error),
+                                                                    ),
+                                                                  )),
                                                               Column(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment

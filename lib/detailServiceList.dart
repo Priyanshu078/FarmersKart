@@ -6,6 +6,7 @@ import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/add&removeUserfav.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/filter.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
@@ -19,11 +20,9 @@ const String _heroAddTodo = 'add-todo-hero';
 List<String> tempin = [];
 List<General> temp = [];
 
-String categoryId ;
+String categoryId;
 int j = 0;
 String title;
-
-
 
 class DetailPage extends StatefulWidget {
   final String index;
@@ -35,67 +34,48 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  void generalfunc() {
-
-
-
-  }
+  void generalfunc() {}
 
   void chipfunc() {
-
-    categoryId=widget.index;
+    categoryId = widget.index;
 
     if (widget.index == '1') {
       {
-        title="Fresh Vegetables & fruits";
+        title = "Fresh Vegetables & fruits";
       }
     } else if (widget.index == '2') {
-      title="Grocery & Staples";
+      title = "Grocery & Staples";
     } else if (widget.index == 4) {
-      title="Dairy";
+      title = "Dairy";
     } else {
-      title="Bakery & Confectionery";
+      title = "Bakery & Confectionery";
     }
 
-    String subCategory=widget.subCategory;
+    String subCategory = widget.subCategory;
     print(subCategory);
     final split = subCategory.split(',');
     final Map<int, String> values = {
-      for (int i = 0; i < split.length; i++)
-        i: split[i]
+      for (int i = 0; i < split.length; i++) i: split[i]
     };
-    tempin=['All'];
-    for(int i=0;i<values.length;i++){
+    tempin = ['All'];
+    for (int i = 0; i < values.length; i++) {
       print(values[i]);
       tempin.add(values[i]);
     }
-
-
-
-
-
-
-
   }
 
-  void initState(){
+  void initState() {
     super.initState();
     chipfunc();
     print('sub');
     print(widget.index);
     print(widget.subCategory);
-    fetchSubCategotyProductApiData(categoryId.toString(),'All');
+    fetchSubCategotyProductApiData(categoryId.toString(), 'All');
 
-
-    temp=[];
-    temp=subCategoryProductsList;
+    temp = [];
+    temp = subCategoryProductsList;
     print(subCategoryProductsList.length);
   }
-
-
-
-
-
 
   int selectedIndex = 0;
   @override
@@ -117,7 +97,10 @@ class _DetailPageState extends State<DetailPage> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -145,7 +128,7 @@ class _DetailPageState extends State<DetailPage> {
             height: 81,
             decoration: BoxDecoration(
                 gradient:
-                LinearGradient(colors: [left, middle, Colors.purple])),
+                    LinearGradient(colors: [left, middle, Colors.purple])),
             child: Column(
               children: [
                 Padding(
@@ -205,18 +188,19 @@ class _DetailPageState extends State<DetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Consumer<APIData>(
-                          builder:(context,data,child){
-                            return  Text(
-                              '${data.temp.length} products',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            );
-                          }
-
-                      ),
+                      Consumer<APIData>(builder: (context, data, child) {
+                        try {
+                          return Text(
+                            '${data.temp.length} products',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          );
+                        } catch (e) {
+                          return Container();
+                        }
+                      }),
                       Material(
                         borderRadius: BorderRadius.circular(5),
                         color: bgcolor,
@@ -256,279 +240,327 @@ class _DetailPageState extends State<DetailPage> {
                 itemBuilder: (context, index) => choiceChipWidget(tempin)),
           ),
           Consumer<APIData>(
-            builder: (context,data,child){
-              return Expanded(
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: new ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: temp.length,
-                      physics: ClampingScrollPhysics(),
-
-                      itemBuilder: (context, index) {
-
-                        bool flag=true;
-                        if((data.discountMoreThan15==false&&data.discountUpToRs15==false&&data.discountUpToRs5==false)||(data.discountUpToRs5==true&&int.parse(temp[index].discount)>5)||(data.discountUpToRs15==true&&int.parse(temp[index].discount)>15)||(data.discountMoreThan15==true&&int.parse(temp[index].discount)<15))
-                          flag=true;
-                        else
-                          flag=false;
-
-                        if(flag)
-                        {
-
-                          if((data.priceMoreThan300==false&&data.priceLessThan300==false&&data.priceLessThan100==false&&data.priceLessThan20==false)||(data.priceLessThan100==true&&temp[index].newrate<100)||(data.priceLessThan300==true&&temp[index].newrate<300)||(data.priceLessThan20==true&&temp[index].newrate<20)||(data.priceMoreThan300==true&&temp[index].newrate>300)){
-                            flag=true;
-                          }
+            builder: (context, data, child) {
+              try {
+                return Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: temp.length,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          bool flag = true;
+                          if ((data.discountMoreThan15 == false &&
+                                  data.discountUpToRs15 == false &&
+                                  data.discountUpToRs5 == false) ||
+                              (data.discountUpToRs5 == true &&
+                                  int.parse(temp[index].discount) > 5) ||
+                              (data.discountUpToRs15 == true &&
+                                  int.parse(temp[index].discount) > 15) ||
+                              (data.discountMoreThan15 == true &&
+                                  int.parse(temp[index].discount) < 15))
+                            flag = true;
                           else
-                            flag=false;
+                            flag = false;
 
-                        }
+                          if (flag) {
+                            if ((data.priceMoreThan300 == false &&
+                                    data.priceLessThan300 == false &&
+                                    data.priceLessThan100 == false &&
+                                    data.priceLessThan20 == false) ||
+                                (data.priceLessThan100 == true &&
+                                    temp[index].newrate < 100) ||
+                                (data.priceLessThan300 == true &&
+                                    temp[index].newrate < 300) ||
+                                (data.priceLessThan20 == true &&
+                                    temp[index].newrate < 20) ||
+                                (data.priceMoreThan300 == true &&
+                                    temp[index].newrate > 300)) {
+                              flag = true;
+                            } else
+                              flag = false;
+                          }
 
-                        if(flag==false)
-                        {
-                          return Container(
-                            height: 0,
-                            width: 0,
-                          ) ;
-                        }
+                          if (flag == false) {
+                            return Container(
+                              height: 0,
+                              width: 0,
+                            );
+                          }
 
-                        return InkWell(
-                          onTap: () {
-                            List temp2 = [
-                              temp[index].imageUrl,
-                              temp[index].title,
-                              temp[index].weight,
-                              temp[index].newrate,
-                              temp[index].description,
-                              temp[index].oldrate,
-                              temp[index].data
-                            ];
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProductDetails(temp2, 0)));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(10),
-                            width: 150,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      spreadRadius: 1,
-                                      blurRadius: 1,
-                                      offset: Offset(0, 1),
-                                      color: Colors.black38)
-                                ]),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Container(
-                                    height: 70,
-                                    width: 70,
-                                    child:  CachedNetworkImage(
-                                      imageUrl: "http://uprank.live/farmerskart/images/product/${data.temp[index].imageUrl}",
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                              colorFilter:
-                                              ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                          return InkWell(
+                            onTap: () {
+                              List temp2 = [
+                                temp[index].imageUrl,
+                                temp[index].title,
+                                temp[index].weight,
+                                temp[index].newrate,
+                                temp[index].description,
+                                temp[index].oldrate,
+                                temp[index].data
+                              ];
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetails.category(
+                                              temp2, 0, true)));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(10),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1,
+                                        blurRadius: 1,
+                                        offset: Offset(0, 1),
+                                        color: Colors.black38)
+                                  ]),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 10, 20),
+                                    child: Container(
+                                      height: 70,
+                                      width: 70,
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "http://uprank.live/farmerskart/images/product/${data.temp[index].imageUrl}",
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                                colorFilter: ColorFilter.mode(
+                                                    Colors.transparent,
+                                                    BlendMode.colorBurn)),
+                                          ),
                                         ),
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                       ),
-                                      placeholder: (context, url) => CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => Icon(Icons.error),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  width: 250,
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.centerRight,
-                                          child: IconButton(
-                                              onPressed: () async {
-                                                setState(() {
-                                                  if(temp[index].fav==0)
-                                                    temp[index].fav=1;
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        (1 / 2 + 1 / 8),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    if (temp[index].fav == 0)
+                                                      temp[index].fav = 1;
+                                                    else
+                                                      temp[index].fav = 0;
+                                                  });
+
+                                                  String msg;
+                                                  if (temp[index].fav == 0)
+                                                    msg = await removeUserFav(
+                                                        Provider.of<APIData>(
+                                                                context,
+                                                                listen: false)
+                                                            .userId,
+                                                        temp[index].productId);
                                                   else
-                                                    temp[index].fav=0;
+                                                    msg = await addUserFav(
+                                                        Provider.of<APIData>(
+                                                                context,
+                                                                listen: false)
+                                                            .userId,
+                                                        temp[index].productId);
 
-                                                });
-
-                                                String msg;
-                                                if(temp[index].fav==0)
-                                                  msg= await   removeUserFav(Provider.of<APIData>(context,listen: false).userId, temp[index].productId);
-                                                else
-                                                  msg=  await addUserFav(Provider.of<APIData>(context,listen: false).userId, temp[index].productId);
-
-                                                print(msg);
-
-
-                                              } ,
-                                              icon: Icon(
-                                                (temp[index].fav!=1)?Icons.favorite_border_rounded:Icons.favorite,
-                                                color: yellow,
-                                              ))),
-                                      Text(
-                                        temp[index].title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14,
-                                          color: Colors.deepPurple,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      GestureDetector(
-                                        // borderRadius: BorderRadius.circular(20),
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              HeroDialogRoute(
-                                                  builder: (context) {
-                                                    return _AddTodoPopupCard(index);
-                                                  },
-                                                  settings: ModalRoute.of(context)
-                                                      .settings));
-                                        },
-                                        child: Hero(
-                                          tag: _heroAddTodo,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                top: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.purple),
-                                                left: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.purple),
-                                                right: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.purple),
-                                                bottom: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.purple),
-                                              ),
-                                              borderRadius:
-                                              BorderRadius.circular(5.0),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  ' ${temp[index].weight}',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: yellow,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                Icon(
-                                                  Icons.keyboard_arrow_down,
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(msg)));
+                                                },
+                                                icon: Icon(
+                                                  (temp[index].fav != 1)
+                                                      ? Icons
+                                                          .favorite_border_rounded
+                                                      : Icons.favorite,
                                                   color: yellow,
-                                                )
-                                              ],
-                                            ),
+                                                ))),
+                                        Text(
+                                          temp[index].title,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.deepPurple,
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "₹  ${temp[index].newrate}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                              color: Colors.purple,
-                                            ),
-                                          ),
-                                          RatingBar.builder(
-                                            unratedColor: Colors.grey[300],
-                                            itemCount: 5,
-                                            initialRating: 0,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemSize: 18,
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              size: 1.0,
-                                              color: yellow,
-                                            ),
-                                            onRatingUpdate: (rating) {
-                                              print(rating);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: RaisedButton(
-                                          elevation: 0.0,
-                                          color: bgcolor,
-                                          onPressed: () {
-                                            setState(() {
-                                              selectedIndex = index;
-                                            });
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        GestureDetector(
+                                          // borderRadius: BorderRadius.circular(20),
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                HeroDialogRoute(
+                                                    builder: (context) {
+                                                      return _AddTodoPopupCard(
+                                                          index);
+                                                    },
+                                                    settings:
+                                                        ModalRoute.of(context)
+                                                            .settings));
                                           },
-                                          child: selectedIndex == index
-                                              ? Container(
-                                            child: CustomStepper(
-                                              lowerLimit: 1,
-                                              upperLimit: 10,
-                                              value: 1,
-                                              stepValue: 1,
-                                              iconSize: 10,
-                                            ),
-                                          )
-                                              : Container(
-                                              height: 25,
-                                              width: 80,
+                                          child: Hero(
+                                            tag: _heroAddTodo,
+                                            child: Container(
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(5.0),
-                                                color: Colors.purple[700],
-                                              ),
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "ADD",
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white),
+                                                border: Border(
+                                                  top: BorderSide(
+                                                      width: 2.0,
+                                                      color: Colors.purple),
+                                                  left: BorderSide(
+                                                      width: 2.0,
+                                                      color: Colors.purple),
+                                                  right: BorderSide(
+                                                      width: 2.0,
+                                                      color: Colors.purple),
+                                                  bottom: BorderSide(
+                                                      width: 2.0,
+                                                      color: Colors.purple),
                                                 ),
-                                              )),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                      " ${temp[index].data[0][0]}",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: yellow,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: yellow,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "₹  ${temp[index].newrate}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                                color: Colors.purple,
+                                              ),
+                                            ),
+                                            RatingBar.builder(
+                                              unratedColor: Colors.grey[300],
+                                              itemCount: 5,
+                                              initialRating: 0,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemSize: 18,
+                                              itemBuilder: (context, _) => Icon(
+                                                Icons.star,
+                                                size: 1.0,
+                                                color: yellow,
+                                              ),
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: RaisedButton(
+                                            elevation: 0.0,
+                                            color: bgcolor,
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedIndex = index;
+                                              });
+                                            },
+                                            child: selectedIndex == index
+                                                ? Container(
+                                                    child: CustomStepper(
+                                                      lowerLimit: 1,
+                                                      upperLimit: 10,
+                                                      value: 1,
+                                                      stepValue: 1,
+                                                      iconSize: 10,
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    height: 25,
+                                                    width: 80,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      color: Colors.purple[700],
+                                                    ),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        "ADD",
+                                                        style: TextStyle(
+                                                            fontSize: 10,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }),
-                ),
-              );
+                          );
+                        }),
+                  ),
+                );
+              } catch (e) {
+                return Container();
+              }
             },
           ),
         ],
@@ -608,7 +640,6 @@ class choiceChipWidget extends StatefulWidget {
 }
 
 class _choiceChipWidgetState extends State<choiceChipWidget> {
-
   String selectedChoice = "All";
   _buildChoiceList() {
     List<Widget> choices = [];
@@ -629,19 +660,17 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
           selectedColor: Colors.yellow[800],
           selected: selectedChoice == item,
           onSelected: (selected) async {
-            await  fetchSubCategotyProductApiData(categoryId.toString(),item);
+            await fetchSubCategotyProductApiData(categoryId.toString(), item);
             setState(() {
               selectedChoice = item;
               print(item);
 
+              temp = [];
+              temp = subCategoryProductsList;
 
-              temp=[];
-              temp=subCategoryProductsList;
-
-              Provider.of<APIData>(context,listen: false).initializeTemp(temp);
+              Provider.of<APIData>(context, listen: false).initializeTemp(temp);
               print('size');
               print(temp.length);
-
             });
           },
         ),
@@ -657,7 +686,6 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
     );
   }
 }
-
 
 int n = 0;
 
@@ -718,7 +746,7 @@ class _AddTodoPopupCard extends StatelessWidget {
             color: lightbg,
             elevation: 2,
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -760,7 +788,7 @@ class _AddTodoPopupCard extends StatelessWidget {
                                 colors: [left, middle, Colors.purple])),
                         child: Padding(
                           padding:
-                          const EdgeInsets.only(left: 25.0, right: 85.0),
+                              const EdgeInsets.only(left: 25.0, right: 85.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -857,7 +885,7 @@ class _CustomStepperState extends State<CustomStepper> {
               ),
               onTap: () {
                 setState(
-                      () {
+                  () {
                     widget.value = widget.value == widget.lowerLimit
                         ? widget.lowerLimit
                         : widget.value -= widget.stepValue;
@@ -871,7 +899,7 @@ class _CustomStepperState extends State<CustomStepper> {
             child: Container(
               decoration: BoxDecoration(
                   gradient:
-                  LinearGradient(colors: [left, middle, Colors.purple])),
+                      LinearGradient(colors: [left, middle, Colors.purple])),
               width: widget.iconSize,
               child: Center(
                 child: FittedBox(
@@ -898,7 +926,7 @@ class _CustomStepperState extends State<CustomStepper> {
               ),
               onTap: () {
                 setState(
-                      () {
+                  () {
                     widget.value = widget.value == widget.upperLimit
                         ? widget.upperLimit
                         : widget.value += widget.stepValue;

@@ -211,19 +211,19 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                               BoxDecoration(
                                                             border: Border(
                                                               top: BorderSide(
-                                                                  width: 1.0,
+                                                                  width: 2.0,
                                                                   color: Colors
                                                                       .greenAccent),
                                                               left: BorderSide(
-                                                                  width: 1.0,
+                                                                  width: 2.0,
                                                                   color: Colors
                                                                       .greenAccent),
                                                               right: BorderSide(
-                                                                  width: 1.0,
+                                                                  width: 2.0,
                                                                   color: Colors
                                                                       .greenAccent),
                                                               bottom: BorderSide(
-                                                                  width: 1.0,
+                                                                  width: 2.0,
                                                                   color: Colors
                                                                       .greenAccent),
                                                             ),
@@ -323,11 +323,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 .start,
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
-                                                                .spaceEvenly,
+                                                                .center,
                                                         children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
+                                                          Expanded(
                                                             child: Container(
                                                               height: 25,
                                                               width: 150,
@@ -336,24 +334,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 border: Border(
                                                                   top: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .orange),
+                                                                          .yellow),
                                                                   left: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .orange),
+                                                                          .yellow),
                                                                   right: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .orange),
+                                                                          .yellow),
                                                                   bottom: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .orange),
+                                                                          .yellow),
                                                                 ),
                                                                 borderRadius:
                                                                     BorderRadius
@@ -391,9 +389,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                               ),
                                                             ),
                                                           ),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Expanded(
                                                             child: Container(
                                                               height: 25,
                                                               width: 150,
@@ -402,22 +401,22 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 border: Border(
                                                                   top: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
                                                                           .greenAccent),
                                                                   left: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
                                                                           .greenAccent),
                                                                   right: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
                                                                           .greenAccent),
                                                                   bottom: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
                                                                           .greenAccent),
                                                                 ),
@@ -469,11 +468,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 .start,
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
-                                                                .spaceEvenly,
+                                                                .center,
                                                         children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
+                                                          Expanded(
                                                             child: Container(
                                                               height: 25,
                                                               width: 150,
@@ -536,9 +533,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                               ),
                                                             ),
                                                           ),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Expanded(
                                                             child: Container(
                                                               height: 25,
                                                               width: 150,
@@ -614,7 +612,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           fontWeight: FontWeight
                                                                               .normal,
                                                                           color:
-                                                                              Colors.orangeAccent),
+                                                                              Colors.red),
                                                                     )),
                                                               ),
                                                             ),
@@ -694,24 +692,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 border: Border(
                                                                   top: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .black),
+                                                                          .greenAccent),
                                                                   left: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .black),
+                                                                          .greenAccent),
                                                                   right: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .black),
+                                                                          .greenAccent),
                                                                   bottom: BorderSide(
                                                                       width:
-                                                                          1.0,
+                                                                          2.0,
                                                                       color: Colors
-                                                                          .black),
+                                                                          .greenAccent),
                                                                 ),
                                                                 borderRadius:
                                                                     BorderRadius
@@ -744,7 +742,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           fontWeight: FontWeight
                                                                               .normal,
                                                                           color:
-                                                                              Colors.blueGrey),
+                                                                              Colors.greenAccent),
                                                                     )),
                                                               ),
                                                             ),
@@ -807,12 +805,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     .start,
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                                    .center,
                                                             children: [
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
+                                                              Expanded(
                                                                 child:
                                                                     Container(
                                                                   height: 25,
@@ -823,22 +818,22 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                         Border(
                                                                       top: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
                                                                               Colors.yellow),
                                                                       left: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
                                                                               Colors.yellow),
                                                                       right: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
                                                                               Colors.yellow),
                                                                       bottom: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
                                                                               Colors.yellow),
                                                                     ),
@@ -872,10 +867,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
+                                                              SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Expanded(
                                                                 child:
                                                                     Container(
                                                                   height: 25,
@@ -886,24 +881,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                         Border(
                                                                       top: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
-                                                                              Colors.black),
+                                                                              Colors.greenAccent),
                                                                       left: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
-                                                                              Colors.black),
+                                                                              Colors.greenAccent),
                                                                       right: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
-                                                                              Colors.black),
+                                                                              Colors.greenAccent),
                                                                       bottom: BorderSide(
                                                                           width:
-                                                                              1.0,
+                                                                              2.0,
                                                                           color:
-                                                                              Colors.black),
+                                                                              Colors.greenAccent),
                                                                     ),
                                                                     borderRadius:
                                                                         BorderRadius.circular(
@@ -931,7 +926,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           style: TextStyle(
                                                                               fontSize: 10,
                                                                               fontWeight: FontWeight.normal,
-                                                                              color: Colors.white),
+                                                                              color: Colors.black),
                                                                         )),
                                                                   ),
                                                                 ),
@@ -947,12 +942,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                     .start,
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                                    .center,
                                                             children: [
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
+                                                              Expanded(
                                                                 child:
                                                                     Container(
                                                                   height: 25,
@@ -1006,15 +998,15 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           style: TextStyle(
                                                                               fontSize: 10,
                                                                               fontWeight: FontWeight.normal,
-                                                                              color: Colors.white),
+                                                                              color: Colors.black),
                                                                         )),
                                                                   ),
                                                                 ),
                                                               ),
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
+                                                              SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Expanded(
                                                                 child:
                                                                     Container(
                                                                   height: 25,
@@ -1163,19 +1155,19 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 BoxDecoration(
                                                               border: Border(
                                                                 top: BorderSide(
-                                                                    width: 1.0,
+                                                                    width: 2.0,
                                                                     color: Colors
                                                                         .greenAccent),
                                                                 left: BorderSide(
-                                                                    width: 1.0,
+                                                                    width: 2.0,
                                                                     color: Colors
                                                                         .greenAccent),
                                                                 right: BorderSide(
-                                                                    width: 1.0,
+                                                                    width: 2.0,
                                                                     color: Colors
                                                                         .greenAccent),
                                                                 bottom: BorderSide(
-                                                                    width: 1.0,
+                                                                    width: 2.0,
                                                                     color: Colors
                                                                         .greenAccent),
                                                               ),
@@ -1277,12 +1269,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                   .start,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
-                                                                  .spaceEvenly,
+                                                                  .center,
                                                           children: [
-                                                            Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
+                                                            Expanded(
                                                               child: Container(
                                                                 height: 25,
                                                                 width: 150,
@@ -1292,24 +1281,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                       Border(
                                                                     top: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
-                                                                            .orange),
+                                                                            .yellow),
                                                                     left: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
-                                                                            .orange),
+                                                                            .yellow),
                                                                     right: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
-                                                                            .orange),
+                                                                            .yellow),
                                                                     bottom: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
-                                                                            .orange),
+                                                                            .yellow),
                                                                   ),
                                                                   borderRadius:
                                                                       BorderRadius
@@ -1347,10 +1336,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                 ),
                                                               ),
                                                             ),
-                                                            Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Expanded(
                                                               child: Container(
                                                                 height: 25,
                                                                 width: 150,
@@ -1360,22 +1349,22 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                       Border(
                                                                     top: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
                                                                             .greenAccent),
                                                                     left: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
                                                                             .greenAccent),
                                                                     right: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
                                                                             .greenAccent),
                                                                     bottom: BorderSide(
                                                                         width:
-                                                                            1.0,
+                                                                            2.0,
                                                                         color: Colors
                                                                             .greenAccent),
                                                                   ),

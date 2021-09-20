@@ -5,12 +5,12 @@ import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/getUserFav.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 
 const String _heroAddTodo = 'add-todo-hero';
 
@@ -20,27 +20,27 @@ class Wishlist extends StatefulWidget {
   @override
   _WishlistState createState() => _WishlistState();
 }
-List<UserFavProductCategories> details=[];
-List<UserFavProductCategories> detailByCategory=[];
+
+List<UserFavProductCategories> details = [];
+List<UserFavProductCategories> detailByCategory = [];
+
 class _WishlistState extends State<Wishlist> {
   List<String> tempin = [
     'All',
     'Fresh Vegetables & fruit',
     'Grocery & Staples',
     'Dairy',
-    'Bakery & Confectionery'
+    'Bakery & Confectionery',
+    'Pooja'
   ];
 
-  void initState(){
+  void initState() {
     super.initState();
-    fetchGetUserFav(Provider.of<APIData>(context,listen: false).userId);
-    details=userFavProductList;
+    fetchGetUserFav(Provider.of<APIData>(context, listen: false).userId);
+    details = userFavProductList;
     print(details.length);
-    detailByCategory=details;
-
+    detailByCategory = details;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,10 @@ class _WishlistState extends State<Wishlist> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
+              },
               icon: Icon(
                 Icons.shopping_cart,
                 color: yellow,
@@ -82,7 +85,7 @@ class _WishlistState extends State<Wishlist> {
           ),
         ),
       ),
-      body:  Container(
+      body: Container(
         child: Column(
           children: [
             Container(
@@ -94,7 +97,7 @@ class _WishlistState extends State<Wishlist> {
                   itemBuilder: (context, index) => choiceChipWidget(tempin)),
             ),
             Consumer<APIData>(
-              builder: (context,data,child){
+              builder: (context, data, child) {
                 return Expanded(
                   child: Container(
                     height: MediaQuery.of(context).size.height,
@@ -112,48 +115,59 @@ class _WishlistState extends State<Wishlist> {
                               children: [
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    data.detailsByCategory[index].discount!=0?Container(
-                                      height: 28,
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                            top: BorderSide(
-                                                width: 1.0, color: yellow),
-                                            left: BorderSide(
-                                                width: 1.0, color: yellow),
-                                            right: BorderSide(
-                                                width: 1.0, color: yellow),
-                                            bottom: BorderSide(
-                                                width: 1.0, color: yellow),
-                                          ),
-                                          borderRadius: BorderRadius.circular(5.0),
-                                          gradient: LinearGradient(colors: [
-                                            left,
-                                            middle,
-                                            Colors.purple
-                                          ])),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '₹  ${data.detailsByCategory[index].discount} OFF',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Colors.white,
+                                    data.detailsByCategory[index].discount != 0
+                                        ? Container(
+                                            height: 28,
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                  top: BorderSide(
+                                                      width: 1.0,
+                                                      color: yellow),
+                                                  left: BorderSide(
+                                                      width: 1.0,
+                                                      color: yellow),
+                                                  right: BorderSide(
+                                                      width: 1.0,
+                                                      color: yellow),
+                                                  bottom: BorderSide(
+                                                      width: 1.0,
+                                                      color: yellow),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      left,
+                                                      middle,
+                                                      Colors.purple
+                                                    ])),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '₹  ${data.detailsByCategory[index].discount} OFF',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ):Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
+                                            ),
+                                          )
+                                        : Container(
+                                            height: 0,
+                                            width: 0,
+                                          ),
                                     IconButton(
                                         onPressed: null,
                                         icon: Icon(
@@ -164,26 +178,33 @@ class _WishlistState extends State<Wishlist> {
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(20.0),
                                       child: Container(
                                         height: 50,
                                         width: 50,
-                                        child:  CachedNetworkImage(
-                                          imageUrl: "http://uprank.live/farmerskart/images/product/${data.detailsByCategory[index].imageURL}",
-                                          imageBuilder: (context, imageProvider) => Container(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "http://uprank.live/farmerskart/images/product/${data.detailsByCategory[index].imageURL}",
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-                                                  colorFilter:
-                                                  ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.transparent,
+                                                      BlendMode.colorBurn)),
                                             ),
                                           ),
-                                          placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
                                       ),
                                     ),
@@ -192,7 +213,7 @@ class _WishlistState extends State<Wishlist> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             data.detailsByCategory[index].title,
@@ -215,8 +236,8 @@ class _WishlistState extends State<Wishlist> {
                                                             index);
                                                       },
                                                       settings:
-                                                      ModalRoute.of(context)
-                                                          .settings));
+                                                          ModalRoute.of(context)
+                                                              .settings));
                                             },
                                             child: Hero(
                                               tag: _heroAddTodo,
@@ -241,19 +262,21 @@ class _WishlistState extends State<Wishlist> {
                                                             .deepPurpleAccent),
                                                   ),
                                                   borderRadius:
-                                                  BorderRadius.circular(5.0),
+                                                      BorderRadius.circular(
+                                                          5.0),
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      ' ${ data.detailsByCategory[0].weight[0][0]}',
+                                                      ' ${data.detailsByCategory[0].weight[0][0]}',
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: yellow,
-                                                        fontWeight: FontWeight.w700,
+                                                        fontWeight:
+                                                            FontWeight.w700,
                                                       ),
                                                     ),
                                                     Icon(
@@ -289,27 +312,28 @@ class _WishlistState extends State<Wishlist> {
                                                           return _AddTodoPopupCard(
                                                               index);
                                                         },
-                                                        settings:
-                                                        ModalRoute.of(context)
+                                                        settings: ModalRoute.of(
+                                                                context)
                                                             .settings));
                                               },
                                               child: Text(
                                                 'Move to Cart',
-                                                style:
-                                                TextStyle(color: Colors.white),
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
                                               style: ButtonStyle(
                                                   backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.purple[600]),
+                                                      MaterialStateProperty.all(
+                                                          Colors.purple[600]),
                                                   padding:
-                                                  MaterialStateProperty.all(
-                                                      EdgeInsets.symmetric(
-                                                          vertical: 12,
-                                                          horizontal: 20)),
+                                                      MaterialStateProperty.all(
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 12,
+                                                              horizontal: 20)),
                                                   textStyle:
-                                                  MaterialStateProperty.all(
-                                                      TextStyle(fontSize: 14))),
+                                                      MaterialStateProperty.all(
+                                                          TextStyle(
+                                                              fontSize: 14))),
                                             ),
                                           ),
                                         ],
@@ -324,13 +348,10 @@ class _WishlistState extends State<Wishlist> {
                   ),
                 );
               },
-
             ),
           ],
         ),
       ),
-
-
       bottomNavigationBar: Navigate(),
     );
   }
@@ -408,9 +429,8 @@ class choiceChipWidget extends StatefulWidget {
 class _choiceChipWidgetState extends State<choiceChipWidget> {
   String selectedChoice = "";
 
-
   _buildChoiceList() {
-    print( widget.reportList);
+    print(widget.reportList);
     List<Widget> choices = [];
 
     widget.reportList.forEach((item) {
@@ -431,15 +451,15 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
             setState(() {
               selectedChoice = item;
               print(item);
-              detailByCategory=[];
-              for(int i=0;i<details.length;i++){
-                 print(details[i].categoryName);
-                if(details[i].categoryName==item||item=='All')
+              detailByCategory = [];
+              for (int i = 0; i < details.length; i++) {
+                print(details[i].categoryName);
+                if (details[i].categoryName == item || item == 'All')
                   detailByCategory.add(details[i]);
               }
               print(detailByCategory.length);
-              Provider.of<APIData>(context,listen: false).initialUserFavProductCategories(detailByCategory);
-
+              Provider.of<APIData>(context, listen: false)
+                  .initialUserFavProductCategories(detailByCategory);
             });
           },
         ),
@@ -507,7 +527,7 @@ class _AddTodoPopupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<APIData>(
-      builder: (context,data,chid){
+      builder: (context, data, chid) {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(32.0),
@@ -516,8 +536,8 @@ class _AddTodoPopupCard extends StatelessWidget {
               child: Material(
                 color: lightbg,
                 elevation: 2,
-                shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22)),
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -547,7 +567,9 @@ class _AddTodoPopupCard extends StatelessWidget {
                           color: Colors.orange,
                           thickness: 0.8,
                         ),
-                        for (int k = 0; k < data.detailsByCategory[n].weight.length; k++) ...{
+                        for (int k = 0;
+                            k < data.detailsByCategory[n].weight.length;
+                            k++) ...{
                           Container(
                             height: 35,
                             decoration: BoxDecoration(
@@ -561,8 +583,8 @@ class _AddTodoPopupCard extends StatelessWidget {
                                 gradient: LinearGradient(
                                     colors: [left, middle, Colors.purple])),
                             child: Padding(
-                              padding:
-                              const EdgeInsets.only(left: 25.0, right: 85.0),
+                              padding: const EdgeInsets.only(
+                                  left: 25.0, right: 85.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

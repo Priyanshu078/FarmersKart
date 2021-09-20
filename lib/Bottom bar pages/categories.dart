@@ -6,6 +6,7 @@ import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/home.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 List<Categories> category = category1;
 
 class Category extends StatelessWidget {
@@ -44,61 +45,60 @@ class Category extends StatelessWidget {
         color: bgcolor,
         child: Padding(
             padding: EdgeInsets.only(top: 18, bottom: 18),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              for (int i = 0; i < category.length; i++) ...{
-                Container(
-                    padding: EdgeInsets.only(left: 15.0, top: 10.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(30),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailPage(category[i].categoryId,category[i].subCategory)));
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            height: 80,
-                            width: 80,
-
-                            child: CachedNetworkImage(
-
-
-                              imageUrl: "http://uprank.live/farmerskart/images/category/${category[i].imageUrl}",
-
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                      colorFilter:
-                                      ColorFilter.mode(Colors.transparent, BlendMode.colorBurn)),
+            child: ListView.builder(
+                itemCount: category.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                      padding: EdgeInsets.only(left: 15.0, top: 10.0),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(30),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DetailPage(
+                                      category[index].categoryId,
+                                      category[index].subCategory)));
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              height: 80,
+                              width: 80,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    "http://uprank.live/farmerskart/images/category/${category[index].imageUrl}",
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.transparent,
+                                            BlendMode.colorBurn)),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8.0, bottom: 8.0, left: 18.0),
-                            child: Text(
-                              category[i].title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                                color: Colors.purple,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8.0, bottom: 8.0, left: 18.0),
+                              child: Text(
+                                category[index].title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Colors.purple,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )),
-              },
-            ])),
+                          ],
+                        ),
+                      ));
+                })),
       ),
       bottomNavigationBar: Navigate(),
     );

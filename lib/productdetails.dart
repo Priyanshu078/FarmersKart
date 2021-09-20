@@ -17,6 +17,7 @@ class ProductDetails extends StatefulWidget {
   int k = 0;
   bool offers = false;
   bool discountAvailable = false;
+  bool category = false;
   // ProductDetails(List cat,int j){
   // this.temporary = cat;
   // this.k = j;
@@ -25,6 +26,7 @@ class ProductDetails extends StatefulWidget {
   ProductDetails.offers(this.temporary, this.k, this.offers);
   ProductDetails.search(
       this.temporary, this.k, this.offers, this.discountAvailable);
+  ProductDetails.category(this.temporary, this.k, this.category);
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -333,7 +335,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                 onTap: () {
                   Navigator.of(context).push(HeroDialogRoute(
                       builder: (context) {
-                        return _AddTodoPopupCard(widget.offers);
+                        return _AddTodoPopupCard(
+                            widget.offers, widget.category);
                       },
                       settings: ModalRoute.of(context).settings));
                 },
@@ -361,14 +364,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   fontWeight: FontWeight.w700,
                                 ),
                               )
-                            : Text(
-                                '${temp[6][0][1]}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: yellow,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                            : widget.category
+                                ? Text(
+                                    '${temp[6][0][0]}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: yellow,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  )
+                                : Text(
+                                    '${temp[6][0][1]}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: yellow,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                         Icon(
                           Icons.keyboard_arrow_down,
                           color: yellow,
@@ -607,7 +619,8 @@ class HeroDialogRoute<T> extends PageRoute<T> {
 
 class _AddTodoPopupCard extends StatefulWidget {
   bool offers;
-  _AddTodoPopupCard(this.offers);
+  bool category;
+  _AddTodoPopupCard(this.offers, this.category);
   @override
   __AddTodoPopupCardState createState() => __AddTodoPopupCardState();
 }
@@ -615,6 +628,7 @@ class _AddTodoPopupCard extends StatefulWidget {
 class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
   @override
   Widget build(BuildContext context) {
+    print(temp);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -679,14 +693,23 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                         color: Colors.white,
                                       ),
                                     )
-                                  : Text(
-                                      '${temp[6][k][1]} -',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                  : !widget.category
+                                      ? Text(
+                                          '${temp[6][k][1]} -',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Text(
+                                          '${temp[6][k][0]} -',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                               Spacer(
                                 flex: 2,
                               ),
@@ -700,15 +723,27 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                           decoration:
                                               TextDecoration.lineThrough),
                                     )
-                                  : Text(
-                                      '₹${temp[6][k][2]}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
+                                  : widget.category
+                                      ? Text(
+                                          '₹${temp[6][k][1]}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                        )
+                                      : Text(
+                                          '₹${temp[6][k][2]}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                        ),
                               Spacer(
                                 flex: 2,
                               ),
@@ -723,14 +758,23 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
                                             color: Colors.white,
                                           ),
                                         )
-                                  : Text(
-                                      '₹${temp[6][k][3]}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                  : widget.category
+                                      ? Text(
+                                          '₹${temp[6][0][2]}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Text(
+                                          '₹${temp[6][k][3]}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                             ],
                           ),
                         ),
