@@ -1,34 +1,125 @@
 {
   "project_info": {
-    "project_number": "150016245577",
-    "project_id": "farmerskart-3177d",
-    "storage_bucket": "farmerskart-3177d.appspot.com"
+    "project_number": "537455387489",
+    "project_id": "farmers-kart",
+    "storage_bucket": "farmers-kart.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:150016245577:android:4e0e6c31718cbffc9ca498",
+        "mobilesdk_app_id": "1:537455387489:android:7539d243571caf01701b20",
         "android_client_info": {
-          "package_name": "com.servicexpertz.shellcode2"
+          "package_name": "com.farmers.kart"
         }
       },
       "oauth_client": [
         {
-          "client_id": "150016245577-4fplkd5op4q34i3gtka770qtkeursv20.apps.googleusercontent.com",
+          "client_id": "537455387489-0o5fjltl7stviekbu9fu3hino9d9ernm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "1cfd04152bfdbd1efab171a2a8c579decce98f23"
+          }
+        },
+        {
+          "client_id": "537455387489-28s3lpbrgruhftbpeb7uc2khfhp8d6m4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "bb12b3c0699be04cc3bef2b08e327ba1b8e3aa3c"
+          }
+        },
+        {
+          "client_id": "537455387489-2o2hc6442vvqru72p00r49ht450c548l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "a4c913384d68749956c023553e5fc7468b5f26b7"
+          }
+        },
+        {
+          "client_id": "537455387489-55i2q21a36q1jrku5h3jebeqpm4t0lgt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "d113b5246267be3bbbc0cd2aa89a2fff39363ac3"
+          }
+        },
+        {
+          "client_id": "537455387489-gokauhk0roed7n1gm9cnb664b37bpal8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "9f0ca1c600fac9c9b166497b44fd85b57dd585f1"
+          }
+        },
+        {
+          "client_id": "537455387489-o5cm14gmm69io6oj6p5k47g571jgo7ce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.farmers.kart",
+            "certificate_hash": "af4cc8b5a270b53f8806dfab883e4cd1d4975308"
+          }
+        },
+        {
+          "client_id": "537455387489-dpae2rdsdhd6ojbm8bq42j2lbc9gohp0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB3sfa0CmkF5WGhgAZpzkN9nyFFeLijGoI"
+          "current_key": "AIzaSyBop8mQXmWJ8EuL_tDA3DxFaATsuFYJx-A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "150016245577-4fplkd5op4q34i3gtka770qtkeursv20.apps.googleusercontent.com",
+              "client_id": "537455387489-dpae2rdsdhd6ojbm8bq42j2lbc9gohp0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "537455387489-s1vnp4fsocf2taroq8luet61v0snvbna.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.servicexpertz.shellcode2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537455387489:android:9e00d59198c325df701b20",
+        "android_client_info": {
+          "package_name": "com.servicexpertz.shellcode2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537455387489-dpae2rdsdhd6ojbm8bq42j2lbc9gohp0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBop8mQXmWJ8EuL_tDA3DxFaATsuFYJx-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537455387489-dpae2rdsdhd6ojbm8bq42j2lbc9gohp0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "537455387489-s1vnp4fsocf2taroq8luet61v0snvbna.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.servicexpertz.shellcode2"
+              }
             }
           ]
         }

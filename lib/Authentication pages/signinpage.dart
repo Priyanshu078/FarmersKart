@@ -325,9 +325,12 @@ class _SignInState extends State<SignIn> {
       List<UserOfApp> userAccountData =
           await fetchLoginApiData(phoneNo, password);
       print(userAccountData);
-      if (userAccountData == null)
+      if (userAccountData == null) {
         authenticated = false;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please try Again!!!")));
+      }
       else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Successful")));
         authenticated = true;
         Provider.of<APIData>(context, listen: false)
             .initializeUser(userAccountData[0]);
@@ -339,6 +342,9 @@ class _SignInState extends State<SignIn> {
               context, MaterialPageRoute(builder: (context) => Home()));
         }
       }
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please try Again!!!")));
     }
   }
 

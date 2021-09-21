@@ -438,23 +438,35 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   Future<bool> addProductToCart() async {
+    print(temp);
     http.Response response;
     String userId = Provider.of<APIData>(context, listen: false).user.id;
-    String productId = widget.offers ? temp[6][0].p_Id : temp[6][0][0];
+    String productId = widget.offers ? temp[6][0].p_Id :widget.category ? temp[6][0][3]:temp[6][0][0];
+    print(productId);
     String Quantity = quantity.toString();
     String unitPrice = widget.offers
         ? widget.discountAvailable
             ? temp[6][0].discountedPrice
             : temp[6][0].originalPrice
-        : temp[6][0][3] == ""
+        : widget.category?
+        temp[6][0][2] == ""?
+            temp[6][0][1]
+        :temp[6][0][2]
+    :temp[6][0][3] == ""
             ? temp[6][0][2]
             : temp[6][0][3];
+    print(unitPrice);
     String weight = widget.offers
         ? "${temp[6][0].weight} ${temp[6][0].unit}"
-        : temp[6][0][1];
-    String unit = widget.offers ? temp[6][0].unit : temp[6][0][4];
+        : widget.category
+    ?temp[6][0][0]
+    :temp[6][0][1];
+    print(weight);
+    String unit = widget.offers ? temp[6][0].unit : widget.category?temp[6][0][4]: temp[6][0][4];
+    print(unit);
     String originalPrice =
-        widget.offers ? temp[6][0].originalPrice : temp[6][0][2];
+        widget.offers ? temp[6][0].originalPrice :widget.category?temp[6][0][1] :temp[6][0][2];
+    print(originalPrice);
     String url =
         "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
     print(url);

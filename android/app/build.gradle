@@ -60,3 +60,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '6.7.1'
+}
+
+tasks.register("prepareKotlinBuildScriptModel"){}

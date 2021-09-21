@@ -44,6 +44,8 @@ Future<List<Product>> fetchSubCategotyProductApiData(String category, String sub
         newOldPrice.add('${subCategoryProductPrice[j].weight} ${subCategoryProductPrice[j].unit}');
         newOldPrice.add('${subCategoryProductPrice[j].originalPrice}');
         newOldPrice.add('${subCategoryProductPrice[j].discountedPrice}');
+        newOldPrice.add('${subCategoryProductPrice[j].pId}');
+        newOldPrice.add('${subCategoryProductPrice[j].unit}');
 
         manyNewOldPrice.add(newOldPrice);
       }
