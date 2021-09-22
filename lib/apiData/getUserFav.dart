@@ -46,7 +46,12 @@ Future<void> fetchGetUserFav(String userId) async {
           rate: newRate.toInt(),
           imageURL: favProducts[i].img,
           categoryName: favProducts[i].categoryName,
-          discount: favProductsPrice[0].discount));
+          discount: favProductsPrice[0].discount,
+      productId: favProducts[i].id,
+      discountPrice: favProducts[i].productPrice[0].discountedPrice,
+      originalPrice: favProducts[i].productPrice[0].originalPrice,
+      unit: favProducts[i].productPrice[0].unit));
+
     }
   } else {}
 }
@@ -58,6 +63,10 @@ class UserFavProductCategories {
   List weight;
   String categoryName;
   int discount;
+  String productId;
+  String discountPrice;
+  String originalPrice;
+  String unit;
   UserFavProductCategories({
     @required this.imageURL,
     @required this.title,
@@ -65,6 +74,10 @@ class UserFavProductCategories {
     @required this.weight,
     @required this.categoryName,
     @required this.discount,
+    @required this.productId,
+    @required this.discountPrice,
+    @required this.originalPrice,
+    @required this.unit
   });
 }
 

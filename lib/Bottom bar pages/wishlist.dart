@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/apiData/getAllMainCategoryApi.dart';
 import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/colors.dart';
@@ -11,6 +14,7 @@ import 'package:shellcode2/detailServiceList.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 
 const String _heroAddTodo = 'add-todo-hero';
 
@@ -25,7 +29,7 @@ List<UserFavProductCategories> details = [];
 List<UserFavProductCategories> detailByCategory = [];
 
 class _WishlistState extends State<Wishlist> {
-  List<String> tempin = [
+  List<String> categories = [
     'All',
     'Fresh Vegetables & fruit',
     'Grocery & Staples',
@@ -40,6 +44,35 @@ class _WishlistState extends State<Wishlist> {
     details = userFavProductList;
     print(details.length);
     detailByCategory = details;
+  }
+
+  Future<bool> addProductToCart(String productid, String unitprice,String Weight, String Unit, String OriginalPrice) async {
+    http.Response response;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    String productId = productid;
+    print(productId);
+    String Quantity = "1";
+    String unitPrice = unitprice;
+    print(unitPrice);
+    String weight = Weight;
+    print(weight);
+    String unit = Unit;
+    print(unit);
+    String originalPrice = OriginalPrice;
+    print(originalPrice);
+    String url =
+        "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
+    print(url);
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    bool added = false;
+    if (jsonData["code"] == "200") {
+      added = true;
+    } else {
+      added = false;
+    }
+    return added;
   }
 
   @override
@@ -93,8 +126,8 @@ class _WishlistState extends State<Wishlist> {
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: tempin.length,
-                  itemBuilder: (context, index) => choiceChipWidget(tempin)),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) => choiceChipWidget(categories)),
             ),
             Consumer<APIData>(
               builder: (context, data, child) {
@@ -271,7 +304,7 @@ class _WishlistState extends State<Wishlist> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      ' ${data.detailsByCategory[0].weight[0][0]}',
+                                                      ' ${data.detailsByCategory[index].weight[0][0]}',
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: yellow,
@@ -305,16 +338,21 @@ class _WishlistState extends State<Wishlist> {
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                    HeroDialogRoute(
-                                                        builder: (context) {
-                                                          return _AddTodoPopupCard(
-                                                              index);
-                                                        },
-                                                        settings: ModalRoute.of(
-                                                                context)
-                                                            .settings));
+                                              onPressed: () async{
+                                                String discountPrice;
+                                                if(data.detailsByCategory[index].discountPrice != null){
+                                                  discountPrice = data.detailsByCategory[index].discountPrice;
+                                                }
+                                                else{
+                                                  discountPrice = data.detailsByCategory[index].originalPrice;
+                                                }
+                                               bool added = await addProductToCart(data.detailsByCategory[index].productId, discountPrice, data.detailsByCategory[index].weight[0], data.detailsByCategory[index].unit, data.detailsByCategory[index].originalPrice);
+                                               if(added){
+                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product moved to cart")));
+                                               }
+                                               else{
+                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something Went Wrong")));
+                                               }
                                               },
                                               child: Text(
                                                 'Move to Cart',
@@ -453,9 +491,13 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
               print(item);
               detailByCategory = [];
               for (int i = 0; i < details.length; i++) {
-                print(details[i].categoryName);
-                if (details[i].categoryName == item || item == 'All')
+                print(details[i]);
+                if (details[i].categoryName == item) {
                   detailByCategory.add(details[i]);
+                }
+                else if(selectedChoice == 'All'){
+                  detailByCategory.add(details[i]);
+                }
               }
               print(detailByCategory.length);
               Provider.of<APIData>(context, listen: false)

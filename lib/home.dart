@@ -373,6 +373,7 @@ class _HomeState extends State<Home> {
                       ),
                       CarouselSlider(
                           items: imgList.map((imgUrl) {
+                            print(imgList);
                             return Builder(
                               builder: (BuildContext context) {
                                 return Container(
@@ -649,7 +650,7 @@ class _HomeState extends State<Home> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ProductDetails.offers(
-                                                      temp2, 1, true)));
+                                                      temp2, 1, true,true)));
                                     },
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -1729,13 +1730,16 @@ class SearchProducts extends SearchDelegate<String> {
                 suggestionList[index].price[0].discount
               ];
               if (suggestionList[index].price[0].discountedPrice.toString() ==
-                  "") {
+                  "" || suggestionList[index].price[0].discountedPrice.toString() ==
+              " .") {
+                print(temp[6][0].unit);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
                             ProductDetails.search(temp, 0, true, false)));
               } else {
+                print(temp);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

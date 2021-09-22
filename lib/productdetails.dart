@@ -23,7 +23,7 @@ class ProductDetails extends StatefulWidget {
   // this.k = j;
   //}
   ProductDetails(this.temporary, this.k);
-  ProductDetails.offers(this.temporary, this.k, this.offers);
+  ProductDetails.offers(this.temporary, this.k, this.offers,this.discountAvailable);
   ProductDetails.search(
       this.temporary, this.k, this.offers, this.discountAvailable);
   ProductDetails.category(this.temporary, this.k, this.category);
@@ -233,14 +233,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                             print(data.quantity);
                             return widget.discountAvailable
                                 ? Text(
-                                    '${int.parse(temp[3]) * data.quantity}',
+                                    '${double.parse(temp[3]) * data.quantity}',
                                     style: TextStyle(
                                         color: Colors.deepPurple[800],
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
                                   )
                                 : Text(
-                                    '${int.parse(temp[5]) * data.quantity}',
+                                    '${double.parse(temp[5]) * data.quantity}',
                                     style: TextStyle(
                                         color: Colors.deepPurple[800],
                                         fontWeight: FontWeight.w500,

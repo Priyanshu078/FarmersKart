@@ -18,6 +18,9 @@ class FrontPage extends StatefulWidget {
   @override
   _FrontPageState createState() => _FrontPageState();
 }
+// bool homePage = true;
+// bool category = false;
+// bool wishlist = false;
 
 class _FrontPageState extends State<FrontPage> {
   List color = [

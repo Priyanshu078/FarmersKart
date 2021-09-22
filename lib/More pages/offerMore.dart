@@ -99,7 +99,7 @@ class _OfferMoreState extends State<OfferMore> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           ProductDetails.offers(
-                                              temp1, 0, true)));
+                                              temp1, 0, true,true)));
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
