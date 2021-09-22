@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
 import 'package:shellcode2/Authentication%20pages/signuppage.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
+import 'package:shellcode2/ComplaintsStatus.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/myOrders.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/userAcc.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/wallet.dart';
+import 'package:shellcode2/Subscriptions.dart';
 import 'package:shellcode2/apiData/loginApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
@@ -70,7 +72,16 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     )),
                   ),
                   buildMenuItem(
-                    text: 'Favourites Or wishlist',
+                      text: 'My Subscriptions',
+                      icon: Icons.subscriptions_rounded,
+                      onClicked: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Subscriptions()));
+                      }),
+                  buildMenuItem(
+                    text: 'Favourites Or Wishlist',
                     icon: Icons.favorite_border,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
@@ -151,6 +162,15 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ));
                       }),
                   buildMenuItem(
+                      text: 'Complaints Status',
+                      icon: CupertinoIcons.percent,
+                      onClicked: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ComplaintStatus()));
+                      }),
+                  buildMenuItem(
                     text: 'Handy Order',
                     icon: Icons.assignment,
                     onClicked: () =>
@@ -166,6 +186,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       builder: (context) => Home(),
                     )),
                   ),
+                  buildMenuItem(
+                      text: 'Privacy Policy',
+                      icon: Icons.privacy_tip,
+                      onClicked: () {}),
                   buildMenuItem(
                     text: 'Sign out',
                     icon: Icons.exit_to_app,

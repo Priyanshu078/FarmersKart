@@ -84,7 +84,7 @@ class _ComplaintsState extends State<Complaints> {
       formData = new FormData.fromMap({
         "user_id": userId,
         "image_name": pic.name,
-        "product_id": overAll ? "" : getProductId(),
+        "product_id": overAll ? "OverAll" : getProductId(),
         "complaints_text": complaintsController.text,
         "order_id": widget.orderID,
         "pic": await MultipartFile.fromFile(pic.path, filename: pic.name)
@@ -93,7 +93,7 @@ class _ComplaintsState extends State<Complaints> {
       formData = new FormData.fromMap({
         "user_id": userId,
         "image_name": "",
-        "product_id": overAll ? "" : getProductId(),
+        "product_id": overAll ? "OverAll" : getProductId(),
         "complaints_text": complaintsController.text,
         "order_id": widget.orderID,
       });
