@@ -812,32 +812,11 @@ class _CartState extends State<Cart> {
       if (totalAmount > 200) {
         Provider.of<APIData>(context, listen: false)
             .initializeTotalAmount(totalAmount);
-        if(couponValue != null) {
-          if( Provider
-              .of<APIData>(context, listen: false)
-              .deliveryCharges == 0) {
-            Provider.of<APIData>(context, listen: false)
-                .initializeTotalDiscount(
-                totalDiscount +
-                    40 + double.parse(couponValue);
-          }
-          else {
-            if()
-            Provider.of<APIData>(context, listen: false)
-                .initializeTotalDiscount(
-                totalDiscount +
-                    Provider
-                        .of<APIData>(context, listen: false)
-                        .deliveryCharges + double.parse(couponValue));
-          }
-          }
-        else{
-          Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
-              totalDiscount +
-                  Provider
-                      .of<APIData>(context, listen: false)
-                      .deliveryCharges);
-        }
+
+        Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
+            totalDiscount +
+                Provider.of<APIData>(context, listen: false).deliveryCharges,);
+
         Provider.of<APIData>(context, listen: false).changeDeliveryCharges(0);
       } else {
         Provider.of<APIData>(context, listen: false).changeDeliveryCharges(40);
