@@ -34,6 +34,7 @@ class _CartState extends State<Cart> {
   String couponId = "";
   String couponCode = "";
   String couponValue = "";
+  bool couponApplied = false;
 
   @override
   void initState() {
@@ -593,9 +594,11 @@ class _CartState extends State<Cart> {
                                     totalAmount: totalAmount,
                                     productOrderId: productOrderId,
                                     deliveryCharges: deliveryCharges,
-                                    couponCode: couponCode,
+                                    couponCode: couponController.text,
                                     couponId: couponId,
-                                    couponValue: couponValue)),
+                                    couponValue: couponValue,
+                                couponApplied: couponApplied,
+                               )),
                           );
                         }),
                   ),
@@ -809,11 +812,32 @@ class _CartState extends State<Cart> {
       if (totalAmount > 200) {
         Provider.of<APIData>(context, listen: false)
             .initializeTotalAmount(totalAmount);
-
-        Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
-            totalDiscount +
-                Provider.of<APIData>(context, listen: false).deliveryCharges);
-
+        if(couponValue != null) {
+          if( Provider
+              .of<APIData>(context, listen: false)
+              .deliveryCharges == 0) {
+            Provider.of<APIData>(context, listen: false)
+                .initializeTotalDiscount(
+                totalDiscount +
+                    40 + double.parse(couponValue);
+          }
+          else {
+            if()
+            Provider.of<APIData>(context, listen: false)
+                .initializeTotalDiscount(
+                totalDiscount +
+                    Provider
+                        .of<APIData>(context, listen: false)
+                        .deliveryCharges + double.parse(couponValue));
+          }
+          }
+        else{
+          Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
+              totalDiscount +
+                  Provider
+                      .of<APIData>(context, listen: false)
+                      .deliveryCharges);
+        }
         Provider.of<APIData>(context, listen: false).changeDeliveryCharges(0);
       } else {
         Provider.of<APIData>(context, listen: false).changeDeliveryCharges(40);
@@ -846,9 +870,22 @@ class _CartState extends State<Cart> {
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(jsonData["msg"] + "\n" + "Coupon applied successfully")));
+      if (Provider.of<APIData>(context,listen:false).totalAmount < double.parse(jsonData["coupon"][0]["minimum_order_amount"])){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+            Text(jsonData["msg"] + "\n" + "minimum order Amount Required " +
+                jsonData["coupon"][0]["minimum_order_amount"])));
+    }
+    else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+            Text(jsonData["msg"] + "\n" + "Coupon Applied Successfully")));
+        couponApplied = true;
+        couponValue = jsonData["coupon"][0]["value"];
+        couponId = jsonData["coupon"][0]["id"];
+        Provider.of<APIData>(context,listen:false).initializeTotalAmount(Provider.of<APIData>(context,listen:false).totalAmount - double.parse(jsonData["coupon"][0]["value"]));
+        Provider.of<APIData>(context,listen:false).initializeTotalDiscount(Provider.of<APIData>(context,listen:false).discountAmount + double.parse(jsonData["coupon"][0]["value"]));
+    }
       for (var item in jsonData["coupon"]) {
         Coupon coupon = new Coupon(
             item["id"],

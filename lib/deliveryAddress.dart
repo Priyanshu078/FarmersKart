@@ -17,6 +17,7 @@ class DeliveryAddress extends StatefulWidget {
   List productOrderId;
   double deliveryCharges;
   double totalAmount;
+  bool couponApplied;
   DeliveryAddress(
       {Key key,
       @required this.totalAmount,
@@ -24,7 +25,8 @@ class DeliveryAddress extends StatefulWidget {
       @required this.deliveryCharges,
       @required this.couponCode,
       @required this.couponId,
-      @required this.couponValue})
+      @required this.couponValue,
+      @required this.couponApplied})
       : super(key: key);
   DeliveryAddress.handyOrder(this.id);
 
@@ -145,6 +147,7 @@ class Navigate extends StatefulWidget {
   String couponCode;
   String couponValue;
   List productOrderId;
+  bool couponApplied;
   Navigate(
       {Key key,
       @required this.totalAmount,
@@ -153,7 +156,8 @@ class Navigate extends StatefulWidget {
       @required this.couponId,
       @required this.couponCode,
       @required this.couponValue,
-      @required this.productOrderId})
+      @required this.productOrderId,
+      @required this.couponApplied})
       : super(key: key);
   Navigate.handyOrder(this.id);
 
@@ -222,6 +226,7 @@ class _NavigateState extends State<Navigate> {
                                                 widget.deliveryCharges,
                                             productOrderId:
                                                 widget.productOrderId,
+                                        couponApplied: widget.couponApplied,
                                           )));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

@@ -14,6 +14,7 @@ import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
   @override
@@ -181,22 +182,23 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   buildMenuItem(
                     text: 'About us',
                     icon: Icons.person,
-                    onClicked: () =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Home(),
-                    )),
+                    onClicked: () async{
+                      await launch("https://docs.google.com/forms/d/e/1FAIpQLSdPicJAxB969UMGziYKeuTE09Ol7Rx8wp_YUMiYhGYUp792eg/viewform");
+                    }
                   ),
                   buildMenuItem(
                       text: 'Privacy Policy',
                       icon: Icons.privacy_tip,
-                      onClicked: () {}),
+                      onClicked: () async{
+                        await launch("https://farmerskart.com/privacy.htm");
+                      }),
                   buildMenuItem(
                     text: 'Sign out',
                     icon: Icons.exit_to_app,
-                    onClicked: () =>
+                    onClicked: () {
                         Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SignIn(),
-                    )),
+                    ));}
                   ),
                 ],
               ),

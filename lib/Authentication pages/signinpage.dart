@@ -322,26 +322,28 @@ class _SignInState extends State<SignIn> {
     print(password);
     // String firebaseToken = await getToken();
     if (password != null && phoneNo != null) {
-      List<UserOfApp> userAccountData =
-          await fetchLoginApiData(phoneNo, password);
-      print(userAccountData);
-      if (userAccountData == null) {
-        authenticated = false;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please try Again!!!")));
-      }
-      else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Successful")));
-        authenticated = true;
-        Provider.of<APIData>(context, listen: false)
-            .initializeUser(userAccountData[0]);
-        // updateFirebaseToken(firebaseToken,
-        //     Provider.of<APIData>(context, listen: false).user.id);
-        print(authenticated);
-        if (authenticated) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()));
+        List<UserOfApp> userAccountData =
+        await fetchLoginApiData(phoneNo, password);
+        print(userAccountData);
+        if (userAccountData == null) {
+          authenticated = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Please try Again!!!")));
         }
-      }
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Login Successful")));
+          authenticated = true;
+          Provider.of<APIData>(context, listen: false)
+              .initializeUser(userAccountData[0]);
+          // updateFirebaseToken(firebaseToken,
+          //     Provider.of<APIData>(context, listen: false).user.id);
+          print(authenticated);
+          if (authenticated) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          }
+        }
     }
     else{
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please try Again!!!")));

@@ -18,6 +18,7 @@ class PaymentOption extends StatefulWidget {
   String couponCode;
   String couponValue;
   double deliveryCharges;
+  bool couponApplied;
   PaymentOption(
       {Key key,
       @required this.totalAmount,
@@ -25,7 +26,8 @@ class PaymentOption extends StatefulWidget {
       @required this.couponCode,
       @required this.couponValue,
       @required this.deliveryCharges,
-      @required this.productOrderId})
+      @required this.productOrderId,
+      @required this.couponApplied})
       : super(key: key);
 
   @override
@@ -263,12 +265,18 @@ class _PaymentOptionState extends State<PaymentOption> {
                             String orderIds = getOrderIds();
                             if (onlinePayment == true) {
                               initiateRazorpay();
+                              if(widget.couponApplied){
+                                applyCoupon();
+                              }
                               print(1);
                             } else if (cashOnDelivery == true) {
                               placeOrder(orderIds);
                               if (Provider.of<APIData>(context, listen: false)
                                   .walletUsed) {
                                 updateUserWallet();
+                              }
+                              if(widget.couponApplied){
+                                applyCoupon();
                               }
                               print(2);
                             } else if (Provider.of<APIData>(context,
@@ -280,6 +288,9 @@ class _PaymentOptionState extends State<PaymentOption> {
                                     0) {
                               placeOrder(orderIds);
                               updateUserWallet();
+                              if(widget.couponApplied){
+                                applyCoupon();
+                              }
                               print(3);
                             } else {
                               showSnackBar("Please select a payment option");
@@ -398,7 +409,7 @@ class _PaymentOptionState extends State<PaymentOption> {
   }
 
   void applyCoupon() async {
-    String coupon = "";
+    String coupon = widget.couponApplied? widget.couponCode : "";
     http.Response response;
     String url = "$header/app_api/applyCoupon.php?coupon=$coupon";
     Uri uri = Uri.parse(url);
@@ -406,7 +417,7 @@ class _PaymentOptionState extends State<PaymentOption> {
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Coupon Appied Successfully")));
+          .showSnackBar(SnackBar(content: Text("Coupon Applied Successfully")));
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
