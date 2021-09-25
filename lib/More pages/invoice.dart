@@ -213,12 +213,14 @@ class _InvoiceState extends State<Invoice> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text(
-                                                  "${widget.data[index].productName} ${widget.data[index].weight}",
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
+                                              Flexible(
+                                                child: Text(
+                                                    "${widget.data[index].productName} ${widget.data[index].weight}",
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                              ),
                                               Spacer(),
                                               Text(
                                                   "${widget.data[index].quantity}",

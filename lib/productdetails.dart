@@ -42,7 +42,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void initState() {
-    print(temp);
     super.initState();
   }
 
@@ -56,6 +55,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     te();
     print(temp);
+    Provider.of<APIData>(context, listen: false).initializeIndex(0);
     Provider.of<APIData>(context, listen: false).initializeQuantity(1);
     return Scaffold(
       backgroundColor: bgcolor,
@@ -129,13 +129,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       colors: [left, middle, Colors.purple])),
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(
-                                  '₹ ${temp[7]} OFF',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
+                                child: Consumer<APIData>(
+                                  builder: (context, data,child) {
+                                    return Text(
+                                      '₹ ${temp[6][data.index].discount} OFF',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  }
                                 ),
                               ),
                             ),
@@ -195,14 +199,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14),
                           ),
-                          Text(
-                            '${temp[5]}',
-                            style: TextStyle(
-                              color: yellow,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              decoration: TextDecoration.lineThrough,
-                            ),
+                          Consumer<APIData>(
+    builder: (context,data,child){
+                            return Text(
+                              '${temp[6][data.index].originalPrice}',
+                              style: TextStyle(
+                                color: yellow,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            );
+  }
                           ),
                         ],
                       ),
@@ -233,14 +241,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                             print(data.quantity);
                             return widget.discountAvailable
                                 ? Text(
-                                    '${double.parse(temp[3]) * data.quantity}',
+                                    '${double.parse(temp[6][data.index].discountedPrice) * data.quantity}',
                                     style: TextStyle(
                                         color: Colors.deepPurple[800],
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
                                   )
                                 : Text(
-                                    '${double.parse(temp[5]) * data.quantity}',
+                                    '${double.parse(temp[6][data.index].originalPrice) * data.quantity}',
                                     style: TextStyle(
                                         color: Colors.deepPurple[800],
                                         fontWeight: FontWeight.w500,
@@ -252,7 +260,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           builder: (context, data, child) {
                             print(data.quantity);
                             return Text(
-                              '${(temp[3]) * data.quantity}',
+                              '${double.parse(temp[6][data.index][3] == ""? temp[6][data.index][2]:temp[6][data.index][3]) * data.quantity}',
                               style: TextStyle(
                                   color: Colors.deepPurple[800],
                                   fontWeight: FontWeight.w500,
@@ -333,12 +341,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               GestureDetector(
                 // borderRadius: BorderRadius.circular(20),
                 onTap: () {
-                  Navigator.of(context).push(HeroDialogRoute(
-                      builder: (context) {
-                        return _AddTodoPopupCard(
-                            widget.offers, widget.category);
-                      },
-                      settings: ModalRoute.of(context).settings));
+                  showDialog(context: context, builder: (context) => weightList(context, widget.offers, widget.category));
                 },
                 child: Hero(
                   tag: _heroAddTodo,
@@ -356,14 +359,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         widget.offers
-                            ? Text(
-                                '${temp[6][0].weight} ${temp[6][0].unit}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: yellow,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              )
+                            ? Consumer<APIData>(
+                          builder:(context,data,child) {
+                            return Text(
+                              '${temp[6][data.index].weight} ${temp[6][data.index].unit}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: yellow,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            );
+
+                          }
+                            )
                             : widget.category
                                 ? Text(
                                     '${temp[6][0][0]}',
@@ -373,14 +381,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   )
-                                : Text(
-                                    '${temp[6][0][1]}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: yellow,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                                : Consumer<APIData>(
+                builder: (context, data, child) {
+                  return Text(
+                    '${temp[6][data.index][1]}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: yellow,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                }
+                                ),
                         Icon(
                           Icons.keyboard_arrow_down,
                           color: yellow,
@@ -441,31 +453,31 @@ class _ProductDetailsState extends State<ProductDetails> {
     print(temp);
     http.Response response;
     String userId = Provider.of<APIData>(context, listen: false).user.id;
-    String productId = widget.offers ? temp[6][0].p_Id :widget.category ? temp[6][0][3]:temp[6][0][0];
+    String productId = widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].p_Id :widget.category ? temp[6][Provider.of<APIData>(context,listen:false).index][3]:temp[6][Provider.of<APIData>(context,listen:false).index][0];
     print(productId);
     String Quantity = quantity.toString();
     String unitPrice = widget.offers
         ? widget.discountAvailable
-            ? temp[6][0].discountedPrice
-            : temp[6][0].originalPrice
+            ? temp[6][Provider.of<APIData>(context,listen:false).index].discountedPrice
+            : temp[6][Provider.of<APIData>(context,listen:false).index].originalPrice
         : widget.category?
-        temp[6][0][2] == ""?
-            temp[6][0][1]
-        :temp[6][0][2]
-    :temp[6][0][3] == ""
-            ? temp[6][0][2]
-            : temp[6][0][3];
+        temp[6][Provider.of<APIData>(context,listen:false).index][2] == ""?
+            temp[6][Provider.of<APIData>(context,listen:false).index][1]
+        :temp[6][Provider.of<APIData>(context,listen:false).index][2]
+    :temp[6][Provider.of<APIData>(context,listen:false).index][3] == ""
+            ? temp[6][Provider.of<APIData>(context,listen:false).index][2]
+            : temp[6][Provider.of<APIData>(context,listen:false).index][3];
     print(unitPrice);
     String weight = widget.offers
-        ? "${temp[6][0].weight} ${temp[6][0].unit}"
+        ? "${temp[6][Provider.of<APIData>(context,listen:false).index].weight} ${temp[6][Provider.of<APIData>(context,listen:false).index].unit}"
         : widget.category
-    ?temp[6][0][0]
-    :temp[6][0][1];
+    ?temp[6][Provider.of<APIData>(context,listen:false).index][0]
+    :temp[6][Provider.of<APIData>(context,listen:false).index][1];
     print(weight);
-    String unit = widget.offers ? temp[6][0].unit : widget.category?temp[6][0][4]: temp[6][0][4];
+    String unit = widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].unit : widget.category?temp[6][Provider.of<APIData>(context,listen:false).index][4]: temp[6][Provider.of<APIData>(context,listen:false).index][4];
     print(unit);
     String originalPrice =
-        widget.offers ? temp[6][0].originalPrice :widget.category?temp[6][0][1] :temp[6][0][2];
+        widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].originalPrice :widget.category?temp[6][Provider.of<APIData>(context,listen:false).index][1] :temp[6][Provider.of<APIData>(context,listen:false).index][2];
     print(originalPrice);
     String url =
         "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
@@ -629,175 +641,180 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   String get barrierLabel => 'Popup dialog open';
 }
 
-class _AddTodoPopupCard extends StatefulWidget {
-  bool offers;
-  bool category;
-  _AddTodoPopupCard(this.offers, this.category);
-  @override
-  __AddTodoPopupCardState createState() => __AddTodoPopupCardState();
-}
-
-class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
-  @override
-  Widget build(BuildContext context) {
+  Widget weightList(BuildContext context, bool offers, bool category) {
     print(temp);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Hero(
-          tag: _heroAddTodo,
-          child: Material(
-            color: lightbg,
-            elevation: 2,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Available quantities for',
-                      style: TextStyle(
-                          color: Colors.purple,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      'Farmerskart - ${temp[1]}',
-                      style: TextStyle(
-                          height: 2,
-                          color: Colors.purple,
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const Divider(
-                      color: Colors.orange,
-                      thickness: 0.8,
-                    ),
-                    for (int k = 0; k < temp[6].length; k++) ...{
-                      Container(
-                        height: 35,
-                        decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(width: 1.0, color: yellow),
-                              left: BorderSide(width: 1.0, color: yellow),
-                              right: BorderSide(width: 1.0, color: yellow),
-                              bottom: BorderSide(width: 1.0, color: yellow),
+    return AlertDialog(
+      content: Hero(
+        tag: _heroAddTodo,
+        child: Material(
+          color: lightbg,
+          elevation: 2,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Available quantities for',
+                    style: TextStyle(
+                        color: Colors.purple,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    'Farmerskart - ${temp[1]}',
+                    style: TextStyle(
+                        height: 2,
+                        color: Colors.purple,
+                        fontSize: 18,
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const Divider(
+                    color: Colors.orange,
+                    thickness: 0.8,
+                  ),
+                  for (int k = 0; k < temp[6].length; k++) ...{
+                    InkWell(
+                      onTap: (){
+                        Provider.of<APIData>(context, listen: false).initializeIndex(k);
+                        Navigator.pop(context);
+                      },
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 1.0, color: yellow),
+                            left: BorderSide(width: 1.0, color: yellow),
+                            right: BorderSide(width: 1.0, color: yellow),
+                            bottom: BorderSide(width: 1.0, color: yellow),
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: LinearGradient(
+                              colors: [left, middle, Colors.purple])),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            offers
+                                ? Text(
+                                    "${temp[6][k].weight} ${temp[6][k].unit}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : !category
+                                    ? Text(
+                                        '${temp[6][k][1]} -',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        '${temp[6][k][0]} -',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                            Spacer(
+                              flex: 2,
                             ),
-                            borderRadius: BorderRadius.circular(5.0),
-                            gradient: LinearGradient(
-                                colors: [left, middle, Colors.purple])),
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 25.0, right: 85.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              widget.offers
-                                  ? Text(
-                                      "${temp[6][k].weight} ${temp[6][k].unit}",
-                                      style: TextStyle(
+                            offers
+                                ? Text(
+                                    "₹${temp[6][k].originalPrice}",
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14,
                                         color: Colors.white,
-                                      ),
-                                    )
-                                  : !widget.category
-                                      ? Text(
-                                          '${temp[6][k][1]} -',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : Text(
-                                          '${temp[6][k][0]} -',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                              Spacer(
-                                flex: 2,
-                              ),
-                              widget.offers
-                                  ? Text(
-                                      "${temp[6][k].originalPrice}",
-                                      style: TextStyle(
+                                        decoration:
+                                            TextDecoration.lineThrough),
+                                  )
+                                : category
+                                    ? Text(
+                                        '₹${temp[6][k][1]}',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14,
                                           color: Colors.white,
                                           decoration:
-                                              TextDecoration.lineThrough),
-                                    )
-                                  : widget.category
-                                      ? Text(
-                                          '₹${temp[6][k][1]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                        )
-                                      : Text(
-                                          '₹${temp[6][k][2]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
+                                              TextDecoration.lineThrough,
                                         ),
-                              Spacer(
-                                flex: 2,
-                              ),
-                              widget.offers
-                                  ? temp[6][k].discountedPrice == ""
-                                      ? Container()
-                                      : Text(
-                                          "${temp[6][k].discountedPrice}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                  : widget.category
-                                      ? Text(
-                                          '₹${temp[6][0][2]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : Text(
-                                          '₹${temp[6][k][3]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
+                                      )
+                                    :
+                            temp[6][k][3] == ""
+                                ?Text(
+          '₹${temp[6][k][2]}',
+          style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+          color: Colors.white,
+          ),
+          )
+                            :Text(
+                                        '₹${temp[6][k][2]}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          decoration:
+                                              TextDecoration.lineThrough,
                                         ),
-                            ],
-                          ),
+                                      ),
+                            Spacer(
+                              flex: 2,
+                            ),
+                            offers
+                                ? temp[6][k].discountedPrice == ""
+                                    ? Container()
+                                    : Text(
+                                        "${temp[6][k].discountedPrice}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                : category
+                                    ? Text(
+                                        '₹${temp[6][0][2]}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : temp[6][k][3] == ""
+                                ? Container()
+                            :Text(
+                                        '₹${temp[6][k][3]}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                          ],
                         ),
                       ),
-                      const Divider(
-                        color: Colors.white,
-                        thickness: 0.2,
-                      ),
-                    },
-                  ],
-                ),
+                    ),
+          ),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 0.2,
+                    ),
+                  },
+                ],
               ),
             ),
           ),
@@ -805,4 +822,3 @@ class __AddTodoPopupCardState extends State<_AddTodoPopupCard> {
       ),
     );
   }
-}

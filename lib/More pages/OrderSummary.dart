@@ -532,10 +532,12 @@ class _OrderSummaryState extends State<OrderSummary> {
                                               color: Colors.purple[600]),
                                         )
                                       ])),
-                              Text(
-                                "${widget.todaysOrder[0].center[0].centerName} , ${widget.todaysOrder[0].center[0].address} , ${widget.todaysOrder[0].center[0].pincode}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              Flexible(
+                                child: Text(
+                                  "${widget.todaysOrder[0].center[0].centerName} , ${widget.todaysOrder[0].center[0].address} , ${widget.todaysOrder[0].center[0].pincode}",
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               )
                             ],
                           ),

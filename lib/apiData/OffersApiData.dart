@@ -32,7 +32,7 @@ List offersData = [];
 class Data {
   void getOffersData() async {
     http.Response response;
-    Uri url = Uri.parse("$header/app_api/getoffer.php?user_type=Society");
+    Uri url = Uri.parse("$header/app_api/getOffersProducts.php?user_type=Society");
     try {
       response = await http.get(url);
     } catch (e) {
@@ -64,6 +64,7 @@ class Data {
           item1["description"]);
       offersData.add(offerData);
     }
+    print(offersData);
     print("productPrice");
     print(offersData[0].productPrice[0].weight);
     print(offersData.length);

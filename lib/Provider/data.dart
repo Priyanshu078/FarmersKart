@@ -43,11 +43,19 @@ class APIData extends ChangeNotifier {
   String flat;
   String mobile;
   String image;
+  int index = 0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
   void initialUserFavProductCategories(List<UserFavProductCategories> list) {
     this.detailsByCategory = list;
+    notifyListeners();
+  }
+
+  void initializeIndex(int index){
+    if(index != null){
+      this.index = index;
+    }
     notifyListeners();
   }
 
