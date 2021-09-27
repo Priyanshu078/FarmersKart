@@ -109,6 +109,7 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: phoneController,
+                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(
@@ -147,6 +148,7 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: pwController,
+                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(

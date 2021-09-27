@@ -1626,7 +1626,7 @@ class _HomeState extends State<Home> {
     allProducts = [];
     http.Response response;
     String usertype = "Society";
-    String url = "$header/app_api/getAllProducts.php?user_type=$usertype";
+    String url = "https://uprank.live/farmerskart/app_api/getAllProducts.php?user_type=$usertype";
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);

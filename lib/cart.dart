@@ -672,7 +672,7 @@ class _CartState extends State<Cart> {
         case "Fresh Vegetables & fruit":
           ProductsCart productsCart = new ProductsCart(
               cartproductsList[i]["category_name"],
-              cartproductsList[i]["product_ name"],
+              cartproductsList[i]["product_name"],
               cartproductsList[i]["product_img"],
               cartproductsList[i]["id"],
               cartproductsList[i]["user_id"],
@@ -699,7 +699,7 @@ class _CartState extends State<Cart> {
         case "Grocery & Staples":
           ProductsCart productsCart = new ProductsCart(
               cartproductsList[i]["category_name"],
-              cartproductsList[i]["product_ name"],
+              cartproductsList[i]["product_name"],
               cartproductsList[i]["product_img"],
               cartproductsList[i]["id"],
               cartproductsList[i]["user_id"],
@@ -726,7 +726,7 @@ class _CartState extends State<Cart> {
         case "Bakery & Confectionery":
           ProductsCart productsCart = new ProductsCart(
               cartproductsList[i]["category_name"],
-              cartproductsList[i]["product_ name"],
+              cartproductsList[i]["product_name"],
               cartproductsList[i]["product_img"],
               cartproductsList[i]["id"],
               cartproductsList[i]["user_id"],
@@ -753,7 +753,7 @@ class _CartState extends State<Cart> {
         case "Dairy":
           ProductsCart productsCart = new ProductsCart(
               cartproductsList[i]["category_name"],
-              cartproductsList[i]["product_ name"],
+              cartproductsList[i]["product_name"],
               cartproductsList[i]["product_img"],
               cartproductsList[i]["id"],
               cartproductsList[i]["user_id"],
