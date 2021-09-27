@@ -257,7 +257,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
                         )
                       : widget.category
-                  ?
+                  ?Consumer<APIData>(
+                    builder: (context, data, child) {
+                      print(data.quantity);
+                      return Text(
+                        '${double.parse(temp[6][data.index][2] == ""? temp[6][data.index][1]:temp[6][data.index][2]) * data.quantity}',
+                        style: TextStyle(
+                            color: Colors.deepPurple[800],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14),
+                      );
+                    },
+                  )
                   :Consumer<APIData>(
                           builder: (context, data, child) {
                             print(data.quantity);
@@ -375,14 +386,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                           }
                             )
                             : widget.category
-                                ? Text(
-                                    '${temp[6][0][0]}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: yellow,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
+                ?Consumer<APIData>(
+                builder: (context, data ,child){
+               return Text(
+              '${temp[6][data.index][0]}',
+              style: TextStyle(
+              fontSize: 14,
+              color: yellow,
+              fontWeight: FontWeight.w700,
+              ),
+              );
+              }
+              )
                                 : Consumer<APIData>(
                 builder: (context, data, child) {
                   return Text(
