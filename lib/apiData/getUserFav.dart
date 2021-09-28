@@ -39,19 +39,17 @@ Future<void> fetchGetUserFav(String userId) async {
         newRate = double.parse(favProductsPrice[0].originalPrice);
       else
         newRate = double.parse(favProductsPrice[0].discountedPrice);
-
-      userFavProductList.add(UserFavProductCategories(
-          title: favProducts[i].name,
-          weight: manyNewOldPrice,
-          rate: newRate.toInt(),
-          imageURL: favProducts[i].img,
-          categoryName: favProducts[i].categoryName,
-          discount: favProductsPrice[0].discount,
-      productId: favProducts[i].id,
-      discountPrice: favProducts[i].productPrice[0].discountedPrice,
-      originalPrice: favProducts[i].productPrice[0].originalPrice,
-      unit: favProducts[i].productPrice[0].unit));
-
+        userFavProductList.add(UserFavProductCategories(
+            title: favProducts[i].name,
+            weight: manyNewOldPrice,
+            rate: newRate.toInt(),
+            imageURL: favProducts[i].img,
+            categoryName: favProducts[i].categoryName,
+            discount: favProductsPrice[0].discount,
+            productId: favProducts[i].id,
+            discountPrice: favProducts[i].productPrice[0].discountedPrice,
+            originalPrice: favProducts[i].productPrice[0].originalPrice,
+            unit: favProducts[i].productPrice[0].unit));
     }
   } else {}
 }

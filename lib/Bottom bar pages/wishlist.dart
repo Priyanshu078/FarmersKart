@@ -43,7 +43,7 @@ class _WishlistState extends State<Wishlist> {
     fetchGetUserFav(Provider.of<APIData>(context, listen: false).userId);
     details = userFavProductList;
     print(details.length);
-    detailByCategory = details;
+    // detailByCategory = details;
   }
 
   Future<bool> addProductToCart(String productid, String unitprice,String Weight, String Unit, String OriginalPrice) async {
@@ -65,6 +65,7 @@ class _WishlistState extends State<Wishlist> {
     print(url);
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
+    print(response);
     var jsonData = jsonDecode(response.body);
     bool added = false;
     if (jsonData["code"] == "200") {
@@ -339,14 +340,14 @@ class _WishlistState extends State<Wishlist> {
                                             alignment: Alignment.centerRight,
                                             child: ElevatedButton(
                                               onPressed: () async{
-                                                String discountPrice;
-                                                if(data.detailsByCategory[index].discountPrice != null){
+                                                String discountPrice = "";
+                                                if(data.detailsByCategory[index].discountPrice != ""){
                                                   discountPrice = data.detailsByCategory[index].discountPrice;
                                                 }
                                                 else{
                                                   discountPrice = data.detailsByCategory[index].originalPrice;
                                                 }
-                                               bool added = await addProductToCart(data.detailsByCategory[index].productId, discountPrice, data.detailsByCategory[index].weight[0], data.detailsByCategory[index].unit, data.detailsByCategory[index].originalPrice);
+                                               bool added = await addProductToCart(data.detailsByCategory[index].productId, discountPrice, data.detailsByCategory[index].weight[0][0], data.detailsByCategory[index].unit, data.detailsByCategory[index].originalPrice);
                                                if(added){
                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product moved to cart")));
                                                }
@@ -490,16 +491,17 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
               selectedChoice = item;
               print(item);
               detailByCategory = [];
+              print("Details.length ${details.length}");
               for (int i = 0; i < details.length; i++) {
-                print(details[i]);
                 if (details[i].categoryName == item) {
                   detailByCategory.add(details[i]);
                 }
                 else if(selectedChoice == 'All'){
                   detailByCategory.add(details[i]);
+                  print(details[i]);
                 }
               }
-              print(detailByCategory.length);
+              print(detailByCategory[0]);
               Provider.of<APIData>(context, listen: false)
                   .initialUserFavProductCategories(detailByCategory);
             });
