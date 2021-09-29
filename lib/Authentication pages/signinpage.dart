@@ -37,6 +37,8 @@ class _SignInState extends State<SignIn> {
   @override
   void initState() {
     super.initState();
+    phoneNo = "";
+    password = "";
   }
 
   @override
@@ -109,7 +111,6 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: phoneController,
-                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(
@@ -148,7 +149,6 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: pwController,
-                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(
@@ -323,32 +323,31 @@ class _SignInState extends State<SignIn> {
     print(phoneNo);
     print(password);
     // String firebaseToken = await getToken();
-    if (password != null && phoneNo != null) {
-        List<UserOfApp> userAccountData =
-        await fetchLoginApiData(phoneNo, password);
-        print(userAccountData);
-        if (userAccountData == null) {
-          authenticated = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Please try Again!!!")));
+    if ((password != null && phoneNo != null) && (phoneController.text != "" && pwController.text != "")) {
+      List<UserOfApp> userAccountData =
+          await fetchLoginApiData(phoneNo, password);
+      print(userAccountData);
+      if (userAccountData == null) {
+        authenticated = false;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Please try Again!!!")));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Login Successful")));
+        authenticated = true;
+        Provider.of<APIData>(context, listen: false)
+            .initializeUser(userAccountData[0]);
+        // updateFirebaseToken(firebaseToken,
+        //     Provider.of<APIData>(context, listen: false).user.id);
+        print(authenticated);
+        if (authenticated) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
         }
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Successful")));
-          authenticated = true;
-          Provider.of<APIData>(context, listen: false)
-              .initializeUser(userAccountData[0]);
-          // updateFirebaseToken(firebaseToken,
-          //     Provider.of<APIData>(context, listen: false).user.id);
-          print(authenticated);
-          if (authenticated) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
-          }
-        }
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please try Again!!!")));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Please try Again!!!")));
     }
   }
 
