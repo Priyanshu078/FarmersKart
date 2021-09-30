@@ -6,6 +6,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/home.dart';
 import 'colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -155,23 +156,28 @@ class _PaymentOptionState extends State<PaymentOption> {
                           ],
                         ),
                         SizedBox(height: 15),
-                        Consumer<APIData>(builder: (context, wallet, child) {
-                          return CheckboxListTile(
-                              value: wallet.walletUsed,
-                              onChanged: (_) {
-                                setState(() {
-                                  Provider.of<APIData>(context, listen: false)
-                                      .useWallet();
-                                });
-                              },
-                              title: Text(
-                                'check this to use wallet amount',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 18),
-                              ),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              activeColor: Colors.purple);
-                        }),
+                        int.parse(snapshot.data) > 0
+                            ? Consumer<APIData>(
+                                builder: (context, wallet, child) {
+                                return CheckboxListTile(
+                                    value: wallet.walletUsed,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        Provider.of<APIData>(context,
+                                                listen: false)
+                                            .useWallet();
+                                      });
+                                    },
+                                    title: Text(
+                                      'check this to use wallet amount',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                    ),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    activeColor: Colors.purple);
+                              })
+                            : Container(),
                         SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -260,57 +266,59 @@ class _PaymentOptionState extends State<PaymentOption> {
                               )
                             : Container(),
                         SizedBox(height: 30),
-                        ElevatedButton(
-                          onPressed: () {
-                            String orderIds = getOrderIds();
-                            if (onlinePayment == true) {
-                              initiateRazorpay();
-                              if(widget.couponApplied){
-                                applyCoupon();
-                              }
-                              print(1);
-                            } else if (cashOnDelivery == true) {
-                              placeOrder(orderIds);
-                              if (Provider.of<APIData>(context, listen: false)
-                                  .walletUsed) {
+                        Consumer<APIData>(builder: (context, data, child) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              String orderIds = getOrderIds();
+                              if (onlinePayment == true) {
+                                initiateRazorpay();
+                                if (widget.couponApplied) {
+                                  applyCoupon();
+                                }
+                                print(1);
+                              } else if (cashOnDelivery == true) {
+                                placeOrder(orderIds);
+                                if (Provider.of<APIData>(context, listen: false)
+                                    .walletUsed) {
+                                  updateUserWallet();
+                                }
+                                if (widget.couponApplied) {
+                                  applyCoupon();
+                                }
+                                print(2);
+                              } else if (Provider.of<APIData>(context,
+                                              listen: false)
+                                          .walletUsed ==
+                                      true &&
+                                  Provider.of<APIData>(context, listen: false)
+                                          .totalAmount ==
+                                      0) {
+                                placeOrder(orderIds);
                                 updateUserWallet();
+                                if (widget.couponApplied) {
+                                  applyCoupon();
+                                }
+                                print(3);
+                              } else {
+                                showSnackBar("Please select a payment option");
                               }
-                              if(widget.couponApplied){
-                                applyCoupon();
-                              }
-                              print(2);
-                            } else if (Provider.of<APIData>(context,
-                                            listen: false)
-                                        .walletUsed ==
-                                    true &&
-                                Provider.of<APIData>(context, listen: false)
-                                        .totalAmount ==
-                                    0) {
-                              placeOrder(orderIds);
-                              updateUserWallet();
-                              if(widget.couponApplied){
-                                applyCoupon();
-                              }
-                              print(3);
-                            } else {
-                              showSnackBar("Please select a payment option");
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 25),
-                            child: Text(
-                              'MAKE PAYMENT',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.purple,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
                             ),
-                          ),
-                        )
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 80, vertical: 25),
+                              child: Text(
+                                data.paymentText,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
+                          );
+                        })
                       ],
                     ),
                   ),
@@ -361,7 +369,34 @@ class _PaymentOptionState extends State<PaymentOption> {
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
-      showSnackBar("Order Placed Successfully");
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text("Thank you for ordering with us"),
+                title:
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.green,
+                      size: 40,
+                    ),
+                  ),
+                  Flexible(child: Text("Order Placed Successfully"))
+                ]),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Home()));
+                      },
+                      child: Text(
+                        "OK",
+                        style: TextStyle(color: Colors.black),
+                      ))
+                ],
+              ));
     } else {
       showSnackBar("Something Went Wrong");
     }
@@ -409,7 +444,7 @@ class _PaymentOptionState extends State<PaymentOption> {
   }
 
   void applyCoupon() async {
-    String coupon = widget.couponApplied? widget.couponCode : "";
+    String coupon = widget.couponApplied ? widget.couponCode : "";
     http.Response response;
     String url = "$header/app_api/applyCoupon.php?coupon=$coupon";
     Uri uri = Uri.parse(url);

@@ -59,6 +59,7 @@ class Category extends StatelessWidget {
                                   builder: (context) => DetailPage(
                                       category[index].categoryId,
                                       category[index].subCategory)));
+                          print("");
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

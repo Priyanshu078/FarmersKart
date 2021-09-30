@@ -44,6 +44,7 @@ class APIData extends ChangeNotifier {
   String mobile;
   String image;
   int index = 0;
+  String paymentText = "MAKE PAYMENT";
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -52,8 +53,8 @@ class APIData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeIndex(int index){
-    if(index != null){
+  void initializeIndex(int index) {
+    if (index != null) {
       this.index = index;
     }
     notifyListeners();
@@ -75,6 +76,11 @@ class APIData extends ChangeNotifier {
 
   void initializepaymentChoice(Payment value) {
     choice = value;
+    if (choice == Payment.online) {
+      paymentText = 'MAKE PAYMENT';
+    } else {
+      paymentText = 'PLACE ORDER';
+    }
     notifyListeners();
   }
 

@@ -38,7 +38,7 @@ dependencies:
   image: ^3.0.2
   flutter_sound_lite: ^8.2.0
   permission_handler: ^8.1.4+1
-  flutter_facebook_login: ^3.0.0
+  flutter_facebook_auth: ^3.5.2
   firebase_core: ^1.4.0
   http: ^0.13.3
   dio: ^4.0.0
@@ -47,7 +47,7 @@ dependencies:
   cached_network_image: ^3.1.0
   razorpay_flutter: ^1.2.7
   firebase_auth: ^3.1.0
-  google_sign_in: ^5.1.0
+  google_sign_in: ^4.5.1
   url_launcher: ^6.0.10
 
 dev_dependencies:

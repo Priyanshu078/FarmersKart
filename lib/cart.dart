@@ -329,12 +329,35 @@ class _CartState extends State<Cart> {
                                                                 IconButton(
                                                                     onPressed:
                                                                         () {
-                                                                      setState(
-                                                                          () {
-                                                                        deleteFromCart(snapshot
-                                                                            .data[index][i]
-                                                                            .id);
-                                                                      });
+                                                                      showDialog(
+                                                                          context:
+                                                                              context,
+                                                                          builder: (context) =>
+                                                                              AlertDialog(
+                                                                                content: Text("Do you want to delete product from cart ?"),
+                                                                                title: Text("Delete"),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: Text(
+                                                                                        "NO",
+                                                                                        style: TextStyle(color: Colors.black),
+                                                                                      )),
+                                                                                  TextButton(
+                                                                                      onPressed: () {
+                                                                                        setState(() {
+                                                                                          deleteFromCart(snapshot.data[index][i].productId, snapshot.data[index][i].weight);
+                                                                                        });
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: Text(
+                                                                                        "YES",
+                                                                                        style: TextStyle(color: Colors.black),
+                                                                                      ))
+                                                                                ],
+                                                                              ));
                                                                     },
                                                                     icon: Icon(Icons
                                                                         .delete)),
@@ -351,21 +374,49 @@ class _CartState extends State<Cart> {
                                                                         .size
                                                                         .width /
                                                                     10),
-                                                            child: Align(
-                                                              alignment: Alignment
-                                                                  .centerRight,
-                                                              child:
-                                                                  CustomStepper(
-                                                                lowerLimit: 1,
-                                                                upperLimit: 10,
-                                                                value: int.parse(
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                setState(() {});
+                                                              },
+                                                              child: Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: CustomStepper(
+                                                                    1,
+                                                                    10,
+                                                                    1,
+                                                                    1.0,
+                                                                    int.parse(snapshot
+                                                                        .data[index]
+                                                                            [i]
+                                                                        .quantity),
+                                                                    snapshot
+                                                                        .data[index]
+                                                                            [i]
+                                                                        .productId,
+                                                                    int.parse(snapshot
+                                                                        .data[index]
+                                                                            [i]
+                                                                        .quantity),
+                                                                    snapshot
+                                                                        .data[index]
+                                                                            [i]
+                                                                        .unitPrice,
                                                                     snapshot
                                                                         .data[
                                                                             index]
                                                                             [i]
-                                                                        .quantity),
-                                                                stepValue: 1,
-                                                                iconSize: 10,
+                                                                        .weight,
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                            [i]
+                                                                        .unit,
+                                                                    snapshot
+                                                                        .data[
+                                                                            index]
+                                                                            [i]
+                                                                        .unitOriginalPrice),
                                                               ),
                                                             ),
                                                           ),
@@ -591,14 +642,14 @@ class _CartState extends State<Cart> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DeliveryAddress(
-                                    totalAmount: totalAmount,
-                                    productOrderId: productOrderId,
-                                    deliveryCharges: deliveryCharges,
-                                    couponCode: couponController.text,
-                                    couponId: couponId,
-                                    couponValue: couponValue,
-                                couponApplied: couponApplied,
-                               )),
+                                      totalAmount: totalAmount,
+                                      productOrderId: productOrderId,
+                                      deliveryCharges: deliveryCharges,
+                                      couponCode: couponController.text,
+                                      couponId: couponId,
+                                      couponValue: couponValue,
+                                      couponApplied: couponApplied,
+                                    )),
                           );
                         }),
                   ),
@@ -610,6 +661,42 @@ class _CartState extends State<Cart> {
       ),
       bottomNavigationBar: Navigate(),
     );
+  }
+
+  Future<bool> addProductToCart(
+      String productid,
+      String proQuantity,
+      String unitprice,
+      String Weight,
+      String Unit,
+      String originalprice) async {
+    http.Response response;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    String productId = productid;
+    print(productId);
+    String Quantity = proQuantity;
+    String unitPrice = unitprice;
+    print(unitPrice);
+    String weight = Weight;
+    print(weight);
+    String unit = Unit;
+    print(unit);
+    String orderNumber = '';
+    String originalPrice = originalprice;
+    print(originalPrice);
+    String url =
+        "$header/app_api/addtocart_order.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice&order_number=$orderNumber";
+    print(url);
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    bool added = false;
+    if (jsonData["code"] == "200") {
+      added = true;
+    } else {
+      added = false;
+    }
+    return added;
   }
 
   void addSpecification(String productId, String specification) async {
@@ -629,9 +716,11 @@ class _CartState extends State<Cart> {
     }
   }
 
-  void deleteFromCart(String id) async {
+  void deleteFromCart(String productId, String weight) async {
+    String userId = Provider.of<APIData>(context, listen: false).userId;
     http.Response response;
-    String url = "$header/app_api/deleteCartProduct.php?id=$id";
+    String url =
+        "$header/app_api/deletefromcart_order.php?user_id=$userId&product_id=$productId&weight=$weight";
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
@@ -666,6 +755,7 @@ class _CartState extends State<Cart> {
     List vegetables = [];
     List grocery = [];
     List dairy = [];
+    List pooja = [];
     for (int i = 0; i < cartproductsList.length; i++) {
       String category = cartproductsList[i]["category_name"];
       switch (category) {
@@ -777,6 +867,33 @@ class _CartState extends State<Cart> {
               cartproductsList[i]["address_id"]);
           dairy.add(productsCart);
           break;
+        case "Pooja ":
+          ProductsCart productsCart = new ProductsCart(
+              cartproductsList[i]["category_name"],
+              cartproductsList[i]["product_name"],
+              cartproductsList[i]["product_img"],
+              cartproductsList[i]["id"],
+              cartproductsList[i]["user_id"],
+              cartproductsList[i]["order_id"],
+              cartproductsList[i]["quantity"],
+              cartproductsList[i]["product_id"],
+              cartproductsList[i]["unit_price"],
+              cartproductsList[i]["order_status"],
+              cartproductsList[i]["admin_status"],
+              cartproductsList[i]["cart"],
+              cartproductsList[i]["created_date"],
+              cartproductsList[i]["total_amount"],
+              cartproductsList[i]["updated_date"],
+              cartproductsList[i]["cancelled_reason"],
+              cartproductsList[i]["wallet"],
+              cartproductsList[i]["weight"],
+              cartproductsList[i]["specification"],
+              cartproductsList[i]["coupon_value"],
+              cartproductsList[i]["unit"],
+              cartproductsList[i]["unit_original_price"],
+              cartproductsList[i]["address_id"]);
+          pooja.add(productsCart);
+          break;
       }
     }
     List differentCategoryData = [];
@@ -791,6 +908,9 @@ class _CartState extends State<Cart> {
     }
     if (dairy.isNotEmpty) {
       differentCategoryData.add(dairy);
+    }
+    if (pooja.isNotEmpty) {
+      differentCategoryData.add(pooja);
     }
 
     totalAmount = 0;
@@ -814,8 +934,9 @@ class _CartState extends State<Cart> {
             .initializeTotalAmount(totalAmount);
 
         Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
-            totalDiscount +
-                Provider.of<APIData>(context, listen: false).deliveryCharges,);
+          totalDiscount +
+              Provider.of<APIData>(context, listen: false).deliveryCharges,
+        );
 
         Provider.of<APIData>(context, listen: false).changeDeliveryCharges(0);
       } else {
@@ -849,22 +970,27 @@ class _CartState extends State<Cart> {
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
-      if (Provider.of<APIData>(context,listen:false).totalAmount < double.parse(jsonData["coupon"][0]["minimum_order_amount"])){
+      if (Provider.of<APIData>(context, listen: false).totalAmount <
+          double.parse(jsonData["coupon"][0]["minimum_order_amount"])) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-            Text(jsonData["msg"] + "\n" + "minimum order Amount Required " +
+            content: Text(jsonData["msg"] +
+                "\n" +
+                "minimum order Amount Required " +
                 jsonData["coupon"][0]["minimum_order_amount"])));
-    }
-    else {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-            Text(jsonData["msg"] + "\n" + "Coupon Applied Successfully")));
+                Text(jsonData["msg"] + "\n" + "Coupon Applied Successfully")));
         couponApplied = true;
         couponValue = jsonData["coupon"][0]["value"];
         couponId = jsonData["coupon"][0]["id"];
-        Provider.of<APIData>(context,listen:false).initializeTotalAmount(Provider.of<APIData>(context,listen:false).totalAmount - double.parse(jsonData["coupon"][0]["value"]));
-        Provider.of<APIData>(context,listen:false).initializeTotalDiscount(Provider.of<APIData>(context,listen:false).discountAmount + double.parse(jsonData["coupon"][0]["value"]));
-    }
+        Provider.of<APIData>(context, listen: false).initializeTotalAmount(
+            Provider.of<APIData>(context, listen: false).totalAmount -
+                double.parse(jsonData["coupon"][0]["value"]));
+        Provider.of<APIData>(context, listen: false).initializeTotalDiscount(
+            Provider.of<APIData>(context, listen: false).discountAmount +
+                double.parse(jsonData["coupon"][0]["value"]));
+      }
       for (var item in jsonData["coupon"]) {
         Coupon coupon = new Coupon(
             item["id"],
@@ -889,30 +1015,19 @@ class _CartState extends State<Cart> {
           .showSnackBar(SnackBar(content: Text(jsonData["msg"])));
     }
   }
-}
 
-class CustomStepper extends StatefulWidget {
-  CustomStepper({
-    @required this.lowerLimit,
-    @required this.upperLimit,
-    @required this.stepValue,
-    @required this.iconSize,
-    @required this.value,
-  });
-
-  final int lowerLimit;
-  final int upperLimit;
-  final int stepValue;
-  final double iconSize;
-  int value;
-
-  @override
-  _CustomStepperState createState() => _CustomStepperState();
-}
-
-class _CustomStepperState extends State<CustomStepper> {
-  @override
-  Widget build(BuildContext context) {
+  Widget CustomStepper(
+      int lowerLimit,
+      int upperLimit,
+      int stepValue,
+      dynamic iconSize,
+      int value,
+      String productid,
+      int proQuantity,
+      String unitprice,
+      String Weight,
+      String Unit,
+      String originalprice) {
     return Container(
       height: 40,
       width: 150,
@@ -924,20 +1039,24 @@ class _CustomStepperState extends State<CustomStepper> {
         children: [
           Expanded(
             flex: 1,
-            child: GestureDetector(
+            child: InkWell(
               child: Icon(
                 Icons.remove,
                 color: Colors.deepPurple,
                 size: 20,
               ),
               onTap: () {
-                setState(
-                  () {
-                    widget.value = widget.value == widget.lowerLimit
-                        ? widget.lowerLimit
-                        : widget.value -= widget.stepValue;
-                  },
-                );
+                if (proQuantity > 1) {
+                  setState(
+                    () {
+                      value =
+                          value == lowerLimit ? lowerLimit : value -= stepValue;
+                    },
+                  );
+                  proQuantity -= 1;
+                  addProductToCart(productid, proQuantity.toString(), unitprice,
+                      Weight, Unit, originalprice);
+                }
               },
             ),
           ),
@@ -947,11 +1066,11 @@ class _CustomStepperState extends State<CustomStepper> {
               decoration: BoxDecoration(
                   gradient:
                       LinearGradient(colors: [left, middle, Colors.purple])),
-              width: widget.iconSize,
+              width: iconSize,
               child: Center(
                 child: FittedBox(
                   child: Text(
-                    '${widget.value}',
+                    '${value}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white,
@@ -965,16 +1084,18 @@ class _CustomStepperState extends State<CustomStepper> {
           ),
           Expanded(
             flex: 1,
-            child: GestureDetector(
+            child: InkWell(
               child: Icon(Icons.add, color: Colors.greenAccent, size: 20),
               onTap: () {
                 setState(
                   () {
-                    widget.value = widget.value == widget.upperLimit
-                        ? widget.upperLimit
-                        : widget.value += widget.stepValue;
+                    value =
+                        value == upperLimit ? upperLimit : value += stepValue;
                   },
                 );
+                proQuantity += 1;
+                addProductToCart(productid, proQuantity.toString(), unitprice,
+                    Weight, Unit, originalprice);
               },
             ),
           ),
@@ -983,6 +1104,99 @@ class _CustomStepperState extends State<CustomStepper> {
     );
   }
 }
+
+// class CustomStepper extends StatefulWidget {
+//   CustomStepper({
+//     @required this.lowerLimit,
+//     @required this.upperLimit,
+//     @required this.stepValue,
+//     @required this.iconSize,
+//     @required this.value,
+//   });
+//
+//   final int lowerLimit;
+//   final int upperLimit;
+//   final int stepValue;
+//   final double iconSize;
+//   int value;
+//
+//   @override
+//   _CustomStepperState createState() => _CustomStepperState();
+// }
+
+// class _CustomStepperState extends State<CustomStepper> {
+//   @override
+//   Widget CustomStepper(BuildContext context, lowerLimit, upperLimit,stepValue,iconSize,value) {
+//     return Container(
+//       height: 40,
+//       width: 150,
+//       decoration: BoxDecoration(
+//           border: Border.all(color: Colors.purple),
+//           borderRadius: BorderRadius.circular(5)),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: [
+//           Expanded(
+//             flex: 1,
+//             child: GestureDetector(
+//               child: Icon(
+//                 Icons.remove,
+//                 color: Colors.deepPurple,
+//                 size: 20,
+//               ),
+//               onTap: () {
+//                 setState(
+//                   () {
+//                     value = value == lowerLimit
+//                         ? lowerLimit
+//                         : value -= stepValue;
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//           Expanded(
+//             flex: 1,
+//             child: Container(
+//               decoration: BoxDecoration(
+//                   gradient:
+//                       LinearGradient(colors: [left, middle, Colors.purple])),
+//               width: iconSize,
+//               child: Center(
+//                 child: FittedBox(
+//                   child: Text(
+//                     '${value}',
+//                     style: TextStyle(
+//                       fontSize: 12,
+//                       color: Colors.white,
+//                       fontWeight: FontWeight.w600,
+//                     ),
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Expanded(
+//             flex: 1,
+//             child: GestureDetector(
+//               child: Icon(Icons.add, color: Colors.greenAccent, size: 20),
+//               onTap: () {
+//                 setState(
+//                   () {
+//                     value = value == upperLimit
+//                         ? upperLimit
+//                         : value += stepValue;
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class Navigate extends StatefulWidget {
   const Navigate({Key key}) : super(key: key);

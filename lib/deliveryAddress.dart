@@ -67,6 +67,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
       bottomNavigationBar: widget.id == 1
           ? Navigate.handyOrder(widget.id)
           : Navigate(
+              couponApplied: widget.couponApplied,
               totalAmount: widget.totalAmount,
               deliveryCharges: widget.deliveryCharges,
               selected: selected,
@@ -226,7 +227,7 @@ class _NavigateState extends State<Navigate> {
                                                 widget.deliveryCharges,
                                             productOrderId:
                                                 widget.productOrderId,
-                                        couponApplied: widget.couponApplied,
+                                            couponApplied: widget.couponApplied,
                                           )));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

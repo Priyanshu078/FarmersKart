@@ -46,7 +46,8 @@ class _WishlistState extends State<Wishlist> {
     // detailByCategory = details;
   }
 
-  Future<bool> addProductToCart(String productid, String unitprice,String Weight, String Unit, String OriginalPrice) async {
+  Future<bool> addProductToCart(String productid, String unitprice,
+      String Weight, String Unit, String OriginalPrice) async {
     http.Response response;
     String userId = Provider.of<APIData>(context, listen: false).user.id;
     String productId = productid;
@@ -60,8 +61,9 @@ class _WishlistState extends State<Wishlist> {
     print(unit);
     String originalPrice = OriginalPrice;
     print(originalPrice);
+    String orderNumber = '';
     String url =
-        "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
+        "$header/app_api/addtocart_order.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice&order_number=$orderNumber";
     print(url);
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
@@ -128,7 +130,8 @@ class _WishlistState extends State<Wishlist> {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
-                  itemBuilder: (context, index) => choiceChipWidget(categories)),
+                  itemBuilder: (context, index) =>
+                      choiceChipWidget(categories)),
             ),
             Consumer<APIData>(
               builder: (context, data, child) {
@@ -339,21 +342,51 @@ class _WishlistState extends State<Wishlist> {
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: ElevatedButton(
-                                              onPressed: () async{
+                                              onPressed: () async {
                                                 String discountPrice = "";
-                                                if(data.detailsByCategory[index].discountPrice != ""){
-                                                  discountPrice = data.detailsByCategory[index].discountPrice;
+                                                if (data
+                                                        .detailsByCategory[
+                                                            index]
+                                                        .discountPrice !=
+                                                    "") {
+                                                  discountPrice = data
+                                                      .detailsByCategory[index]
+                                                      .discountPrice;
+                                                } else {
+                                                  discountPrice = data
+                                                      .detailsByCategory[index]
+                                                      .originalPrice;
                                                 }
-                                                else{
-                                                  discountPrice = data.detailsByCategory[index].originalPrice;
+                                                bool added =
+                                                    await addProductToCart(
+                                                        data
+                                                            .detailsByCategory[
+                                                                index]
+                                                            .productId,
+                                                        discountPrice,
+                                                        data
+                                                            .detailsByCategory[
+                                                                index]
+                                                            .weight[0][0],
+                                                        data
+                                                            .detailsByCategory[
+                                                                index]
+                                                            .unit,
+                                                        data
+                                                            .detailsByCategory[
+                                                                index]
+                                                            .originalPrice);
+                                                if (added) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "Product moved to cart")));
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "Something Went Wrong")));
                                                 }
-                                               bool added = await addProductToCart(data.detailsByCategory[index].productId, discountPrice, data.detailsByCategory[index].weight[0][0], data.detailsByCategory[index].unit, data.detailsByCategory[index].originalPrice);
-                                               if(added){
-                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product moved to cart")));
-                                               }
-                                               else{
-                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something Went Wrong")));
-                                               }
                                               },
                                               child: Text(
                                                 'Move to Cart',
@@ -495,8 +528,7 @@ class _choiceChipWidgetState extends State<choiceChipWidget> {
               for (int i = 0; i < details.length; i++) {
                 if (details[i].categoryName == item) {
                   detailByCategory.add(details[i]);
-                }
-                else if(selectedChoice == 'All'){
+                } else if (selectedChoice == 'All') {
                   detailByCategory.add(details[i]);
                   print(details[i]);
                 }

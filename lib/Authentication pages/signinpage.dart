@@ -1,6 +1,7 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Authentication pages/signuppage.dart';
 import 'package:sign_button/sign_button.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+// import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shellcode2/apiData/loginApiData.dart';
@@ -26,7 +27,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  static final FacebookLogin facebookSignIn = new FacebookLogin();
+  // static final FacebookLogin facebookSignIn = new FacebookLogin();
   UserCredential userCredential;
   final phoneController = TextEditingController();
   String phoneNo = '';
@@ -90,7 +91,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   Container(
                     padding:
-                        EdgeInsets.only(top: 60.0, right: 30.0, left: 30.0),
+                    EdgeInsets.only(top: 60.0, right: 30.0, left: 30.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -121,11 +122,15 @@ class _SignInState extends State<SignIn> {
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
                               hintStyle:
-                                  Theme.of(context).textTheme.caption.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: yellow, // Set Your Own Color
-                                      ),
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .caption
+                                  .copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: yellow, // Set Your Own Color
+                              ),
                             ),
                             onChanged: (value) => phoneNo = value,
                           ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
@@ -159,11 +164,15 @@ class _SignInState extends State<SignIn> {
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
                               hintStyle:
-                                  Theme.of(context).textTheme.caption.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: yellow, // Set Your Own Color
-                                      ),
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .caption
+                                  .copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: yellow, // Set Your Own Color
+                              ),
                             ),
                             onChanged: (value) => password = value,
                           ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
@@ -218,7 +227,7 @@ class _SignInState extends State<SignIn> {
                             Text(
                               "Don't Have Account ?",
                               style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
+                              TextStyle(fontSize: 12, color: Colors.black),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -247,7 +256,7 @@ class _SignInState extends State<SignIn> {
                           Text(
                             " OR ",
                             style:
-                                TextStyle(fontSize: 14, color: Colors.purple),
+                            TextStyle(fontSize: 14, color: Colors.purple),
                           ),
                           Expanded(
                             child: Divider(
@@ -323,9 +332,10 @@ class _SignInState extends State<SignIn> {
     print(phoneNo);
     print(password);
     // String firebaseToken = await getToken();
-    if ((password != null && phoneNo != null) && (phoneController.text != "" && pwController.text != "")) {
+    if ((password != null && phoneNo != null) &&
+        (phoneController.text != "" && pwController.text != "")) {
       List<UserOfApp> userAccountData =
-          await fetchLoginApiData(phoneNo, password);
+      await fetchLoginApiData(phoneNo, password);
       print(userAccountData);
       if (userAccountData == null) {
         authenticated = false;
@@ -386,49 +396,25 @@ class _SignInState extends State<SignIn> {
         });
   }
 
-  Future<Null> loginWithFacebook() async {
-    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-        print('''
-         Logged in!
-
-         Token: ${accessToken.token}
-         User id: ${accessToken.userId}
-         Expires: ${accessToken.expires}
-         Permissions: ${accessToken.permissions}
-         Declined permissions: ${accessToken.declinedPermissions}
-         ''');
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Signup()));
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print('Login cancelled by the user.');
-        break;
-      case FacebookLoginStatus.error:
-        print('Something went wrong with the login process.\n'
-            'Here\'s the error Facebook gave us: ${result.errorMessage}');
-        break;
-    }
+  Future<UserCredential> loginWithFacebook() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
+  Future signInWithGoogle() async {
+    // FirebaseAuth _auth = new FirebaseAuth.instanceFor(app: );
+    GoogleSignIn _googleSignIn = new GoogleSignIn();
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential user = await _auth.signInWithCredential(credential);
+    return user;
   }
 }

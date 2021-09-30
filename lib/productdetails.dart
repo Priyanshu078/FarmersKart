@@ -22,7 +22,8 @@ class ProductDetails extends StatefulWidget {
   // this.k = j;
   //}
   ProductDetails(this.temporary, this.k);
-  ProductDetails.offers(this.temporary, this.k, this.offers,this.discountAvailable);
+  ProductDetails.offers(
+      this.temporary, this.k, this.offers, this.discountAvailable);
   ProductDetails.search(
       this.temporary, this.k, this.offers, this.discountAvailable);
   ProductDetails.category(this.temporary, this.k, this.category);
@@ -129,17 +130,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Consumer<APIData>(
-                                  builder: (context, data,child) {
-                                    return Text(
-                                      '₹ ${temp[6][data.index].discount} OFF',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    );
-                                  }
-                                ),
+                                    builder: (context, data, child) {
+                                  return Text(
+                                    '₹ ${temp[6][data.index].discount} OFF',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  );
+                                }),
                               ),
                             ),
                     ),
@@ -198,8 +198,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14),
                           ),
-                          Consumer<APIData>(
-    builder: (context,data,child){
+                          Consumer<APIData>(builder: (context, data, child) {
                             return Text(
                               '${temp[6][data.index].originalPrice}',
                               style: TextStyle(
@@ -209,8 +208,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 decoration: TextDecoration.lineThrough,
                               ),
                             );
-  }
-                          ),
+                          }),
                         ],
                       ),
               ),
@@ -256,30 +254,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
                         )
                       : widget.category
-                  ?Consumer<APIData>(
-                    builder: (context, data, child) {
-                      print(data.quantity);
-                      return Text(
-                        '${double.parse(temp[6][data.index][2] == ""? temp[6][data.index][1]:temp[6][data.index][2]) * data.quantity}',
-                        style: TextStyle(
-                            color: Colors.deepPurple[800],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14),
-                      );
-                    },
-                  )
-                  :Consumer<APIData>(
-                          builder: (context, data, child) {
-                            print(data.quantity);
-                            return Text(
-                              '${double.parse(temp[6][data.index][3] == ""? temp[6][data.index][2]:temp[6][data.index][3]) * data.quantity}',
-                              style: TextStyle(
-                                  color: Colors.deepPurple[800],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                            );
-                          },
-                        ),
+                          ? Consumer<APIData>(
+                              builder: (context, data, child) {
+                                print(data.quantity);
+                                return Text(
+                                  '${double.parse(temp[6][data.index][2] == "" ? temp[6][data.index][1] : temp[6][data.index][2]) * data.quantity}',
+                                  style: TextStyle(
+                                      color: Colors.deepPurple[800],
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14),
+                                );
+                              },
+                            )
+                          : Consumer<APIData>(
+                              builder: (context, data, child) {
+                                print(data.quantity);
+                                return Text(
+                                  '${double.parse(temp[6][data.index][3] == "" ? temp[6][data.index][2] : temp[6][data.index][3]) * data.quantity}',
+                                  style: TextStyle(
+                                      color: Colors.deepPurple[800],
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14),
+                                );
+                              },
+                            ),
                 ],
               ),
               SizedBox(
@@ -353,7 +351,10 @@ class _ProductDetailsState extends State<ProductDetails> {
               GestureDetector(
                 // borderRadius: BorderRadius.circular(20),
                 onTap: () {
-                  showDialog(context: context, builder: (context) => weightList(context, widget.offers, widget.category));
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          weightList(context, widget.offers, widget.category));
                 },
                 child: Hero(
                   tag: _heroAddTodo,
@@ -372,43 +373,39 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         widget.offers
                             ? Consumer<APIData>(
-                          builder:(context,data,child) {
-                            return Text(
-                              '${temp[6][data.index].weight} ${temp[6][data.index].unit}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: yellow,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            );
-
-                          }
-                            )
+                                builder: (context, data, child) {
+                                return Text(
+                                  '${temp[6][data.index].weight} ${temp[6][data.index].unit}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: yellow,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                );
+                              })
                             : widget.category
-                ?Consumer<APIData>(
-                builder: (context, data ,child){
-               return Text(
-              '${temp[6][data.index][0]}',
-              style: TextStyle(
-              fontSize: 14,
-              color: yellow,
-              fontWeight: FontWeight.w700,
-              ),
-              );
-              }
-              )
+                                ? Consumer<APIData>(
+                                    builder: (context, data, child) {
+                                    return Text(
+                                      '${temp[6][data.index][0]}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: yellow,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    );
+                                  })
                                 : Consumer<APIData>(
-                builder: (context, data, child) {
-                  return Text(
-                    '${temp[6][data.index][1]}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: yellow,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  );
-                }
-                                ),
+                                    builder: (context, data, child) {
+                                    return Text(
+                                      '${temp[6][data.index][1]}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: yellow,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    );
+                                  }),
                         Icon(
                           Icons.keyboard_arrow_down,
                           color: yellow,
@@ -469,34 +466,52 @@ class _ProductDetailsState extends State<ProductDetails> {
     print(temp);
     http.Response response;
     String userId = Provider.of<APIData>(context, listen: false).user.id;
-    String productId = widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].p_Id :widget.category ? temp[6][Provider.of<APIData>(context,listen:false).index][3]:temp[6][Provider.of<APIData>(context,listen:false).index][0];
+    String productId = widget.offers
+        ? temp[6][Provider.of<APIData>(context, listen: false).index].p_Id
+        : widget.category
+            ? temp[6][Provider.of<APIData>(context, listen: false).index][3]
+            : temp[6][Provider.of<APIData>(context, listen: false).index][0];
     print(productId);
     String Quantity = quantity.toString();
     String unitPrice = widget.offers
         ? widget.discountAvailable
-            ? temp[6][Provider.of<APIData>(context,listen:false).index].discountedPrice
-            : temp[6][Provider.of<APIData>(context,listen:false).index].originalPrice
-        : widget.category?
-        temp[6][Provider.of<APIData>(context,listen:false).index][2] == ""?
-            temp[6][Provider.of<APIData>(context,listen:false).index][1]
-        :temp[6][Provider.of<APIData>(context,listen:false).index][2]
-    :temp[6][Provider.of<APIData>(context,listen:false).index][3] == ""
-            ? temp[6][Provider.of<APIData>(context,listen:false).index][2]
-            : temp[6][Provider.of<APIData>(context,listen:false).index][3];
+            ? temp[6][Provider.of<APIData>(context, listen: false).index]
+                .discountedPrice
+            : temp[6][Provider.of<APIData>(context, listen: false).index]
+                .originalPrice
+        : widget.category
+            ? temp[6][Provider.of<APIData>(context, listen: false).index][2] ==
+                    ""
+                ? temp[6][Provider.of<APIData>(context, listen: false).index][1]
+                : temp[6][Provider.of<APIData>(context, listen: false).index][2]
+            : temp[6][Provider.of<APIData>(context, listen: false).index][3] ==
+                    ""
+                ? temp[6][Provider.of<APIData>(context, listen: false).index][2]
+                : temp[6][Provider.of<APIData>(context, listen: false).index]
+                    [3];
     print(unitPrice);
     String weight = widget.offers
-        ? "${temp[6][Provider.of<APIData>(context,listen:false).index].weight} ${temp[6][Provider.of<APIData>(context,listen:false).index].unit}"
+        ? "${temp[6][Provider.of<APIData>(context, listen: false).index].weight} ${temp[6][Provider.of<APIData>(context, listen: false).index].unit}"
         : widget.category
-    ?temp[6][Provider.of<APIData>(context,listen:false).index][0]
-    :temp[6][Provider.of<APIData>(context,listen:false).index][1];
+            ? temp[6][Provider.of<APIData>(context, listen: false).index][0]
+            : temp[6][Provider.of<APIData>(context, listen: false).index][1];
     print(weight);
-    String unit = widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].unit : widget.category?temp[6][Provider.of<APIData>(context,listen:false).index][4]: temp[6][Provider.of<APIData>(context,listen:false).index][4];
+    String unit = widget.offers
+        ? temp[6][Provider.of<APIData>(context, listen: false).index].unit
+        : widget.category
+            ? temp[6][Provider.of<APIData>(context, listen: false).index][4]
+            : temp[6][Provider.of<APIData>(context, listen: false).index][4];
     print(unit);
-    String originalPrice =
-        widget.offers ? temp[6][Provider.of<APIData>(context,listen:false).index].originalPrice :widget.category?temp[6][Provider.of<APIData>(context,listen:false).index][1] :temp[6][Provider.of<APIData>(context,listen:false).index][2];
+    String orderNumber = '';
+    String originalPrice = widget.offers
+        ? temp[6][Provider.of<APIData>(context, listen: false).index]
+            .originalPrice
+        : widget.category
+            ? temp[6][Provider.of<APIData>(context, listen: false).index][1]
+            : temp[6][Provider.of<APIData>(context, listen: false).index][2];
     print(originalPrice);
     String url =
-        "$header/app_api/addToCart.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice";
+        "$header/app_api/addtocart_order.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice&order_number=$orderNumber";
     print(url);
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
@@ -657,48 +672,48 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   String get barrierLabel => 'Popup dialog open';
 }
 
-  Widget weightList(BuildContext context, bool offers, bool category) {
-    print(temp);
-    return AlertDialog(
-      content: Hero(
-        tag: _heroAddTodo,
-        child: Material(
-          color: lightbg,
-          elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Available quantities for',
-                    style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    'Farmerskart - ${temp[1]}',
-                    style: TextStyle(
-                        height: 2,
-                        color: Colors.purple,
-                        fontSize: 18,
-                        letterSpacing: 0.5,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const Divider(
-                    color: Colors.orange,
-                    thickness: 0.8,
-                  ),
-                  for (int k = 0; k < temp[6].length; k++) ...{
-                    InkWell(
-                      onTap: (){
-                        Provider.of<APIData>(context, listen: false).initializeIndex(k);
-                        Navigator.pop(context);
-                      },
+Widget weightList(BuildContext context, bool offers, bool category) {
+  print(temp);
+  return AlertDialog(
+    content: Hero(
+      tag: _heroAddTodo,
+      child: Material(
+        color: lightbg,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Available quantities for',
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'Farmerskart - ${temp[1]}',
+                  style: TextStyle(
+                      height: 2,
+                      color: Colors.purple,
+                      fontSize: 18,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w700),
+                ),
+                const Divider(
+                  color: Colors.orange,
+                  thickness: 0.8,
+                ),
+                for (int k = 0; k < temp[6].length; k++) ...{
+                  InkWell(
+                    onTap: () {
+                      Provider.of<APIData>(context, listen: false)
+                          .initializeIndex(k);
+                      Navigator.pop(context);
+                    },
                     child: Flexible(
                       child: Container(
                         height: 35,
@@ -737,13 +752,13 @@ class HeroDialogRoute<T> extends PageRoute<T> {
                                           ),
                                         )
                                       : Text(
-                                            '${temp[6][k][0]} -',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                            ),
-                              ),
+                                          '${temp[6][k][0]} -',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                               Spacer(
                                 flex: 2,
                               ),
@@ -768,26 +783,25 @@ class HeroDialogRoute<T> extends PageRoute<T> {
                                                 TextDecoration.lineThrough,
                                           ),
                                         )
-                                      :
-                              temp[6][k][3] == ""
-                                  ?Text(
-          '₹${temp[6][k][2]}',
-          style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          color: Colors.white,
-          ),
-          )
-                              :Text(
-                                          '₹${temp[6][k][2]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                        ),
+                                      : temp[6][k][3] == ""
+                                          ? Text(
+                                              '₹${temp[6][k][2]}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : Text(
+                                              '₹${temp[6][k][2]}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                            ),
                               Spacer(
                                 flex: 2,
                               ),
@@ -812,31 +826,31 @@ class HeroDialogRoute<T> extends PageRoute<T> {
                                           ),
                                         )
                                       : temp[6][k][3] == ""
-                                  ? Container()
-                              :Text(
-                                          '₹${temp[6][k][3]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                          ? Container()
+                                          : Text(
+                                              '₹${temp[6][k][3]}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                              ),
+                                            ),
                             ],
                           ),
                         ),
                       ),
                     ),
-          ),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 0.2,
-                    ),
-                  },
-                ],
-              ),
+                  ),
+                  const Divider(
+                    color: Colors.white,
+                    thickness: 0.2,
+                  ),
+                },
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
