@@ -175,6 +175,14 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                             totalAmount += double.parse(snapshot
                                                 .data[index][i].totalAmount);
                                           }
+                                          totalAmount += double.parse(snapshot
+                                              .data[index][0].deliveryCharges);
+                                          if (snapshot
+                                                  .data[index][0].couponValue !=
+                                              '') {
+                                            totalAmount -= double.parse(snapshot
+                                                .data[index][0].couponValue);
+                                          }
                                           return InkWell(
                                             onTap: () {
                                               Navigator.push(
@@ -281,27 +289,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                       SizedBox(
                                                         height: 10,
                                                       ),
-                                                      totalAmount > 240
-                                                          ? Text(
-                                                              'Total Amount: ₹$totalAmount',
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  color: Colors
-                                                                      .black),
-                                                            )
-                                                          : Text(
-                                                              'Total Amount: ₹${totalAmount + 40}',
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
+                                                      Text(
+                                                        'Total Amount: ₹$totalAmount',
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
                                                       SizedBox(
                                                         height: 10,
                                                       ),
@@ -653,6 +650,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                     snapshot.data[index][i]
                                                         .totalAmount);
                                               }
+                                              totalAmount += double.parse(
+                                                  snapshot.data[index][0]
+                                                      .deliveryCharges);
+                                              if (snapshot.data[index][0]
+                                                      .couponValue !=
+                                                  '') {
+                                                totalAmount -= double.parse(
+                                                    snapshot.data[index][0]
+                                                        .couponValue);
+                                              }
                                               return InkWell(
                                                 onTap: () {
                                                   Navigator.push(
@@ -760,29 +767,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                           SizedBox(
                                                             height: 10,
                                                           ),
-                                                          totalAmount > 240
-                                                              ? Text(
-                                                                  'Total Amount: ₹$totalAmount',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      color: Colors
-                                                                          .black),
-                                                                )
-                                                              : Text(
-                                                                  'Total Amount: ₹${totalAmount + 40}',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      color: Colors
-                                                                          .black),
-                                                                ),
+                                                          Text(
+                                                            'Total Amount: ₹$totalAmount',
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
                                                           SizedBox(
                                                             height: 10,
                                                           ),
@@ -1116,6 +1110,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                   snapshot.data[index][i]
                                                       .totalAmount);
                                             }
+                                            totalAmount += double.parse(snapshot
+                                                .data[index][0]
+                                                .deliveryCharges);
+
                                             print(snapshot.data[index]);
                                             return InkWell(
                                               onTap: () {
@@ -1224,29 +1222,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                         SizedBox(
                                                           height: 10,
                                                         ),
-                                                        totalAmount > 240
-                                                            ? Text(
-                                                                'Total Amount: ₹$totalAmount',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    color: Colors
-                                                                        .black),
-                                                              )
-                                                            : Text(
-                                                                'Total Amount: ₹${totalAmount + 40}',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
+                                                        Text(
+                                                          'Total Amount: ₹$totalAmount',
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
                                                         SizedBox(
                                                           height: 10,
                                                         ),

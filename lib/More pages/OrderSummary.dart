@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shellcode2/colors.dart';
+import 'package:shellcode2/paymentOption.dart';
 
 class OrderSummary extends StatefulWidget {
   List allOrders;
@@ -32,16 +33,25 @@ class _OrderSummaryState extends State<OrderSummary> {
       for (int i = 0; i < widget.allOrders.length; i++) {
         totalAmount += double.parse(widget.allOrders[i].totalAmount);
       }
+      totalAmount += double.parse(widget.allOrders[0].deliveryCharges);
+      if (widget.allOrders[0].couponValue != '') {
+        totalAmount -= double.parse(widget.allOrders[0].couponValue);
+      }
     } else if (widget.index == 1) {
       totalAmount = 0;
       for (int i = 0; i < widget.todaysOrder.length; i++) {
         totalAmount += double.parse(widget.todaysOrder[i].totalAmount);
+      }
+      totalAmount += double.parse(widget.todaysOrder[0].deliveryCharges);
+      if (widget.todaysOrder[0].couponValue != '') {
+        totalAmount -= double.parse(widget.todaysOrder[0].couponValue);
       }
     } else {
       totalAmount = 0;
       for (int i = 0; i < widget.cancelledOrders.length; i++) {
         totalAmount += double.parse(widget.cancelledOrders[i].totalAmount);
       }
+      totalAmount += double.parse(widget.cancelledOrders[0].deliveryCharges);
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -88,21 +98,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                                           color: Colors.purple[600]),
                                     )
                                   ])),
-                          totalAmount > 240
-                              ? Text(
-                                  "₹ $totalAmount",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              : Text(
-                                  "₹ ${totalAmount + 40}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                )
+                          Text(
+                            "₹ $totalAmount",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          )
                         ],
                       ),
                       SizedBox(
@@ -149,32 +151,89 @@ class _OrderSummaryState extends State<OrderSummary> {
                         height: 20,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width / 3 + 10,
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Payment Mode ",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.purple[600]),
-                                    ),
-                                    Text(
-                                      ":",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.purple[600]),
-                                    )
-                                  ])),
-                          Text(
-                            "${widget.allOrders[0].paymentOption}",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 3 +
+                                            10,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Payment Mode ",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.purple[600]),
+                                          ),
+                                          Text(
+                                            ":",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.purple[600]),
+                                          )
+                                        ])),
+                                Text(
+                                  "${widget.allOrders[0].paymentOption}",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ]),
+                          widget.allOrders[0].paymentOption == 'COD'
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                        top: BorderSide(
+                                            width: 1.0, color: yellow),
+                                        left: BorderSide(
+                                            width: 1.0, color: yellow),
+                                        right: BorderSide(
+                                            width: 1.0, color: yellow),
+                                        bottom: BorderSide(
+                                            width: 1.0, color: yellow),
+                                      ),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      gradient: LinearGradient(colors: [
+                                        left,
+                                        middle,
+                                        Colors.purple
+                                      ])),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(30),
+                                    onTap: () {
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             PaymentOption(
+                                      //                 totalAmount: totalAmount,
+                                      //                 couponId: couponId,
+                                      //                 couponCode: couponCode,
+                                      //                 couponValue: couponValue,
+                                      //                 deliveryCharges:
+                                      //                     deliveryCharges,
+                                      //                 productOrderId:
+                                      //                     productOrderId,
+                                      //                 couponApplied:
+                                      //                     couponApplied)));
+                                    },
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Text(
+                                          "Pay Now",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                       SizedBox(
@@ -415,21 +474,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                                               color: Colors.purple[600]),
                                         )
                                       ])),
-                              totalAmount > 240
-                                  ? Text(
-                                      "₹ $totalAmount",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  : Text(
-                                      "₹ ${totalAmount + 40}",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    )
+                              Text(
+                                "₹ $totalAmount",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
                           SizedBox(
@@ -536,7 +587,8 @@ class _OrderSummaryState extends State<OrderSummary> {
                                 child: Text(
                                   "${widget.todaysOrder[0].center[0].centerName} , ${widget.todaysOrder[0].center[0].address} , ${widget.todaysOrder[0].center[0].pincode}",
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               )
                             ],
@@ -743,21 +795,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                                               color: Colors.purple[600]),
                                         )
                                       ])),
-                              totalAmount > 240
-                                  ? Text(
-                                      "₹ $totalAmount",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  : Text(
-                                      "₹ ${totalAmount + 40}",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    )
+                              Text(
+                                "₹ $totalAmount",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
                           SizedBox(
