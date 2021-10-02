@@ -139,42 +139,45 @@ class _DetailPageState extends State<DetailPage> {
                     color: bgcolor,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Search(),
-                        ));
-                      },
+                      onTap: () {},
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.search,
-                                  color: yellow,
-                                ),
-                                Text('   '),
-                                Text(
-                                  'Search',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18,
-                                    color: Colors.grey[600],
+                        child: InkWell(
+                          onTap: () {
+                            showSearch(
+                                context: context,
+                                delegate: SearchProducts(temp));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    color: yellow,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.keyboard_voice_outlined,
-                                  color: yellow,
-                                )
-                              ],
-                            )
-                          ],
+                                  Text('   '),
+                                  Text(
+                                    'Search',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 18,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.keyboard_voice_outlined,
+                                    color: yellow,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -840,6 +843,97 @@ class _AddTodoPopupCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SearchProducts extends SearchDelegate<String> {
+  List products;
+  SearchProducts(this.products);
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    // actions for appbar
+    return [
+      IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.mic,
+            color: Colors.amber[400],
+          ))
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    // leading icon on the left part of the app bar
+    return Icon(
+      Icons.search,
+      color: Colors.amber[400],
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    // show results based on the selection
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    // show when someone searches for something
+    List suggestionList = [];
+    if (query.isNotEmpty) {
+      for (int i = 0; i < products.length; i++) {
+        if (products[i].title.toString().startsWith(query) ||
+            products[i].title.toString().startsWith(query.toUpperCase()) ||
+            products[i].title.toString().startsWith(query.toLowerCase()) ||
+            products[i]
+                .title
+                .toString()
+                .contains(query.substring(1, query.length))) {
+          suggestionList.add(products[i]);
+        }
+      }
+    }
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(suggestionList[index].title.toString()),
+            onTap: () {
+              List temp1 = [
+                suggestionList[index].imageUrl,
+                suggestionList[index].title,
+                suggestionList[index].weight,
+                suggestionList[index].newrate,
+                suggestionList[index].description,
+                suggestionList[index].oldrate,
+                suggestionList[index].data
+              ];
+              if (suggestionList[index].newrate.toString() == "" ||
+                  suggestionList[index].newrate.toString() == " .") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetails.category(temp1, 0, true)));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetails.category(temp1, 0, true)));
+              }
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider(height: 10, color: Colors.black);
+        },
+        itemCount: suggestionList.length);
+    throw UnimplementedError();
   }
 }
 
