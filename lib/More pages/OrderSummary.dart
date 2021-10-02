@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/paymentOption.dart';
+import 'package:intl/intl.dart';
 
 class OrderSummary extends StatefulWidget {
   List allOrders;
@@ -27,6 +28,13 @@ class OrderSummary extends StatefulWidget {
 class _OrderSummaryState extends State<OrderSummary> {
   double totalAmount = 0;
   List cartId = [];
+
+  String getDateTime() {
+    String formattedDateTime =
+        DateFormat('yyyy-MM-dd \n kk:mm:ss').format(DateTime.now()).toString();
+    return formattedDateTime;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.index == 0) {
@@ -352,9 +360,74 @@ class _OrderSummaryState extends State<OrderSummary> {
                           )
                         ],
                       ),
+                      getDateTime().split(" ")[0].trim() ==
+                              widget.allOrders[0].createdDate
+                                  .toString()
+                                  .split(" ")[0]
+                                  .trim()
+                          ? SizedBox(
+                              height: 20,
+                            )
+                          : Container(),
+                      getDateTime().split(" ")[0].trim() ==
+                              widget.allOrders[0].createdDate
+                                  .toString()
+                                  .split(" ")[0]
+                                  .trim()
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Anything forgot to add : ",
+                                  style: TextStyle(
+                                      color: Colors.purple[600],
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Flexible(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                          top: BorderSide(
+                                              width: 1.0, color: yellow),
+                                          left: BorderSide(
+                                              width: 1.0, color: yellow),
+                                          right: BorderSide(
+                                              width: 1.0, color: yellow),
+                                          bottom: BorderSide(
+                                              width: 1.0, color: yellow),
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        gradient: LinearGradient(colors: [
+                                          left,
+                                          middle,
+                                          Colors.purple
+                                        ])),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(30),
+                                      onTap: () {},
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            "Update Order Now",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 16),
@@ -369,6 +442,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                   ),
                 ),
               ),
+              SizedBox(),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(16),
@@ -584,7 +658,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                                     )
                                   ],
                                 ),
-                                widget.allOrders[0].paymentOption == 'COD'
+                                widget.todaysOrder[0].paymentOption == 'COD'
                                     ? Container(
                                         decoration: BoxDecoration(
                                             border: Border(
@@ -763,6 +837,72 @@ class _OrderSummaryState extends State<OrderSummary> {
                               )
                             ],
                           ),
+                          getDateTime().split(" ")[0].trim() ==
+                                  widget.todaysOrder[0].createdDate
+                                      .toString()
+                                      .split(" ")[0]
+                                      .trim()
+                              ? SizedBox(
+                                  height: 20,
+                                )
+                              : Container(),
+                          getDateTime().split(" ")[0].trim() ==
+                                  widget.todaysOrder[0].createdDate
+                                      .toString()
+                                      .split(" ")[0]
+                                      .trim()
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Anything forgot to add : ",
+                                      style: TextStyle(
+                                          color: Colors.purple[600],
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Flexible(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                              top: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              left: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              right: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              bottom: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            gradient: LinearGradient(colors: [
+                                              left,
+                                              middle,
+                                              Colors.purple
+                                            ])),
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {},
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                "Update Order Now",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
