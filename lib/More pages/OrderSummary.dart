@@ -26,6 +26,7 @@ class OrderSummary extends StatefulWidget {
 
 class _OrderSummaryState extends State<OrderSummary> {
   double totalAmount = 0;
+  List cartId = [];
   @override
   Widget build(BuildContext context) {
     if (widget.index == 0) {
@@ -206,21 +207,36 @@ class _OrderSummaryState extends State<OrderSummary> {
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(30),
                                     onTap: () {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             PaymentOption(
-                                      //                 totalAmount: totalAmount,
-                                      //                 couponId: couponId,
-                                      //                 couponCode: couponCode,
-                                      //                 couponValue: couponValue,
-                                      //                 deliveryCharges:
-                                      //                     deliveryCharges,
-                                      //                 productOrderId:
-                                      //                     productOrderId,
-                                      //                 couponApplied:
-                                      //                     couponApplied)));
+                                      bool couponApplied = false;
+                                      if (widget.allOrders[0].couponCode !=
+                                          "") {
+                                        couponApplied = true;
+                                      }
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PaymentOption.paynow(
+                                                      paynow: true,
+                                                      orderNumber: widget
+                                                          .allOrders[0].orderId,
+                                                      totalAmount: totalAmount,
+                                                      couponId: widget
+                                                          .allOrders[0]
+                                                          .couponId,
+                                                      couponCode: widget
+                                                          .allOrders[0]
+                                                          .couponCode,
+                                                      couponValue: widget
+                                                          .allOrders[0]
+                                                          .couponValue,
+                                                      deliveryCharges:
+                                                          double.parse(widget
+                                                              .allOrders[0]
+                                                              .deliveryCharges),
+                                                      productOrderId: cartId,
+                                                      couponApplied:
+                                                          couponApplied)));
                                     },
                                     child: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -360,6 +376,10 @@ class _OrderSummaryState extends State<OrderSummary> {
                       itemCount: widget.allOrders.length,
                       itemBuilder: (context, int index) {
                         print(widget.allOrders[index].productImage);
+                        cartId = [];
+                        for (int i = 0; i < widget.allOrders.length; i++) {
+                          cartId.add(widget.allOrders[i].id);
+                        }
                         return Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
@@ -528,35 +548,119 @@ class _OrderSummaryState extends State<OrderSummary> {
                             height: 20,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 3 +
-                                      10,
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Payment Mode ",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.purple[600]),
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    3 +
+                                                10,
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Payment Mode ",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.purple[600]),
+                                              ),
+                                              Text(
+                                                ":",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.purple[600]),
+                                              )
+                                            ])),
+                                    Text(
+                                      "${widget.todaysOrder[0].paymentOption}",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                widget.allOrders[0].paymentOption == 'COD'
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                              top: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              left: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              right: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                              bottom: BorderSide(
+                                                  width: 1.0, color: yellow),
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            gradient: LinearGradient(colors: [
+                                              left,
+                                              middle,
+                                              Colors.purple
+                                            ])),
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
+                                            bool couponApplied = false;
+                                            if (widget.todaysOrder[0]
+                                                    .couponCode !=
+                                                "") {
+                                              couponApplied = true;
+                                            }
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentOption.paynow(
+                                                            paynow: true,
+                                                            orderNumber: widget
+                                                                .todaysOrder[0]
+                                                                .orderId,
+                                                            totalAmount:
+                                                                totalAmount,
+                                                            couponId: widget
+                                                                .todaysOrder[0]
+                                                                .couponId,
+                                                            couponCode:
+                                                                widget
+                                                                    .todaysOrder[
+                                                                        0]
+                                                                    .couponCode,
+                                                            couponValue: widget
+                                                                .todaysOrder[0]
+                                                                .couponValue,
+                                                            deliveryCharges:
+                                                                double.parse(widget
+                                                                    .todaysOrder[
+                                                                        0]
+                                                                    .deliveryCharges),
+                                                            productOrderId:
+                                                                cartId,
+                                                            couponApplied:
+                                                                couponApplied)));
+                                          },
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                "Pay Now",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
                                         ),
-                                        Text(
-                                          ":",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.purple[600]),
-                                        )
-                                      ])),
-                              Text(
-                                "${widget.todaysOrder[0].paymentOption}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
+                                      )
+                                    : Container()
+                              ]),
                           SizedBox(
                             height: 20,
                           ),
@@ -682,6 +786,12 @@ class _OrderSummaryState extends State<OrderSummary> {
                       child: ListView.builder(
                           itemCount: widget.todaysOrder.length,
                           itemBuilder: (context, int index) {
+                            cartId = [];
+                            for (int i = 0;
+                                i < widget.todaysOrder.length;
+                                i++) {
+                              cartId.add(widget.todaysOrder[i].id);
+                            }
                             return Card(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),

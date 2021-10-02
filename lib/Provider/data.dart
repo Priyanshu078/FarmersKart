@@ -78,7 +78,7 @@ class APIData extends ChangeNotifier {
     choice = value;
     if (choice == Payment.online) {
       paymentText = 'MAKE PAYMENT';
-    } else {
+    } else if (choice == Payment.cod) {
       paymentText = 'PLACE ORDER';
     }
     notifyListeners();

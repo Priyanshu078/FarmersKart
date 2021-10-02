@@ -20,8 +20,23 @@ class PaymentOption extends StatefulWidget {
   String couponValue;
   double deliveryCharges;
   bool couponApplied;
+  bool paynow = false;
+  String orderNumber;
   PaymentOption(
       {Key key,
+      @required this.totalAmount,
+      @required this.couponId,
+      @required this.couponCode,
+      @required this.couponValue,
+      @required this.deliveryCharges,
+      @required this.productOrderId,
+      @required this.couponApplied})
+      : super(key: key);
+
+  PaymentOption.paynow(
+      {Key key,
+      @required this.paynow,
+      @required this.orderNumber,
       @required this.totalAmount,
       @required this.couponId,
       @required this.couponCode,
@@ -39,6 +54,7 @@ class _PaymentOptionState extends State<PaymentOption> {
   Razorpay _razorpay;
   // bool checkbox = false;
   Payment option;
+  double totalAmount = 0.0;
   double walletamount = 0;
   // var amount = '70.0';
   bool onlinePayment = false;
@@ -106,6 +122,17 @@ class _PaymentOptionState extends State<PaymentOption> {
 
   @override
   Widget build(BuildContext context) {
+    if (Provider.of<APIData>(context, listen: false).choice != null) {
+      Provider.of<APIData>(context, listen: false)
+          .initializepaymentChoice(null);
+    }
+    if (Provider.of<APIData>(context, listen: false).walletUsed) {
+      Provider.of<APIData>(context, listen: false).useWallet();
+    }
+    if (widget.paynow) {
+      Provider.of<APIData>(context, listen: false)
+          .initializeTotalAmount(widget.totalAmount);
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -240,27 +267,30 @@ class _PaymentOptionState extends State<PaymentOption> {
                                         activeColor: Colors.purple,
                                       );
                                     }),
-                                    Consumer<APIData>(
-                                        builder: (context, payment, child) {
-                                      return RadioListTile(
-                                        value: Payment.cod,
-                                        groupValue: payment.choice,
-                                        title: Text(
-                                          "COD",
-                                          style: TextStyle(
-                                              color: Colors.orange,
-                                              fontSize: 18),
-                                        ),
-                                        onChanged: (value) {
-                                          Provider.of<APIData>(context,
-                                                  listen: false)
-                                              .initializepaymentChoice(value);
-                                          cashOnDelivery = true;
-                                          onlinePayment = false;
-                                        },
-                                        activeColor: Colors.purple,
-                                      );
-                                    })
+                                    widget.paynow
+                                        ? Container()
+                                        : Consumer<APIData>(
+                                            builder: (context, payment, child) {
+                                            return RadioListTile(
+                                              value: Payment.cod,
+                                              groupValue: payment.choice,
+                                              title: Text(
+                                                "COD",
+                                                style: TextStyle(
+                                                    color: Colors.orange,
+                                                    fontSize: 18),
+                                              ),
+                                              onChanged: (value) {
+                                                Provider.of<APIData>(context,
+                                                        listen: false)
+                                                    .initializepaymentChoice(
+                                                        value);
+                                                cashOnDelivery = true;
+                                                onlinePayment = false;
+                                              },
+                                              activeColor: Colors.purple,
+                                            );
+                                          })
                                   ],
                                 ),
                               )
@@ -350,7 +380,7 @@ class _PaymentOptionState extends State<PaymentOption> {
     String couponValue = widget.couponValue;
     double deliveryCharges =
         Provider.of<APIData>(context, listen: false).deliveryCharges;
-    String orderNumber = randomNumber();
+    String orderNumber = widget.paynow ? widget.orderNumber : randomNumber();
     String walletUsed = "";
     if (Provider.of<APIData>(context, listen: false).walletUsed) {
       walletUsed = "YES";
