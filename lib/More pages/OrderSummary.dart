@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/paymentOption.dart';
 import 'package:intl/intl.dart';
+import 'package:shellcode2/update_order.dart';
 
 class OrderSummary extends StatefulWidget {
   List allOrders;
@@ -406,7 +407,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         ])),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(30),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdateOrder()));
+                                      },
                                       child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
@@ -885,7 +892,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         child: InkWell(
                                           borderRadius:
                                               BorderRadius.circular(30),
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UpdateOrder()));
+                                          },
                                           child: Padding(
                                               padding:
                                                   const EdgeInsets.all(5.0),
