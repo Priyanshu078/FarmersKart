@@ -48,11 +48,19 @@ class APIData extends ChangeNotifier {
   String paymentText = "MAKE PAYMENT";
   int cartProductCount = 0;
   int productQuantity = 1;
+  double totalAddedProductAmount = 0.0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
   void initialUserFavProductCategories(List<UserFavProductCategories> list) {
     this.detailsByCategory = list;
+    notifyListeners();
+  }
+
+  void initializetotalAddedProductAmount(double totalAddedProductAmount) {
+    if (totalAddedProductAmount != null) {
+      this.totalAddedProductAmount = totalAddedProductAmount;
+    }
     notifyListeners();
   }
 

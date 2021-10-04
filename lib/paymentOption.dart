@@ -22,8 +22,22 @@ class PaymentOption extends StatefulWidget {
   bool couponApplied;
   bool paynow = false;
   String orderNumber;
+  bool updateOrder;
   PaymentOption(
       {Key key,
+      @required this.totalAmount,
+      @required this.couponId,
+      @required this.couponCode,
+      @required this.couponValue,
+      @required this.deliveryCharges,
+      @required this.productOrderId,
+      @required this.couponApplied})
+      : super(key: key);
+
+  PaymentOption.updateOrder(
+      {Key key,
+      @required this.updateOrder,
+      @required this.orderNumber,
       @required this.totalAmount,
       @required this.couponId,
       @required this.couponCode,
@@ -216,16 +230,27 @@ class _PaymentOptionState extends State<PaymentOption> {
                                   fontWeight: FontWeight.w700,
                                   fontSize: 20),
                             ),
-                            Consumer<APIData>(
-                                builder: (context, amount, child) {
-                              return Text(
-                                '₹ ${amount.totalAmount}',
-                                style: TextStyle(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20),
-                              );
-                            }),
+                            widget.updateOrder
+                                ? Consumer<APIData>(
+                                    builder: (context, amount, child) {
+                                    return Text(
+                                      '₹ ${amount.totalAddedProductAmount}',
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20),
+                                    );
+                                  })
+                                : Consumer<APIData>(
+                                    builder: (context, amount, child) {
+                                    return Text(
+                                      '₹ ${amount.totalAmount}',
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20),
+                                    );
+                                  }),
                           ],
                         ),
                         SizedBox(height: 40),
@@ -380,7 +405,11 @@ class _PaymentOptionState extends State<PaymentOption> {
     String couponValue = widget.couponValue;
     double deliveryCharges =
         Provider.of<APIData>(context, listen: false).deliveryCharges;
-    String orderNumber = widget.paynow ? widget.orderNumber : randomNumber();
+    String orderNumber = widget.paynow
+        ? widget.orderNumber
+        : widget.updateOrder
+            ? widget.orderNumber
+            : randomNumber();
     String walletUsed = "";
     if (Provider.of<APIData>(context, listen: false).walletUsed) {
       walletUsed = "YES";

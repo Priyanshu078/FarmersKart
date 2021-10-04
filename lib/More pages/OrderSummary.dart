@@ -415,6 +415,24 @@ class _OrderSummaryState extends State<OrderSummary> {
                                                     UpdateOrder(
                                                       orderId: widget
                                                           .allOrders[0].orderId,
+                                                      couponId: widget
+                                                          .allOrders[0]
+                                                          .couponId,
+                                                      couponCode: widget
+                                                          .allOrders[0]
+                                                          .couponCode,
+                                                      couponValue: widget
+                                                          .allOrders[0]
+                                                          .couponValue,
+                                                      deliveryCharges: widget
+                                                          .allOrders[0]
+                                                          .deliveryCharges,
+                                                      couponApplied: widget
+                                                                  .allOrders[0]
+                                                                  .couponCode !=
+                                                              ""
+                                                          ? true
+                                                          : false,
                                                     )));
                                       },
                                       child: Padding(
@@ -465,6 +483,10 @@ class _OrderSummaryState extends State<OrderSummary> {
                           cartId.add(widget.allOrders[i].id);
                         }
                         return Card(
+                          color:
+                              widget.allOrders[index].orderStatus == "Received"
+                                  ? Colors.amber[100]
+                                  : Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
                           elevation: 5,
@@ -524,22 +546,45 @@ class _OrderSummaryState extends State<OrderSummary> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(children: [
-                                    Text("Status : ",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.amber,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(
-                                        "${widget.allOrders[index].orderStatus}",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.purple[600],
-                                            fontWeight: FontWeight.bold)),
-                                  ]),
-                                ),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Row(children: [
+                                          Text("Status : ",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.amber,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(
+                                              "${widget.allOrders[index].orderStatus}",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.purple[600],
+                                                  fontWeight: FontWeight.bold)),
+                                        ]),
+                                      ),
+                                      widget.allOrders[index].orderStatus ==
+                                              "Received"
+                                          ? Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: 16.0),
+                                                child: Text(
+                                                  "Updated",
+                                                  style: TextStyle(
+                                                    color: Colors.purple[600],
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ])
                               ],
                             ),
                           ),
@@ -904,6 +949,25 @@ class _OrderSummaryState extends State<OrderSummary> {
                                                           orderId: widget
                                                               .todaysOrder[0]
                                                               .orderId,
+                                                          couponId: widget
+                                                              .todaysOrder[0]
+                                                              .couponId,
+                                                          couponCode: widget
+                                                              .todaysOrder[0]
+                                                              .couponCode,
+                                                          couponValue: widget
+                                                              .todaysOrder[0]
+                                                              .couponValue,
+                                                          deliveryCharges: widget
+                                                              .todaysOrder[0]
+                                                              .deliveryCharges,
+                                                          couponApplied: widget
+                                                                      .todaysOrder[
+                                                                          0]
+                                                                      .couponCode !=
+                                                                  ""
+                                                              ? true
+                                                              : false,
                                                         )));
                                           },
                                           child: Padding(
@@ -957,6 +1021,10 @@ class _OrderSummaryState extends State<OrderSummary> {
                                   borderRadius: BorderRadius.circular(15)),
                               elevation: 5,
                               child: Container(
+                                color: widget.todaysOrder[index].orderStatus ==
+                                        "Received"
+                                    ? Colors.amber[100]
+                                    : Colors.white,
                                 child: Column(
                                   children: [
                                     Padding(
@@ -1012,22 +1080,51 @@ class _OrderSummaryState extends State<OrderSummary> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Row(children: [
-                                        Text("Status : ",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.amber,
-                                                fontWeight: FontWeight.bold)),
-                                        Text(
-                                            "${widget.todaysOrder[index].orderStatus}",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.purple[600],
-                                                fontWeight: FontWeight.bold)),
-                                      ]),
-                                    ),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: Row(children: [
+                                              Text("Status : ",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.amber,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Text(
+                                                  "${widget.todaysOrder[index].orderStatus}",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.purple[600],
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ]),
+                                          ),
+                                          widget.todaysOrder[index]
+                                                      .orderStatus ==
+                                                  "Received"
+                                              ? Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 16),
+                                                    child: Text(
+                                                      "Updated",
+                                                      style: TextStyle(
+                                                        color:
+                                                            Colors.purple[600],
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ])
                                   ],
                                 ),
                               ),
