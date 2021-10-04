@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'Authentication pages/otpverification.dart';
 import 'More pages/ImmunityMore.dart';
 import 'apiData/Constants.dart';
 import 'colors.dart';

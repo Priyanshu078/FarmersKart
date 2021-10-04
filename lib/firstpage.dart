@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
 import 'package:shellcode2/apiData/BannerImagesAPI.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:shellcode2/category.dart';
@@ -18,6 +19,7 @@ class FrontPage extends StatefulWidget {
   @override
   _FrontPageState createState() => _FrontPageState();
 }
+
 // bool homePage = true;
 // bool category = false;
 // bool wishlist = false;

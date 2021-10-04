@@ -424,6 +424,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   if (added) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text("Product Successfully added to cart")));
+                    Provider.of<APIData>(context, listen: false)
+                        .inititalizeCartProductCount(
+                            Provider.of<APIData>(context, listen: false)
+                                    .cartProductCount +
+                                1);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Something Went Wrong")));

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:shellcode2/apiData/getUserFav.dart';
 import 'package:shellcode2/apiData/loginApiData.dart';
+import 'package:shellcode2/cart.dart';
 import 'package:shellcode2/filter.dart';
 // import 'package:shellcode2/apiData/BannerImagesAPI.dart';
 import 'package:shellcode2/apiData/subCategory.dart';
@@ -45,6 +46,7 @@ class APIData extends ChangeNotifier {
   String image;
   int index = 0;
   String paymentText = "MAKE PAYMENT";
+  int cartProductCount = 0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -95,6 +97,20 @@ class APIData extends ChangeNotifier {
     onlinePayment = false;
     notifyListeners();
   }
+
+  void inititalizeCartProductCount(int cartProductCount) async {
+    if (cartProductCount != null) {
+      this.cartProductCount = cartProductCount;
+    }
+    notifyListeners();
+  }
+
+  // void getCartProductsCount() async {
+  //   CartState cartState = new CartState();
+  //   List cartProducts = await cartState.getCartProducts();
+  //   cartProductCount = cartProducts.length;
+  //   notifyListeners();
+  // }
 
   void useWallet() {
     walletUsed = !walletUsed;

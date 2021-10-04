@@ -20,10 +20,10 @@ class Cart extends StatefulWidget {
   const Cart({Key key}) : super(key: key);
 
   @override
-  _CartState createState() => _CartState();
+  CartState createState() => CartState();
 }
 
-class _CartState extends State<Cart> {
+class CartState extends State<Cart> {
   TextEditingController specificationController = new TextEditingController();
   TextEditingController couponController = new TextEditingController();
   String title1 = '';
@@ -346,11 +346,17 @@ class _CartState extends State<Cart> {
                                                                                         style: TextStyle(color: Colors.black),
                                                                                       )),
                                                                                   TextButton(
-                                                                                      onPressed: () {
-                                                                                        setState(() {
-                                                                                          deleteFromCart(snapshot.data[index][i].productId, snapshot.data[index][i].weight);
-                                                                                        });
-                                                                                        Navigator.pop(context);
+                                                                                      onPressed: () async {
+                                                                                        bool deleted = await deleteFromCart(snapshot.data[index][i].productId, snapshot.data[index][i].weight);
+                                                                                        if (deleted) {
+                                                                                          Navigator.pop(context);
+                                                                                          setState(() {});
+                                                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted Successfully")));
+                                                                                        } else {
+                                                                                          Navigator.pop(context);
+                                                                                          setState(() {});
+                                                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something Went Wrong, Please try Again!!")));
+                                                                                        }
                                                                                       },
                                                                                       child: Text(
                                                                                         "YES",
@@ -710,14 +716,16 @@ class _CartState extends State<Cart> {
     if (jsonData["code"] == "200") {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Specification Added Successfully")));
+      setState(() {});
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
     }
   }
 
-  void deleteFromCart(String productId, String weight) async {
+  Future<bool> deleteFromCart(String productId, String weight) async {
     String userId = Provider.of<APIData>(context, listen: false).userId;
+    bool deleted = false;
     http.Response response;
     String url =
         "$header/app_api/deletefromcart_order.php?user_id=$userId&product_id=$productId&weight=$weight";
@@ -725,12 +733,11 @@ class _CartState extends State<Cart> {
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
     if (jsonData["code"] == "200") {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Deleted Successfully")));
+      deleted = true;
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Something Went Wrong")));
+      deleted = false;
     }
+    return deleted;
   }
 
   Future<List> getCartProducts() async {
@@ -955,9 +962,17 @@ class _CartState extends State<Cart> {
       Provider.of<APIData>(context, listen: false)
           .initializeTotalDiscount(totalDiscount);
     }
-
+    int itemCount = 0;
+    if (differentCategoryData.length != 0) {
+      for (var item in differentCategoryData) {
+        itemCount += item.length;
+      }
+    } else {
+      itemCount = 0;
+    }
     print(totalAmount);
-    // Provider.of<APIData>(context,listen: false).initializeTotalAmount(totalAmount);
+    Provider.of<APIData>(context, listen: false)
+        .inititalizeCartProductCount(itemCount);
     return differentCategoryData;
   }
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/handyOrder.dart';
 import 'package:shellcode2/Notifications.dart';
+import 'package:shellcode2/apiData/CartProducts.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
 import 'package:shellcode2/apiData/allProducts.dart';
@@ -30,7 +30,6 @@ import 'package:shellcode2/Provider/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'apiData/BannerImagesAPI.dart';
-
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
 List offerData = offersData;
@@ -71,6 +70,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     getAllProducts();
+    getCartProducts(context);
     requestPermission(_permission);
     imgList = bannerImages;
     if (Provider.of<APIData>(context, listen: false).centerId == null) {
@@ -98,15 +98,30 @@ class _HomeState extends State<Home> {
         elevation: 0,
         iconTheme: IconThemeData(color: yellow),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Cart()));
-              },
-              icon: Icon(
-                Icons.shopping_cart,
-                color: yellow,
-              )),
+          Stack(alignment: Alignment.topRight, children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Cart()));
+                },
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: yellow,
+                )),
+            Consumer<APIData>(builder: (context, data, child) {
+              return Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.purple[900]),
+                height: 20,
+                width: 20,
+                child: Text(
+                  "${data.cartProductCount}",
+                  textAlign: TextAlign.center,
+                ),
+              );
+            })
+          ]),
           IconButton(
               onPressed: () {
                 Navigator.push(context,
@@ -651,7 +666,7 @@ class _HomeState extends State<Home> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ProductDetails.offers(
-                                                      temp2, 1, true,true)));
+                                                      temp2, 1, true, true)));
                                     },
                                     child: Container(
                                       margin: EdgeInsets.all(10),
@@ -1626,7 +1641,8 @@ class _HomeState extends State<Home> {
     allProducts = [];
     http.Response response;
     String usertype = "Society";
-    String url = "https://uprank.live/farmerskart/app_api/getAllProducts.php?user_type=$usertype";
+    String url =
+        "https://uprank.live/farmerskart/app_api/getAllProducts.php?user_type=$usertype";
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);
@@ -1661,6 +1677,193 @@ class _HomeState extends State<Home> {
     print(allProducts);
     return allProducts;
   }
+}
+
+void getCartProducts(BuildContext context) async {
+  String userId = Provider.of<APIData>(context, listen: false).user.id;
+  http.Response response;
+  String url = "$header/app_api/getCartProducts.php?user_id=$userId";
+  print(url);
+  Uri uri = Uri.parse(url);
+  response = await http.get(uri);
+  var jsonData = jsonDecode(response.body);
+  List cartproductsList = jsonData["order"];
+  List productCategories = [];
+  if (jsonData["code"] == "200") {
+    for (int i = 0; i < cartproductsList.length; i++) {
+      String category = cartproductsList[i]["category_name"];
+      if (!productCategories.contains(category)) {
+        productCategories.add(category);
+      }
+    }
+  }
+  List bakery = [];
+  List vegetables = [];
+  List grocery = [];
+  List dairy = [];
+  List pooja = [];
+  for (int i = 0; i < cartproductsList.length; i++) {
+    String category = cartproductsList[i]["category_name"];
+    switch (category) {
+      case "Fresh Vegetables & fruit":
+        ProductsCart productsCart = new ProductsCart(
+            cartproductsList[i]["category_name"],
+            cartproductsList[i]["product_name"],
+            cartproductsList[i]["product_img"],
+            cartproductsList[i]["id"],
+            cartproductsList[i]["user_id"],
+            cartproductsList[i]["order_id"],
+            cartproductsList[i]["quantity"],
+            cartproductsList[i]["product_id"],
+            cartproductsList[i]["unit_price"],
+            cartproductsList[i]["order_status"],
+            cartproductsList[i]["admin_status"],
+            cartproductsList[i]["cart"],
+            cartproductsList[i]["created_date"],
+            cartproductsList[i]["total_amount"],
+            cartproductsList[i]["updated_date"],
+            cartproductsList[i]["cancelled_reason"],
+            cartproductsList[i]["wallet"],
+            cartproductsList[i]["weight"],
+            cartproductsList[i]["specification"],
+            cartproductsList[i]["coupon_value"],
+            cartproductsList[i]["unit"],
+            cartproductsList[i]["unit_original_price"],
+            cartproductsList[i]["address_id"]);
+        vegetables.add(productsCart);
+        break;
+      case "Grocery & Staples":
+        ProductsCart productsCart = new ProductsCart(
+            cartproductsList[i]["category_name"],
+            cartproductsList[i]["product_name"],
+            cartproductsList[i]["product_img"],
+            cartproductsList[i]["id"],
+            cartproductsList[i]["user_id"],
+            cartproductsList[i]["order_id"],
+            cartproductsList[i]["quantity"],
+            cartproductsList[i]["product_id"],
+            cartproductsList[i]["unit_price"],
+            cartproductsList[i]["order_status"],
+            cartproductsList[i]["admin_status"],
+            cartproductsList[i]["cart"],
+            cartproductsList[i]["created_date"],
+            cartproductsList[i]["total_amount"],
+            cartproductsList[i]["updated_date"],
+            cartproductsList[i]["cancelled_reason"],
+            cartproductsList[i]["wallet"],
+            cartproductsList[i]["weight"],
+            cartproductsList[i]["specification"],
+            cartproductsList[i]["coupon_value"],
+            cartproductsList[i]["unit"],
+            cartproductsList[i]["unit_original_price"],
+            cartproductsList[i]["address_id"]);
+        grocery.add(productsCart);
+        break;
+      case "Bakery & Confectionery":
+        ProductsCart productsCart = new ProductsCart(
+            cartproductsList[i]["category_name"],
+            cartproductsList[i]["product_name"],
+            cartproductsList[i]["product_img"],
+            cartproductsList[i]["id"],
+            cartproductsList[i]["user_id"],
+            cartproductsList[i]["order_id"],
+            cartproductsList[i]["quantity"],
+            cartproductsList[i]["product_id"],
+            cartproductsList[i]["unit_price"],
+            cartproductsList[i]["order_status"],
+            cartproductsList[i]["admin_status"],
+            cartproductsList[i]["cart"],
+            cartproductsList[i]["created_date"],
+            cartproductsList[i]["total_amount"],
+            cartproductsList[i]["updated_date"],
+            cartproductsList[i]["cancelled_reason"],
+            cartproductsList[i]["wallet"],
+            cartproductsList[i]["weight"],
+            cartproductsList[i]["specification"],
+            cartproductsList[i]["coupon_value"],
+            cartproductsList[i]["unit"],
+            cartproductsList[i]["unit_original_price"],
+            cartproductsList[i]["address_id"]);
+        bakery.add(productsCart);
+        break;
+      case "Dairy":
+        ProductsCart productsCart = new ProductsCart(
+            cartproductsList[i]["category_name"],
+            cartproductsList[i]["product_name"],
+            cartproductsList[i]["product_img"],
+            cartproductsList[i]["id"],
+            cartproductsList[i]["user_id"],
+            cartproductsList[i]["order_id"],
+            cartproductsList[i]["quantity"],
+            cartproductsList[i]["product_id"],
+            cartproductsList[i]["unit_price"],
+            cartproductsList[i]["order_status"],
+            cartproductsList[i]["admin_status"],
+            cartproductsList[i]["cart"],
+            cartproductsList[i]["created_date"],
+            cartproductsList[i]["total_amount"],
+            cartproductsList[i]["updated_date"],
+            cartproductsList[i]["cancelled_reason"],
+            cartproductsList[i]["wallet"],
+            cartproductsList[i]["weight"],
+            cartproductsList[i]["specification"],
+            cartproductsList[i]["coupon_value"],
+            cartproductsList[i]["unit"],
+            cartproductsList[i]["unit_original_price"],
+            cartproductsList[i]["address_id"]);
+        dairy.add(productsCart);
+        break;
+      case "Pooja ":
+        ProductsCart productsCart = new ProductsCart(
+            cartproductsList[i]["category_name"],
+            cartproductsList[i]["product_name"],
+            cartproductsList[i]["product_img"],
+            cartproductsList[i]["id"],
+            cartproductsList[i]["user_id"],
+            cartproductsList[i]["order_id"],
+            cartproductsList[i]["quantity"],
+            cartproductsList[i]["product_id"],
+            cartproductsList[i]["unit_price"],
+            cartproductsList[i]["order_status"],
+            cartproductsList[i]["admin_status"],
+            cartproductsList[i]["cart"],
+            cartproductsList[i]["created_date"],
+            cartproductsList[i]["total_amount"],
+            cartproductsList[i]["updated_date"],
+            cartproductsList[i]["cancelled_reason"],
+            cartproductsList[i]["wallet"],
+            cartproductsList[i]["weight"],
+            cartproductsList[i]["specification"],
+            cartproductsList[i]["coupon_value"],
+            cartproductsList[i]["unit"],
+            cartproductsList[i]["unit_original_price"],
+            cartproductsList[i]["address_id"]);
+        pooja.add(productsCart);
+        break;
+    }
+  }
+  List differentCategoryData = [];
+  if (vegetables.isNotEmpty) {
+    differentCategoryData.add(vegetables);
+  }
+  if (grocery.isNotEmpty) {
+    differentCategoryData.add(grocery);
+  }
+  if (bakery.isNotEmpty) {
+    differentCategoryData.add(bakery);
+  }
+  if (dairy.isNotEmpty) {
+    differentCategoryData.add(dairy);
+  }
+  if (pooja.isNotEmpty) {
+    differentCategoryData.add(pooja);
+  }
+  int itemCount = 0;
+  for (var item in differentCategoryData) {
+    itemCount += item.length;
+  }
+  Provider.of<APIData>(context, listen: false)
+      .inititalizeCartProductCount(itemCount);
 }
 
 class SearchProducts extends SearchDelegate<String> {
@@ -1731,8 +1934,9 @@ class SearchProducts extends SearchDelegate<String> {
                 suggestionList[index].price[0].discount
               ];
               if (suggestionList[index].price[0].discountedPrice.toString() ==
-                  "" || suggestionList[index].price[0].discountedPrice.toString() ==
-              " .") {
+                      "" ||
+                  suggestionList[index].price[0].discountedPrice.toString() ==
+                      " .") {
                 print(temp[6][0].unit);
                 Navigator.push(
                     context,
