@@ -6,7 +6,8 @@ import 'package:shellcode2/paymentOption.dart';
 import 'colors.dart';
 
 class UpdateOrder extends StatefulWidget {
-  UpdateOrder({Key key}) : super(key: key);
+  String orderId;
+  UpdateOrder({Key key, @required this.orderId}) : super(key: key);
 
   @override
   _UpdateOrderState createState() => _UpdateOrderState();
@@ -119,7 +120,9 @@ class _UpdateOrderState extends State<UpdateOrder> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AddProduct()));
+                                builder: (context) => AddProduct(
+                                      orderId: widget.orderId,
+                                    )));
                       },
                       child: Padding(
                           padding: const EdgeInsets.all(10.0),

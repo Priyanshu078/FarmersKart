@@ -412,7 +412,10 @@ class _OrderSummaryState extends State<OrderSummary> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    UpdateOrder()));
+                                                    UpdateOrder(
+                                                      orderId: widget
+                                                          .allOrders[0].orderId,
+                                                    )));
                                       },
                                       child: Padding(
                                           padding: const EdgeInsets.all(5.0),
@@ -897,7 +900,11 @@ class _OrderSummaryState extends State<OrderSummary> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        UpdateOrder()));
+                                                        UpdateOrder(
+                                                          orderId: widget
+                                                              .todaysOrder[0]
+                                                              .orderId,
+                                                        )));
                                           },
                                           child: Padding(
                                               padding:

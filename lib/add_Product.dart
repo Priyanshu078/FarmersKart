@@ -5,19 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shellcode2/Provider/data.dart';
 import 'More pages/ImmunityMore.dart';
 import 'apiData/Constants.dart';
 import 'colors.dart';
 
 class AddProduct extends StatefulWidget {
-  AddProduct({Key key}) : super(key: key);
+  String orderId;
+  AddProduct({Key key, @required this.orderId}) : super(key: key);
 
   @override
   _AddProductState createState() => _AddProductState();
 }
 
 class _AddProductState extends State<AddProduct> {
-  int selectedIndex = 0;
+  int selectedIndex;
   List temp = [];
   @override
   Widget build(BuildContext context) {
@@ -141,6 +144,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Widget buildSheet(String category) {
+    Provider.of<APIData>(context, listen: false).initializeIndex(-1);
     return DraggableScrollableSheet(
         initialChildSize: 0.8,
         // minChildSize: 1,
@@ -335,45 +339,128 @@ class _AddProductState extends State<AddProduct> {
                                           ),
                                           Align(
                                             alignment: Alignment.centerRight,
-                                            child: MaterialButton(
-                                              elevation: 0.0,
-                                              color: bgcolor,
-                                              onPressed: () {
-                                                setState(() {
-                                                  selectedIndex = index;
-                                                });
+                                            child: InkWell(
+                                              onTap: () async {
+                                                Provider.of<APIData>(context,
+                                                        listen: false)
+                                                    .initializeIndex(index);
+                                                Provider.of<APIData>(context,
+                                                        listen: false)
+                                                    .initializeProductQuantity(
+                                                        1);
+                                                bool added = await addProductToCart(
+                                                    snapshot.data[index].id,
+                                                    Provider.of<APIData>(
+                                                            context,
+                                                            listen: false)
+                                                        .productQuantity
+                                                        .toString(),
+                                                    snapshot
+                                                                .data[index]
+                                                                .productPrice[0]
+                                                                .discountedPrice ==
+                                                            ""
+                                                        ? snapshot
+                                                            .data[index]
+                                                            .productPrice[0]
+                                                            .originalPrice
+                                                        : snapshot
+                                                            .data[index]
+                                                            .productPrice[0]
+                                                            .discountedPrice,
+                                                    snapshot.data[index]
+                                                        .productPrice[0].weight,
+                                                    snapshot.data[index]
+                                                        .productPrice[0].unit,
+                                                    snapshot
+                                                        .data[index]
+                                                        .productPrice[0]
+                                                        .originalPrice);
+                                                if (added) {
+                                                  showSnackBar(
+                                                      "Added to cart Successfully");
+                                                } else {
+                                                  showSnackBar(
+                                                      "Something Went Wrong");
+                                                }
                                               },
-                                              child: selectedIndex == index
-                                                  ? Container(
-                                                      child: CustomStepper(
-                                                        lowerLimit: 1,
-                                                        upperLimit: 10,
-                                                        value: 1,
-                                                        stepValue: 1,
-                                                        iconSize: 10,
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      height: 25,
-                                                      width: 80,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                        color:
-                                                            Colors.purple[700],
-                                                      ),
-                                                      child: Align(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Text(
-                                                          "ADD",
-                                                          style: TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      )),
+                                              child: Consumer<APIData>(builder:
+                                                  (context, data, child) {
+                                                return Container(
+                                                  child: index == data.index
+                                                      ? Container(
+                                                          child: CustomStepper(
+                                                              1,
+                                                              10,
+                                                              Provider.of<APIData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .productQuantity,
+                                                              20.0,
+                                                              1,
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .id,
+                                                              Provider.of<APIData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .productQuantity,
+                                                              snapshot.data[index].productPrice[0].discountedPrice ==
+                                                                      ""
+                                                                  ? snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .productPrice[
+                                                                          0]
+                                                                      .originalPrice
+                                                                  : snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .productPrice[
+                                                                          0]
+                                                                      .discountedPrice,
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .productPrice[
+                                                                      0]
+                                                                  .weight,
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .productPrice[
+                                                                      0]
+                                                                  .unit,
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .productPrice[0]
+                                                                  .originalPrice),
+                                                        )
+                                                      : Container(
+                                                          height: 25,
+                                                          width: 80,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5.0),
+                                                            color: Colors
+                                                                .purple[700],
+                                                          ),
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Text(
+                                                              "ADD",
+                                                              style: TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          )),
+                                                );
+                                              }),
                                             ),
                                           ),
                                         ],
@@ -394,6 +481,161 @@ class _AddProductState extends State<AddProduct> {
             ),
           );
         });
+  }
+
+  Widget CustomStepper(
+      int lowerLimit,
+      int upperLimit,
+      int stepValue,
+      dynamic iconSize,
+      int value,
+      String productid,
+      int proQuantity,
+      String unitprice,
+      String Weight,
+      String Unit,
+      String originalprice) {
+    return Container(
+      height: 30,
+      width: 120,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.purple),
+          borderRadius: BorderRadius.circular(5)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              child: Icon(
+                Icons.remove,
+                color: Colors.deepPurple,
+                size: 20,
+              ),
+              onTap: () async {
+                int quantity = 0;
+                if (Provider.of<APIData>(context, listen: false)
+                        .productQuantity >
+                    1) {
+                  quantity = Provider.of<APIData>(context, listen: false)
+                          .productQuantity -
+                      1;
+                } else {
+                  quantity = 1;
+                }
+                Provider.of<APIData>(context, listen: false)
+                    .initializeProductQuantity(quantity);
+                //   proQuantity -= 1;
+                bool added = await addProductToCart(
+                    productid,
+                    quantity.toString(),
+                    unitprice,
+                    Weight,
+                    Unit,
+                    originalprice);
+                if (added) {
+                  showSnackBar("Added to cart Successfully");
+                } else {
+                  showSnackBar("Something Went Wrong");
+                }
+                // }
+              },
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                  gradient:
+                      LinearGradient(colors: [left, middle, Colors.purple])),
+              width: iconSize,
+              child: Center(
+                child: FittedBox(
+                  child: Consumer<APIData>(builder: (context, data, child) {
+                    return Text(
+                      '${data.productQuantity}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    );
+                  }),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              child: Icon(Icons.add, color: Colors.greenAccent, size: 20),
+              onTap: () async {
+                int quantity = Provider.of<APIData>(context, listen: false)
+                        .productQuantity +
+                    1;
+                Provider.of<APIData>(context, listen: false)
+                    .initializeProductQuantity(quantity);
+                // proQuantity += 1;
+                bool added = await addProductToCart(
+                    productid,
+                    quantity.toString(),
+                    unitprice,
+                    Weight,
+                    Unit,
+                    originalprice);
+                if (added) {
+                  showSnackBar("Added to cart Successfully");
+                } else {
+                  showSnackBar("Something Went Wrong");
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showSnackBar(String content) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(content)));
+  }
+
+  Future<bool> addProductToCart(
+      String productid,
+      String proQuantity,
+      String unitprice,
+      String Weight,
+      String Unit,
+      String originalprice) async {
+    http.Response response;
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    String productId = productid;
+    print(productId);
+    String Quantity = proQuantity;
+    String unitPrice = unitprice;
+    print(unitPrice);
+    String weight = Weight;
+    print(weight);
+    String unit = Unit;
+    print(unit);
+    String orderNumber = widget.orderId;
+    String originalPrice = originalprice;
+    print(originalPrice);
+    String url =
+        "$header/app_api/addtocart_order.php?user_id=$userId&product_id=$productId&quantity=$Quantity&unit_price=$unitPrice&weight=$weight&unit=$unit&unit_original_price=$originalPrice&order_number=$orderNumber";
+    print(url);
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    bool added = false;
+    if (jsonData["code"] == "200") {
+      added = true;
+    } else {
+      added = false;
+    }
+    return added;
   }
 
   Future<List> getCategoryProducts(String category) async {
@@ -545,7 +787,7 @@ Widget addToDoPopUpCard(BuildContext context, int index, List temp) {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${temp[index].productPrice[0].weight} ${temp[index].productPrice[0].unit} -',
+                            '${temp[index].productPrice[k].weight} ${temp[index].productPrice[k].unit} -',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,

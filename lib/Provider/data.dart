@@ -44,14 +44,22 @@ class APIData extends ChangeNotifier {
   String flat;
   String mobile;
   String image;
-  int index = 0;
+  int index;
   String paymentText = "MAKE PAYMENT";
   int cartProductCount = 0;
+  int productQuantity = 1;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
   void initialUserFavProductCategories(List<UserFavProductCategories> list) {
     this.detailsByCategory = list;
+    notifyListeners();
+  }
+
+  void initializeProductQuantity(int productQuantity) {
+    if (productQuantity != null) {
+      this.productQuantity = productQuantity;
+    }
     notifyListeners();
   }
 
@@ -104,13 +112,6 @@ class APIData extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // void getCartProductsCount() async {
-  //   CartState cartState = new CartState();
-  //   List cartProducts = await cartState.getCartProducts();
-  //   cartProductCount = cartProducts.length;
-  //   notifyListeners();
-  // }
 
   void useWallet() {
     walletUsed = !walletUsed;
