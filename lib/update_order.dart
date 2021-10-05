@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:shellcode2/add_Product.dart';
 import 'package:shellcode2/apiData/Constants.dart';
+import 'package:shellcode2/main.dart';
 import 'package:shellcode2/paymentOption.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,9 +30,43 @@ class UpdateOrder extends StatefulWidget {
   _UpdateOrderState createState() => _UpdateOrderState();
 }
 
-class _UpdateOrderState extends State<UpdateOrder> {
+class _UpdateOrderState extends State<UpdateOrder> with RouteAware {
   double totalAmount = 0.0;
   List cartId = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  // Called when the top route has been popped off, and the current route shows up.
+  void didPopNext() {
+    debugPrint("didPopNext ${runtimeType}");
+    setState(() {});
+  }
+
+  // Called when the current route has been pushed.
+  void didPush() {
+    debugPrint("didPush ${runtimeType}");
+  }
+
+  // Called when the current route has been popped off.
+  void didPop() {
+    debugPrint("didPop ${runtimeType}");
+  }
+
+  // Called when a new route has been pushed, and the current route is no longer visible.
+  void didPushNext() {
+    debugPrint("didPushNext ${runtimeType}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -497,9 +532,10 @@ class _UpdateOrderState extends State<UpdateOrder> {
   Future<bool> deleteFromCart(String productId, String weight) async {
     String userId = Provider.of<APIData>(context, listen: false).userId;
     bool deleted = false;
+    String orderId = widget.orderId;
     http.Response response;
     String url =
-        "$header/app_api/deletefromcart_order.php?user_id=$userId&product_id=$productId&weight=$weight";
+        "$header/app_api/deletefromcart_order.php?user_id=$userId&product_id=$productId&weight=$weight&order_id=$orderId";
     Uri uri = Uri.parse(url);
     response = await http.get(uri);
     var jsonData = jsonDecode(response.body);

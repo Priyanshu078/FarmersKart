@@ -22,7 +22,7 @@ class PaymentOption extends StatefulWidget {
   bool couponApplied;
   bool paynow = false;
   String orderNumber;
-  bool updateOrder;
+  bool updateOrder = false;
   PaymentOption(
       {Key key,
       @required this.totalAmount,

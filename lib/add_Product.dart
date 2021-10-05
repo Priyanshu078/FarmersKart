@@ -46,6 +46,10 @@ class _AddProductState extends State<AddProduct> {
                           return InkWell(
                             splashColor: Colors.grey,
                             onTap: () {
+                              Provider.of<APIData>(context, listen: false)
+                                  .initializeProductIndex(0);
+                              Provider.of<APIData>(context, listen: false)
+                                  .initializeProductPriceIndex(0);
                               showModalBottomSheet(
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
@@ -165,310 +169,380 @@ class _AddProductState extends State<AddProduct> {
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.all(10),
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          spreadRadius: 1,
-                                          blurRadius: 1,
-                                          offset: Offset(0, 1),
-                                          color: Colors.black38)
-                                    ]),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 20, 10, 20),
-                                      child: Container(
-                                        height: 70,
-                                        width: 70,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "http://uprank.live/farmerskart/images/product/${snapshot.data[index].img}",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                  colorFilter: ColorFilter.mode(
-                                                      Colors.transparent,
-                                                      BlendMode.colorBurn)),
+                              return Consumer<APIData>(
+                                  builder: (context, obj, child) {
+                                return Container(
+                                  margin: EdgeInsets.all(10),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 1,
+                                            blurRadius: 1,
+                                            offset: Offset(0, 1),
+                                            color: Colors.black38)
+                                      ]),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 20, 10, 20),
+                                        child: Container(
+                                          height: 70,
+                                          width: 70,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "http://uprank.live/farmerskart/images/product/${snapshot.data[index].img}",
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Colors.transparent,
+                                                            BlendMode
+                                                                .colorBurn)),
+                                              ),
                                             ),
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
                                           ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          (1 / 2 + 1 / 8),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            snapshot.data[index].name,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                              color: Colors.deepPurple,
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                (1 / 2 + 1 / 8),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              snapshot.data[index].name,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Colors.deepPurple,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      addToDoPopUpCard(context,
-                                                          index, temp));
-                                            },
-                                            child: Hero(
-                                              tag: addToDoPopUpCard,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border(
-                                                    top: BorderSide(
-                                                        width: 2.0,
-                                                        color: Colors.purple),
-                                                    left: BorderSide(
-                                                        width: 2.0,
-                                                        color: Colors.purple),
-                                                    right: BorderSide(
-                                                        width: 2.0,
-                                                        color: Colors.purple),
-                                                    bottom: BorderSide(
-                                                        width: 2.0,
-                                                        color: Colors.purple),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Provider.of<APIData>(context,
+                                                        listen: false)
+                                                    .initializeProductIndex(
+                                                        index);
+                                                Provider.of<APIData>(context,
+                                                        listen: false)
+                                                    .initializeProductPriceIndex(
+                                                        0);
+
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        addToDoPopUpCard(
+                                                            context,
+                                                            index,
+                                                            temp));
+                                              },
+                                              child: Hero(
+                                                tag: addToDoPopUpCard,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      top: BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.purple),
+                                                      left: BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.purple),
+                                                      right: BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.purple),
+                                                      bottom: BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.purple),
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
                                                   ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.0),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                        " ${snapshot.data[index].productPrice[0].weight} ${snapshot.data[index].productPrice[0].unit}",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: yellow,
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Flexible(
+                                                        child: Text(
+                                                          Provider.of<APIData>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .productIndex ==
+                                                                  index
+                                                              ? " ${snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].weight} ${snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].unit}"
+                                                              : " ${snapshot.data[index].productPrice[0].weight} ${snapshot.data[index].productPrice[0].unit}",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: yellow,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.keyboard_arrow_down,
-                                                      color: yellow,
-                                                    )
-                                                  ],
+                                                      Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down,
+                                                        color: yellow,
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              snapshot
-                                                          .data[index]
-                                                          .productPrice[0]
-                                                          .discountedPrice ==
-                                                      ""
-                                                  ? Text(
-                                                      "₹  ${snapshot.data[index].productPrice[0].originalPrice}",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                        color: Colors.purple,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      "₹  ${snapshot.data[index].productPrice[0].discountedPrice}",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                        color: Colors.purple,
-                                                      ),
-                                                    ),
-                                              RatingBar.builder(
-                                                unratedColor: Colors.grey[300],
-                                                itemCount: 5,
-                                                initialRating: 0,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemSize: 18,
-                                                itemBuilder: (context, _) =>
-                                                    Icon(
-                                                  Icons.star,
-                                                  size: 1.0,
-                                                  color: yellow,
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: InkWell(
-                                              onTap: () async {
-                                                Provider.of<APIData>(context,
-                                                        listen: false)
-                                                    .initializeIndex(index);
-                                                Provider.of<APIData>(context,
-                                                        listen: false)
-                                                    .initializeProductQuantity(
-                                                        1);
-                                                bool added = await addProductToCart(
-                                                    snapshot.data[index].id,
-                                                    Provider.of<APIData>(
-                                                            context,
-                                                            listen: false)
-                                                        .productQuantity
-                                                        .toString(),
-                                                    snapshot
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                obj.productIndex == index
+                                                    ? snapshot
+                                                                .data[obj
+                                                                    .productIndex]
+                                                                .productPrice[obj
+                                                                    .productPriceIndex]
+                                                                .discountedPrice ==
+                                                            ""
+                                                        ? Text(
+                                                            "₹  ${snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].originalPrice}",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.purple,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            "₹  ${snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].discountedPrice}",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.purple,
+                                                            ),
+                                                          )
+                                                    : snapshot
                                                                 .data[index]
                                                                 .productPrice[0]
                                                                 .discountedPrice ==
                                                             ""
-                                                        ? snapshot
-                                                            .data[index]
-                                                            .productPrice[0]
-                                                            .originalPrice
-                                                        : snapshot
-                                                            .data[index]
-                                                            .productPrice[0]
-                                                            .discountedPrice,
-                                                    snapshot.data[index]
-                                                        .productPrice[0].weight,
-                                                    snapshot.data[index]
-                                                        .productPrice[0].unit,
-                                                    snapshot
-                                                        .data[index]
-                                                        .productPrice[0]
-                                                        .originalPrice);
-                                                if (added) {
-                                                  showSnackBar(
-                                                      "Added to cart Successfully");
-                                                } else {
-                                                  showSnackBar(
-                                                      "Something Went Wrong");
-                                                }
-                                              },
-                                              child: Consumer<APIData>(builder:
-                                                  (context, data, child) {
-                                                return Container(
-                                                  child: index == data.index
-                                                      ? Container(
-                                                          child: CustomStepper(
-                                                              1,
-                                                              10,
-                                                              Provider.of<APIData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .productQuantity,
-                                                              20.0,
-                                                              1,
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .id,
-                                                              Provider.of<APIData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .productQuantity,
-                                                              snapshot.data[index].productPrice[0].discountedPrice ==
-                                                                      ""
-                                                                  ? snapshot
-                                                                      .data[
-                                                                          index]
-                                                                      .productPrice[
-                                                                          0]
-                                                                      .originalPrice
-                                                                  : snapshot
-                                                                      .data[
-                                                                          index]
-                                                                      .productPrice[
-                                                                          0]
-                                                                      .discountedPrice,
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .productPrice[
-                                                                      0]
-                                                                  .weight,
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .productPrice[
-                                                                      0]
-                                                                  .unit,
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .productPrice[0]
-                                                                  .originalPrice),
-                                                        )
-                                                      : Container(
-                                                          height: 25,
-                                                          width: 80,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5.0),
-                                                            color: Colors
-                                                                .purple[700],
-                                                          ),
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              "ADD",
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .white),
+                                                        ? Text(
+                                                            "₹  ${snapshot.data[index].productPrice[0].originalPrice}",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.purple,
                                                             ),
-                                                          )),
-                                                );
-                                              }),
+                                                          )
+                                                        : Text(
+                                                            "₹  ${snapshot.data[index].productPrice[0].discountedPrice}",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.purple,
+                                                            ),
+                                                          ),
+                                                RatingBar.builder(
+                                                  unratedColor:
+                                                      Colors.grey[300],
+                                                  itemCount: 5,
+                                                  initialRating: 0,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemSize: 18,
+                                                  itemBuilder: (context, _) =>
+                                                      Icon(
+                                                    Icons.star,
+                                                    size: 1.0,
+                                                    color: yellow,
+                                                  ),
+                                                  onRatingUpdate: (rating) {
+                                                    print(rating);
+                                                  },
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  Provider.of<APIData>(context,
+                                                          listen: false)
+                                                      .initializeIndex(index);
+                                                  Provider.of<APIData>(context,
+                                                          listen: false)
+                                                      .initializeProductQuantity(
+                                                          1);
+                                                  // Provider.of<APIData>(context,
+                                                  //         listen: false)
+                                                  //     .initializeProductIndex(
+                                                  //         index);
+                                                  // Provider.of<APIData>(context,
+                                                  //         listen: false)
+                                                  //     .initializeProductPriceIndex(
+                                                  //         0);
+                                                  bool added = false;
+                                                  obj.productIndex == index
+                                                      ? added = await addProductToCart(
+                                                          snapshot
+                                                              .data[obj
+                                                                  .productIndex]
+                                                              .id,
+                                                          obj.productQuantity
+                                                              .toString(),
+                                                          snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].discountedPrice ==
+                                                                  ""
+                                                              ? snapshot
+                                                                  .data[obj
+                                                                      .productIndex]
+                                                                  .productPrice[obj
+                                                                      .productPriceIndex]
+                                                                  .originalPrice
+                                                              : snapshot
+                                                                  .data[obj
+                                                                      .productIndex]
+                                                                  .productPrice[obj
+                                                                      .productPriceIndex]
+                                                                  .discountedPrice,
+                                                          snapshot
+                                                              .data[obj
+                                                                  .productIndex]
+                                                              .productPrice[obj
+                                                                  .productPriceIndex]
+                                                              .weight,
+                                                          snapshot
+                                                              .data[obj.productIndex]
+                                                              .productPrice[obj.productPriceIndex]
+                                                              .unit,
+                                                          snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].originalPrice)
+                                                      : added = await addProductToCart(snapshot.data[index].id, Provider.of<APIData>(context, listen: false).productQuantity.toString(), snapshot.data[index].productPrice[0].discountedPrice == "" ? snapshot.data[index].productPrice[0].originalPrice : snapshot.data[index].productPrice[0].discountedPrice, snapshot.data[index].productPrice[0].weight, snapshot.data[index].productPrice[0].unit, snapshot.data[index].productPrice[0].originalPrice);
+                                                  if (added) {
+                                                    showSnackBar(
+                                                        "Added to cart Successfully");
+                                                  } else {
+                                                    showSnackBar(
+                                                        "Something Went Wrong");
+                                                  }
+                                                },
+                                                child: Consumer<APIData>(
+                                                    builder:
+                                                        (context, data, child) {
+                                                  return Container(
+                                                    child: index == data.index
+                                                        ? Container(
+                                                            child: CustomStepper(
+                                                                1,
+                                                                10,
+                                                                Provider.of<APIData>(context,
+                                                                        listen:
+                                                                            false)
+                                                                    .productQuantity,
+                                                                20.0,
+                                                                1,
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .id,
+                                                                Provider.of<APIData>(context,
+                                                                        listen:
+                                                                            false)
+                                                                    .productQuantity,
+                                                                snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].discountedPrice == ""
+                                                                    ? snapshot
+                                                                        .data[obj
+                                                                            .productIndex]
+                                                                        .productPrice[obj
+                                                                            .productPriceIndex]
+                                                                        .originalPrice
+                                                                    : snapshot
+                                                                        .data[obj
+                                                                            .productIndex]
+                                                                        .productPrice[obj
+                                                                            .productPriceIndex]
+                                                                        .discountedPrice,
+                                                                snapshot
+                                                                    .data[obj.productIndex]
+                                                                    .productPrice[obj.productPriceIndex]
+                                                                    .weight,
+                                                                snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].unit,
+                                                                snapshot.data[obj.productIndex].productPrice[obj.productPriceIndex].originalPrice),
+                                                          )
+                                                        : Container(
+                                                            height: 25,
+                                                            width: 80,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                              color: Colors
+                                                                  .purple[700],
+                                                            ),
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                "ADD",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            )),
+                                                  );
+                                                }),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              });
                             });
                       } else if (snapshot.hasError) {
                         print(snapshot.error);
@@ -769,66 +843,74 @@ Widget addToDoPopUpCard(BuildContext context, int index, List temp) {
                   thickness: 0.8,
                 ),
                 for (int k = 0; k < temp[index].productPrice.length; k++) ...{
-                  Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 1.0, color: yellow),
-                          left: BorderSide(width: 1.0, color: yellow),
-                          right: BorderSide(width: 1.0, color: yellow),
-                          bottom: BorderSide(width: 1.0, color: yellow),
-                        ),
-                        borderRadius: BorderRadius.circular(5.0),
-                        gradient: LinearGradient(
-                            colors: [left, middle, Colors.purple])),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${temp[index].productPrice[k].weight} ${temp[index].productPrice[k].unit} -',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Colors.white,
+                  InkWell(
+                    onTap: () {
+                      Provider.of<APIData>(context, listen: false)
+                          .initializeProductPriceIndex(k);
+                      Navigator.pop(context);
+                      print(temp[index].productPrice[k].discountedPrice);
+                    },
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 1.0, color: yellow),
+                            left: BorderSide(width: 1.0, color: yellow),
+                            right: BorderSide(width: 1.0, color: yellow),
+                            bottom: BorderSide(width: 1.0, color: yellow),
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: LinearGradient(
+                              colors: [left, middle, Colors.purple])),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${temp[index].productPrice[k].weight} ${temp[index].productPrice[k].unit} -',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Spacer(
-                            flex: 2,
-                          ),
-                          temp[index].productPrice[k].discountedPrice != ""
-                              ? Text(
-                                  '₹${temp[index].productPrice[k].originalPrice}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    decoration: TextDecoration.lineThrough,
+                            Spacer(
+                              flex: 2,
+                            ),
+                            temp[index].productPrice[k].discountedPrice != ""
+                                ? Text(
+                                    '₹${temp[index].productPrice[k].originalPrice}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  )
+                                : Text(
+                                    '₹${temp[index].productPrice[k].originalPrice}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  '₹${temp[index].productPrice[k].originalPrice}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                          Spacer(
-                            flex: 2,
-                          ),
-                          temp[index].productPrice[k].discountedPrice != ""
-                              ? Text(
-                                  '₹${temp[index].productPrice[k].discountedPrice}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Container()
-                        ],
+                            Spacer(
+                              flex: 2,
+                            ),
+                            temp[index].productPrice[k].discountedPrice != ""
+                                ? Text(
+                                    '₹${temp[index].productPrice[k].discountedPrice}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Container()
+                          ],
+                        ),
                       ),
                     ),
                   ),

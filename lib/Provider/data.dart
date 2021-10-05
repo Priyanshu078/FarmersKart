@@ -49,6 +49,8 @@ class APIData extends ChangeNotifier {
   int cartProductCount = 0;
   int productQuantity = 1;
   double totalAddedProductAmount = 0.0;
+  int productIndex = 0;
+  int productPriceIndex = 0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -60,6 +62,19 @@ class APIData extends ChangeNotifier {
   void initializetotalAddedProductAmount(double totalAddedProductAmount) {
     if (totalAddedProductAmount != null) {
       this.totalAddedProductAmount = totalAddedProductAmount;
+    }
+    notifyListeners();
+  }
+
+  void initializeProductIndex(int productIndex) {
+    if (productIndex != null) {
+      this.productIndex = productIndex;
+    }
+  }
+
+  void initializeProductPriceIndex(int productPriceIndex) {
+    if (productPriceIndex != null) {
+      this.productPriceIndex = productPriceIndex;
     }
     notifyListeners();
   }
