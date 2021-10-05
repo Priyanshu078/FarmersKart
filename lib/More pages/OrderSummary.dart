@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:shellcode2/Provider/data.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/paymentOption.dart';
 import 'package:intl/intl.dart';
 import 'package:shellcode2/update_order.dart';
+import 'package:http/http.dart' as http;
 
 class OrderSummary extends StatefulWidget {
   List allOrders;
@@ -34,6 +40,49 @@ class _OrderSummaryState extends State<OrderSummary> {
     String formattedDateTime =
         DateFormat('yyyy-MM-dd \n kk:mm:ss').format(DateTime.now()).toString();
     return formattedDateTime;
+  }
+
+  void updateDelivedStatus(
+      String productId, String orderId, String status) async {
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    http.Response response;
+    String url =
+        "$header/app_api/updateDeliveredStatus.php?product_id=$productId&user_id=$userId&order_id=$orderId&status=$status";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      showSnackBar("Status Updated Successfully");
+    } else {
+      showSnackBar("Something Went Wrong");
+    }
+  }
+
+  void addReplacementRequest(
+      String orderId,
+      String productId,
+      String reason,
+      String isRefunded,
+      String deliveryDate,
+      String deliveryDay,
+      String deliveryTime) async {
+    String userId = Provider.of<APIData>(context, listen: false).user.id;
+    http.Response response;
+    String url =
+        "$header/app_api/addReplaceRequest.php?order_id=$orderId&product_id=$productId&reason=$reason&is_refunded=$isRefunded&delivery_date=$deliveryDate&delivery_day=$deliveryDay&delivery_time=$deliveryTime";
+    Uri uri = Uri.parse(url);
+    response = await http.get(uri);
+    var jsonData = jsonDecode(response.body);
+    if (jsonData["code"] == "200") {
+      showSnackBar("Replacement Requested");
+    } else {
+      showSnackBar("Something Went Wrong");
+    }
+  }
+
+  void showSnackBar(String content) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(content)));
   }
 
   @override
@@ -543,6 +592,82 @@ class _OrderSummaryState extends State<OrderSummary> {
                                     ],
                                   ),
                                 ),
+                                getDateTime().split(" ")[0].trim() ==
+                                        widget.allOrders[0].deliveryDate
+                                            .toString()
+                                            .split(" ")[0]
+                                            .trim()
+                                    ? SizedBox(
+                                        height: 10,
+                                      )
+                                    : Container(),
+                                getDateTime().split(" ")[0].trim() ==
+                                        widget.allOrders[0].deliveryDate
+                                            .toString()
+                                            .split(" ")[0]
+                                            .trim()
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          TextButton(
+                                              onPressed: () {
+                                                updateDelivedStatus(
+                                                    widget.allOrders[index]
+                                                        .productId,
+                                                    widget.allOrders[index]
+                                                        .orderId,
+                                                    "Delivered");
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors
+                                                        .lightGreenAccent[400],
+                                                  ),
+                                                  Text("Received",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.grey))
+                                                ],
+                                              )),
+                                          TextButton(
+                                              onPressed: () {
+                                                updateDelivedStatus(
+                                                    widget.allOrders[index]
+                                                        .productId,
+                                                    widget.allOrders[index]
+                                                        .orderId,
+                                                    "Not Delivered");
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.dangerous_rounded,
+                                                    color: Colors.red,
+                                                  ),
+                                                  Text("Not Received",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.grey))
+                                                ],
+                                              )),
+                                          TextButton(
+                                              onPressed: () {},
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.loop,
+                                                      color: Colors.blue),
+                                                  Text("Replace",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.blue))
+                                                ],
+                                              )),
+                                        ],
+                                      )
+                                    : Container(),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -1077,6 +1202,90 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         ],
                                       ),
                                     ),
+                                    getDateTime().split(" ")[0].trim() ==
+                                            widget.todaysOrder[0].deliveryDate
+                                                .toString()
+                                                .split(" ")[0]
+                                                .trim()
+                                        ? SizedBox(
+                                            height: 10,
+                                          )
+                                        : Container(),
+                                    getDateTime().split(" ")[0].trim() ==
+                                            widget.todaysOrder[0].deliveryDate
+                                                .toString()
+                                                .split(" ")[0]
+                                                .trim()
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    updateDelivedStatus(
+                                                        widget
+                                                            .todaysOrder[index]
+                                                            .productId,
+                                                        widget
+                                                            .todaysOrder[index]
+                                                            .orderId,
+                                                        "Delivered");
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.check_circle,
+                                                        color: Colors
+                                                                .lightGreenAccent[
+                                                            400],
+                                                      ),
+                                                      Text("Received",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey))
+                                                    ],
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    updateDelivedStatus(
+                                                        widget
+                                                            .todaysOrder[index]
+                                                            .productId,
+                                                        widget
+                                                            .todaysOrder[index]
+                                                            .orderId,
+                                                        "Not Delivered");
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.dangerous_rounded,
+                                                        color: Colors.red,
+                                                      ),
+                                                      Text("Not Received",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey))
+                                                    ],
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () {},
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.loop,
+                                                          color: Colors.blue),
+                                                      Text("Replace",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.blue))
+                                                    ],
+                                                  )),
+                                            ],
+                                          )
+                                        : Container(),
                                     SizedBox(
                                       height: 10,
                                     ),
