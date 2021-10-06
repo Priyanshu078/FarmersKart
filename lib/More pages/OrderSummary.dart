@@ -85,6 +85,32 @@ class _OrderSummaryState extends State<OrderSummary> {
         .showSnackBar(SnackBar(content: Text(content)));
   }
 
+  String getTodaysDate(String timeDate) {
+    String dateTime = timeDate;
+    String date = dateTime.split(" ")[0];
+    List dateList = date.split("-");
+    String todayDate = dateList[dateList.length - 1];
+    return todayDate;
+  }
+
+  String getNextDayDate() {
+    String todaysDate = getTodaysDate(getDateTime());
+    String date = getDateTime().split(" ")[0];
+    List dateList = date.split("-");
+    dateList[dateList.length - 1] =
+        (int.parse(getTodaysDate(getDateTime())) + 1).toString();
+    String nextDayDate = "";
+    for (int i = 0; i < dateList.length; i++) {
+      nextDayDate += nextDayDate[i];
+      if (i == dateList.length - 1) {
+        continue;
+      } else {
+        nextDayDate += "-";
+      }
+    }
+    return nextDayDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.index == 0) {
@@ -610,61 +636,115 @@ class _OrderSummaryState extends State<OrderSummary> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          TextButton(
-                                              onPressed: () {
-                                                updateDelivedStatus(
-                                                    widget.allOrders[index]
-                                                        .productId,
-                                                    widget.allOrders[index]
-                                                        .orderId,
-                                                    "Delivered");
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.check_circle,
-                                                    color: Colors
-                                                        .lightGreenAccent[400],
-                                                  ),
-                                                  Text("Received",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.grey))
-                                                ],
-                                              )),
-                                          TextButton(
-                                              onPressed: () {
-                                                updateDelivedStatus(
-                                                    widget.allOrders[index]
-                                                        .productId,
-                                                    widget.allOrders[index]
-                                                        .orderId,
-                                                    "Not Delivered");
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.dangerous_rounded,
-                                                    color: Colors.red,
-                                                  ),
-                                                  Text("Not Received",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.grey))
-                                                ],
-                                              )),
-                                          TextButton(
-                                              onPressed: () {},
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.loop,
-                                                      color: Colors.blue),
-                                                  Text("Replace",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.blue))
-                                                ],
-                                              )),
+                                          Row(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  updateDelivedStatus(
+                                                      widget.allOrders[index]
+                                                          .productId,
+                                                      widget.allOrders[index]
+                                                          .orderId,
+                                                      "Delivered");
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.check_circle,
+                                                      color: Colors
+                                                              .lightGreenAccent[
+                                                          400],
+                                                    ),
+                                                    Text("Received",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey))
+                                                  ],
+                                                )),
+                                            TextButton(
+                                                onPressed: () {
+                                                  updateDelivedStatus(
+                                                      widget.allOrders[index]
+                                                          .productId,
+                                                      widget.allOrders[index]
+                                                          .orderId,
+                                                      "Not Delivered");
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.dangerous_rounded,
+                                                      color: Colors.red,
+                                                    ),
+                                                    Text("Not Received",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey))
+                                                  ],
+                                                )),
+                                          ]),
+                                          widget.allOrders[index].orderStatus ==
+                                                      "Delivered" ||
+                                                  int.parse(getTodaysDate(
+                                                          getDateTime())) ==
+                                                      int.parse(getTodaysDate(
+                                                              widget
+                                                                  .allOrders[
+                                                                      index]
+                                                                  .deliveryDate)) +
+                                                          1
+                                              ? TextButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (context) =>
+                                                                AlertDialog(
+                                                                  content: Flexible(
+                                                                      child: Text(
+                                                                          "Do you want to proceed ?")),
+                                                                  title: Flexible(
+                                                                      child: Text(
+                                                                          "Replacement..Order will be delivered on next Sunday")),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child: Text(
+                                                                            "NO")),
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          addReplacementRequest(
+                                                                              widget.allOrders[index].orderId,
+                                                                              widget.allOrders[index].productId,
+                                                                              "replace",
+                                                                              "",
+                                                                              getNextDayDate(),
+                                                                              "",
+                                                                              "10-14");
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child: Text(
+                                                                            "YES"))
+                                                                  ],
+                                                                ));
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.loop,
+                                                          color: Colors.blue),
+                                                      Text("Replace",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.blue))
+                                                    ],
+                                                  ))
+                                              : Container(),
                                         ],
                                       )
                                     : Container(),
@@ -1270,19 +1350,61 @@ class _OrderSummaryState extends State<OrderSummary> {
                                                                   Colors.grey))
                                                     ],
                                                   )),
-                                              TextButton(
-                                                  onPressed: () {},
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.loop,
-                                                          color: Colors.blue),
-                                                      Text("Replace",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
+                                              widget.todaysOrder[index]
+                                                              .orderStatus ==
+                                                          "Delivered" ||
+                                                      int.parse(getTodaysDate(
+                                                              getDateTime())) ==
+                                                          int.parse(getTodaysDate(widget
+                                                                  .todaysOrder[
+                                                                      index]
+                                                                  .deliveryDate)) +
+                                                              1
+                                                  ? TextButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    AlertDialog(
+                                                                      content: Flexible(
+                                                                          child:
+                                                                              Text("Do you want to proceed ?")),
+                                                                      title: Flexible(
+                                                                          child:
+                                                                              Text("Replacement..Order will be delivered on next Sunday")),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                            child:
+                                                                                Text("NO")),
+                                                                        TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              addReplacementRequest(widget.todaysOrder[index].orderId, widget.todaysOrder[index].productId, "replace", "", getNextDayDate(), "", "10-14");
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                            child:
+                                                                                Text("YES"))
+                                                                      ],
+                                                                    ));
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons.loop,
                                                               color:
-                                                                  Colors.blue))
-                                                    ],
-                                                  )),
+                                                                  Colors.blue),
+                                                          Text("Replace",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .blue))
+                                                        ],
+                                                      ))
+                                                  : Container(),
                                             ],
                                           )
                                         : Container(),
