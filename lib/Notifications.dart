@@ -17,6 +17,14 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<APIData>(context, listen: false)
+        .initializeNewNotificationCount(0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

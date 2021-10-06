@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shellcode2/More%20pages/ImmunityMore.dart';
 import 'package:shellcode2/More%20pages/bestSellingMore.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/categories.dart';
@@ -23,13 +25,13 @@ import 'package:shellcode2/More%20pages/newArrivalsmore.dart';
 import 'package:shellcode2/More%20pages/offerMore.dart';
 import 'package:shellcode2/productdetails.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
-import 'package:shellcode2/search.dart';
 import 'package:shellcode2/apiData/BestSellingProducts.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'apiData/BannerImagesAPI.dart';
+import 'package:sqflite/sqflite.dart';
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
 List offerData = offersData;
@@ -71,6 +73,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getAllProducts();
     getCartProducts(context);
+    saveData();
     requestPermission(_permission);
     imgList = bannerImages;
     if (Provider.of<APIData>(context, listen: false).centerId == null) {
@@ -87,6 +90,36 @@ class _HomeState extends State<Home> {
     String userType =
         Provider.of<APIData>(context, listen: false).user.userType;
     return userType;
+  }
+
+  void saveData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List notifications = await getNotifications(context);
+    int newCount = notifications.length;
+    String key = "oldNotificationCount";
+    print("notifications");
+    print("notifications " + newCount.toString());
+    bool CheckValue = preferences.containsKey(key);
+    print(CheckValue);
+    String oldCountData = await getNotificationCount(key) ?? '0';
+    int oldCount = int.parse(oldCountData);
+    print(oldCount);
+    int newNotifications = newCount - oldCount;
+    Provider.of<APIData>(context, listen: false)
+        .initializeNewNotificationCount(newNotifications);
+    setNotificationCount(key, newCount.toString());
+    String oldCountDatanew = await getNotificationCount(key) ?? "0";
+    print(oldCountDatanew);
+  }
+
+  Future setNotificationCount(String key, String data) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString(key, data);
+  }
+
+  Future getNotificationCount(String key) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(key);
   }
 
   @override
@@ -115,22 +148,44 @@ class _HomeState extends State<Home> {
                     color: Colors.purple[900]),
                 height: 20,
                 width: 20,
-                child: Text(
-                  "${data.cartProductCount}",
-                  textAlign: TextAlign.center,
-                ),
+                child: Text("${data.cartProductCount}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15)),
               );
             })
           ]),
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Notifications()));
-              },
-              icon: Icon(
-                Icons.notifications,
-                color: yellow,
-              )),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Stack(alignment: Alignment.topRight, children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Notifications()));
+                  },
+                  icon: Icon(
+                    Icons.notifications,
+                    color: yellow,
+                  )),
+              Consumer<APIData>(builder: (context, data, child) {
+                return Flexible(
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.purple[900]),
+                    child: Text(
+                      "${data.newNotification}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                );
+              })
+            ]),
+          ),
         ],
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -1677,6 +1732,27 @@ class _HomeState extends State<Home> {
     print(allProducts);
     return allProducts;
   }
+}
+
+Future<List> getNotifications(BuildContext context) async {
+  String UserId = Provider.of<APIData>(context, listen: false).userId;
+  Dio dio = new Dio();
+  String url = "$header/app_api/inapp_notifications.php?user_id=$UserId";
+  Response response = await dio.get(url);
+  var jsonData = jsonDecode(response.data);
+  List notifications = [];
+  for (var item in jsonData["records"]) {
+    Notification notification =
+        new Notification(item["message"], item["timestamp"]);
+    notifications.add(notification);
+  }
+  return notifications;
+}
+
+class Notification {
+  String message;
+  String timeStamp;
+  Notification(this.message, this.timeStamp);
 }
 
 void getCartProducts(BuildContext context) async {

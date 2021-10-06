@@ -357,6 +357,8 @@ class _PaymentOptionState extends State<PaymentOption> {
                               } else {
                                 showSnackBar("Please select a payment option");
                               }
+                              Provider.of<APIData>(context, listen: false)
+                                  .inititalizeCartProductCount(0);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.purple,

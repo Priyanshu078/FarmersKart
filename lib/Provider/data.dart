@@ -51,6 +51,7 @@ class APIData extends ChangeNotifier {
   double totalAddedProductAmount = 0.0;
   int productIndex = 0;
   int productPriceIndex = 0;
+  int newNotification = 0;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
@@ -75,6 +76,13 @@ class APIData extends ChangeNotifier {
   void initializeProductPriceIndex(int productPriceIndex) {
     if (productPriceIndex != null) {
       this.productPriceIndex = productPriceIndex;
+    }
+    notifyListeners();
+  }
+
+  void initializeNewNotificationCount(int newNotification) {
+    if (newNotification != null) {
+      this.newNotification = newNotification;
     }
     notifyListeners();
   }
