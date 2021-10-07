@@ -163,7 +163,7 @@ class _UserAccState extends State<UserAcc> {
                       child: _imageFile == null
                           ? CachedNetworkImage(
                               imageUrl:
-                                  "http://192.168.43.156/app_api/files/${Provider.of<APIData>(context, listen: false).image}",
+                                  "$header/app_api/files/${Provider.of<APIData>(context, listen: false).image}",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(

@@ -28,17 +28,17 @@ Future<List> fetchLoginApiData(String mobile, String password) async {
     if (code == '200') {
       for (var item in data) {
         List<CenterOfStore> centerList = [];
-        // for (var center in item["center"]) {
-        //   CenterOfStore centerOfStore = new CenterOfStore(
-        //       centerName: center["center_name"].toString(),
-        //       address: center["address"].toString(),
-        //       pincode: center["pincode"].toString(),
-        //       delFlag: center["del_flag"].toString(),
-        //       deliveryDays: center["delivery_days"].toString(),
-        //       deliveryTime: center["delivery_time"].toString(),
-        //       id: center["id"].toString());
-        //   centerList.add(centerOfStore);
-        // }
+        for (var center in item["center"]) {
+          CenterOfStore centerOfStore = new CenterOfStore(
+              centerName: center["center_name"].toString(),
+              address: center["address"].toString(),
+              pincode: center["pincode"].toString(),
+              delFlag: center["del_flag"].toString(),
+              deliveryDays: center["delivery_days"].toString(),
+              deliveryTime: center["delivery_time"].toString(),
+              id: center["id"].toString());
+          centerList.add(centerOfStore);
+        }
         UserOfApp userOfApp = new UserOfApp(
             id: item["id"],
             name: item["name"],

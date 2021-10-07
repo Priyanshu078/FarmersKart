@@ -52,11 +52,17 @@ class APIData extends ChangeNotifier {
   int productIndex = 0;
   int productPriceIndex = 0;
   int newNotification = 0;
+  bool done = false;
 
   List<UserFavProductCategories> detailsByCategory = [];
 
   void initialUserFavProductCategories(List<UserFavProductCategories> list) {
     this.detailsByCategory = list;
+    notifyListeners();
+  }
+
+  void checkDone(bool done) {
+    this.done = done;
     notifyListeners();
   }
 

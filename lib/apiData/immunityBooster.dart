@@ -10,7 +10,8 @@ List<ImmunityBoosterCategories> immunityBoosterList = [];
 String immunityBoosterApi =
     "$header/app_api/get_special_category_product.php?category=Immunity%20Booster&user_type=Society";
 
-Future<void> fetchImmunityBoosterProductApiData() async {
+Future<bool> fetchImmunityBoosterProductApiData() async {
+  bool gotData = false;
   http.Response response = await http.get(Uri.parse(immunityBoosterApi));
   print(response.statusCode);
   if (response.statusCode == 200) {
@@ -59,8 +60,11 @@ Future<void> fetchImmunityBoosterProductApiData() async {
       print(e);
     }
     print(immunityBoosterList);
+    gotData = true;
   } else
     Exception(response.statusCode);
+
+  return gotData;
 }
 
 class ImmunityBoosterCategories {

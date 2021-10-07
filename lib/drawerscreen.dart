@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shellcode2/Authentication%20pages/signinpage.dart';
 import 'package:shellcode2/Authentication%20pages/signuppage.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
@@ -9,11 +10,13 @@ import 'package:shellcode2/Navigation%20Drawer%20pages/myOrders.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/userAcc.dart';
 import 'package:shellcode2/Navigation%20Drawer%20pages/wallet.dart';
 import 'package:shellcode2/Subscriptions.dart';
+import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/loginApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
+import 'package:shellcode2/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
@@ -25,7 +28,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = EdgeInsets.symmetric(horizontal: 15);
 
   String getImageUrl(BuildContext context) {
-    return "http://192.168.43.156/app_api/files/${Provider.of<APIData>(context, listen: false).image}";
+    UserOfApp user = Provider.of<APIData>(context, listen: false).user;
+    return "$header//app_api/files/" + user.imageName;
   }
 
   String getUserName(BuildContext context) {
@@ -180,26 +184,28 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     )),
                   ),
                   buildMenuItem(
-                    text: 'About us',
-                    icon: Icons.person,
-                    onClicked: () async{
-                      await launch("https://docs.google.com/forms/d/e/1FAIpQLSdPicJAxB969UMGziYKeuTE09Ol7Rx8wp_YUMiYhGYUp792eg/viewform");
-                    }
-                  ),
+                      text: 'About us',
+                      icon: Icons.person,
+                      onClicked: () async {
+                        await launch(
+                            "https://docs.google.com/forms/d/e/1FAIpQLSdPicJAxB969UMGziYKeuTE09Ol7Rx8wp_YUMiYhGYUp792eg/viewform");
+                      }),
                   buildMenuItem(
                       text: 'Privacy Policy',
                       icon: Icons.privacy_tip,
-                      onClicked: () async{
+                      onClicked: () async {
                         await launch("https://farmerskart.com/privacy.htm");
                       }),
                   buildMenuItem(
-                    text: 'Sign out',
-                    icon: Icons.exit_to_app,
-                    onClicked: () {
+                      text: 'Sign out',
+                      icon: Icons.exit_to_app,
+                      onClicked: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SignIn(),
-                    ));}
-                  ),
+                          builder: (context) => SignIn(),
+                        ));
+                        status = false;
+                        setLoginStatus(key2, status);
+                      }),
                 ],
               ),
             ),
@@ -207,6 +213,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ),
       ),
     );
+  }
+
+  Future setLoginStatus(String key, bool status) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setBool(key, status);
   }
 
   Widget buildHeader({

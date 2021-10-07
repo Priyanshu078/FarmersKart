@@ -127,6 +127,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
+        leadingWidth: MediaQuery.of(context).size.width / 5,
         title: Text('Farmers kart'),
         elevation: 0,
         iconTheme: IconThemeData(color: yellow),

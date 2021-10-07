@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shellcode2/Provider/data.dart';
 import 'package:flutter/cupertino.dart';
 
+String key1 = "userData";
+bool status = false;
+String key2 = "loginStatus";
 final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

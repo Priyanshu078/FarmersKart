@@ -1,39 +1,34 @@
-
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shellcode2/apiData/Constants.dart';
 
-
 List<ProductPrice> festiveSpecialProductPrice;
 List<Product> festiveSpecialProduct;
-List<FestiveSpecialCategories> festiveSpecialList=[];
+List<FestiveSpecialCategories> festiveSpecialList = [];
 
-String immunityBoosterApi="$header/app_api/get_special_category_product.php?category=festival%20special&user_type=Society";
+String immunityBoosterApi =
+    "$header/app_api/get_special_category_product.php?category=festival%20special&user_type=Society";
 
-
-Future<void> fetchFestiveSpecialProductApiData() async{
-
-  http.Response response= await http.get(Uri.parse(immunityBoosterApi));
-  if(response.statusCode==200){
-
-    Map ApiData=jsonDecode(response.body);
-    List<dynamic> data =ApiData['product'];
+Future<bool> fetchFestiveSpecialProductApiData() async {
+  bool gotData = false;
+  http.Response response = await http.get(Uri.parse(immunityBoosterApi));
+  if (response.statusCode == 200) {
+    Map ApiData = jsonDecode(response.body);
+    List<dynamic> data = ApiData['product'];
     print(data);
-    festiveSpecialProduct=data.map((e) => Product.fromJson(e)).toList();
+    festiveSpecialProduct = data.map((e) => Product.fromJson(e)).toList();
 
-    for(int i=0;i<festiveSpecialProduct.length;i++){
-      festiveSpecialProductPrice=festiveSpecialProduct[i].productPrice;
+    for (int i = 0; i < festiveSpecialProduct.length; i++) {
+      festiveSpecialProductPrice = festiveSpecialProduct[i].productPrice;
 
-      List<List> manyNewOldPrice=[];
+      List<List> manyNewOldPrice = [];
 
-
-      for(int j=0;j<festiveSpecialProductPrice.length;j++){
-
-        List<String> newOldPrice=[];
+      for (int j = 0; j < festiveSpecialProductPrice.length; j++) {
+        List<String> newOldPrice = [];
         newOldPrice.add("${festiveSpecialProductPrice[j].pId}");
-        newOldPrice.add('${festiveSpecialProductPrice[j].weight} ${festiveSpecialProductPrice[j].unit}');
+        newOldPrice.add(
+            '${festiveSpecialProductPrice[j].weight} ${festiveSpecialProductPrice[j].unit}');
         newOldPrice.add('${festiveSpecialProductPrice[j].originalPrice}');
         newOldPrice.add('${festiveSpecialProductPrice[j].discountedPrice}');
         newOldPrice.add('${festiveSpecialProductPrice[j].unit}');
@@ -41,32 +36,30 @@ Future<void> fetchFestiveSpecialProductApiData() async{
         manyNewOldPrice.add(newOldPrice);
       }
 
-
-
       double newRate;
-      if(festiveSpecialProductPrice[0].discountedPrice=="")
-        newRate=double.parse(festiveSpecialProductPrice[0].originalPrice);
+      if (festiveSpecialProductPrice[0].discountedPrice == "")
+        newRate = double.parse(festiveSpecialProductPrice[0].originalPrice);
       else
-        newRate=double.parse(festiveSpecialProductPrice[0].discountedPrice);
+        newRate = double.parse(festiveSpecialProductPrice[0].discountedPrice);
 
-      festiveSpecialList.add(FestiveSpecialCategories(imageUrl: festiveSpecialProduct[i].img, title: festiveSpecialProduct[i].name, newrate: newRate, oldrate:double.parse(festiveSpecialProductPrice[0].originalPrice), weight: festiveSpecialProductPrice[0].weight, description: festiveSpecialProduct[i].description, data: manyNewOldPrice,productId: festiveSpecialProduct[i].id));
+      festiveSpecialList.add(FestiveSpecialCategories(
+          imageUrl: festiveSpecialProduct[i].img,
+          title: festiveSpecialProduct[i].name,
+          newrate: newRate,
+          oldrate: double.parse(festiveSpecialProductPrice[0].originalPrice),
+          weight: festiveSpecialProductPrice[0].weight,
+          description: festiveSpecialProduct[i].description,
+          data: manyNewOldPrice,
+          productId: festiveSpecialProduct[i].id));
     }
-
-
-
-  }else
+    gotData = true;
+  } else
     Exception(response.statusCode);
 
-
-
+  return gotData;
 }
 
-
-
-
-
-
-class  FestiveSpecialCategories{
+class FestiveSpecialCategories {
   String imageUrl;
   String weight;
   String title;
@@ -87,9 +80,6 @@ class  FestiveSpecialCategories{
   });
 }
 
-
-
-
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
 String welcomeToJson(Welcome data) => json.encode(data.toJson());
@@ -104,14 +94,15 @@ class Welcome {
   String code;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-    product: List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
-    code: json["code"],
-  );
+        product:
+            List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
+        code: json["code"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "product": List<dynamic>.from(product.map((x) => x.toJson())),
-    "code": code,
-  };
+        "product": List<dynamic>.from(product.map((x) => x.toJson())),
+        "code": code,
+      };
 }
 
 class Product {
@@ -140,30 +131,32 @@ class Product {
   List<ProductPrice> productPrice;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    categoryName: json["category_name"],
-    id: json["id"],
-    category: json["category"],
-    subcategory: json["subcategory"],
-    name: json["name"],
-    img: json["img"],
-    description: json["description"],
-    delFlag: json["del_flag"],
-    rating: json["rating"],
-    productPrice: List<ProductPrice>.from(json["product_price"].map((x) => ProductPrice.fromJson(x))),
-  );
+        categoryName: json["category_name"],
+        id: json["id"],
+        category: json["category"],
+        subcategory: json["subcategory"],
+        name: json["name"],
+        img: json["img"],
+        description: json["description"],
+        delFlag: json["del_flag"],
+        rating: json["rating"],
+        productPrice: List<ProductPrice>.from(
+            json["product_price"].map((x) => ProductPrice.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "category_name": categoryName,
-    "id": id,
-    "category": category,
-    "subcategory": subcategory,
-    "name": name,
-    "img": img,
-    "description": description,
-    "del_flag": delFlag,
-    "rating": rating,
-    "product_price": List<dynamic>.from(productPrice.map((x) => x.toJson())),
-  };
+        "category_name": categoryName,
+        "id": id,
+        "category": category,
+        "subcategory": subcategory,
+        "name": name,
+        "img": img,
+        "description": description,
+        "del_flag": delFlag,
+        "rating": rating,
+        "product_price":
+            List<dynamic>.from(productPrice.map((x) => x.toJson())),
+      };
 }
 
 class ProductPrice {
@@ -186,22 +179,22 @@ class ProductPrice {
   String unit;
 
   factory ProductPrice.fromJson(Map<String, dynamic> json) => ProductPrice(
-    pId: json["p_id"],
-    userType: json["user_type"],
-    originalPrice: json["original_price"],
-    discount: json["discount"],
-    discountedPrice: json["discounted_price"],
-    weight: json["weight"],
-    unit: json["unit"],
-  );
+        pId: json["p_id"],
+        userType: json["user_type"],
+        originalPrice: json["original_price"],
+        discount: json["discount"],
+        discountedPrice: json["discounted_price"],
+        weight: json["weight"],
+        unit: json["unit"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "p_id": pId,
-    "user_type": userType,
-    "original_price": originalPrice,
-    "discount": discount,
-    "discounted_price": discountedPrice,
-    "weight": weight,
-    "unit": unit,
-  };
+        "p_id": pId,
+        "user_type": userType,
+        "original_price": originalPrice,
+        "discount": discount,
+        "discounted_price": discountedPrice,
+        "weight": weight,
+        "unit": unit,
+      };
 }

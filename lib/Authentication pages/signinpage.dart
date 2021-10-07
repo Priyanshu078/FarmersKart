@@ -5,12 +5,14 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shellcode2/Authentication pages/forgotpwd.dart';
 import 'package:shellcode2/apiData/Constants.dart';
 import 'package:shellcode2/apiData/OffersApiData.dart';
 import 'package:shellcode2/colors.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Authentication pages/signuppage.dart';
+import 'package:shellcode2/main.dart';
 import 'package:sign_button/sign_button.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -91,7 +93,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   Container(
                     padding:
-                    EdgeInsets.only(top: 60.0, right: 30.0, left: 30.0),
+                        EdgeInsets.only(top: 60.0, right: 30.0, left: 30.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -122,15 +124,11 @@ class _SignInState extends State<SignIn> {
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
                               hintStyle:
-                              Theme
-                                  .of(context)
-                                  .textTheme
-                                  .caption
-                                  .copyWith(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: yellow, // Set Your Own Color
-                              ),
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: yellow, // Set Your Own Color
+                                      ),
                             ),
                             onChanged: (value) => phoneNo = value,
                           ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
@@ -164,15 +162,11 @@ class _SignInState extends State<SignIn> {
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
                               hintStyle:
-                              Theme
-                                  .of(context)
-                                  .textTheme
-                                  .caption
-                                  .copyWith(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: yellow, // Set Your Own Color
-                              ),
+                                  Theme.of(context).textTheme.caption.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: yellow, // Set Your Own Color
+                                      ),
                             ),
                             onChanged: (value) => password = value,
                           ), //fontSize: 12,color: tertiaryColor,fontWeight: FontWeight.w400,
@@ -227,7 +221,7 @@ class _SignInState extends State<SignIn> {
                             Text(
                               "Don't Have Account ?",
                               style:
-                              TextStyle(fontSize: 12, color: Colors.black),
+                                  TextStyle(fontSize: 12, color: Colors.black),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -256,7 +250,7 @@ class _SignInState extends State<SignIn> {
                           Text(
                             " OR ",
                             style:
-                            TextStyle(fontSize: 14, color: Colors.purple),
+                                TextStyle(fontSize: 14, color: Colors.purple),
                           ),
                           Expanded(
                             child: Divider(
@@ -335,7 +329,7 @@ class _SignInState extends State<SignIn> {
     if ((password != null && phoneNo != null) &&
         (phoneController.text != "" && pwController.text != "")) {
       List<UserOfApp> userAccountData =
-      await fetchLoginApiData(phoneNo, password);
+          await fetchLoginApiData(phoneNo, password);
       print(userAccountData);
       if (userAccountData == null) {
         authenticated = false;
@@ -347,8 +341,13 @@ class _SignInState extends State<SignIn> {
         authenticated = true;
         Provider.of<APIData>(context, listen: false)
             .initializeUser(userAccountData[0]);
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
         // updateFirebaseToken(firebaseToken,
         //     Provider.of<APIData>(context, listen: false).user.id);
+        print(userAccountData[0].toJson());
+        setUserData(key1, jsonEncode(userAccountData[0].toJson()));
+        status = true;
+        setLoginStatus(key2, status);
         print(authenticated);
         if (authenticated) {
           Navigator.push(
@@ -363,6 +362,16 @@ class _SignInState extends State<SignIn> {
 
   Future<String> getToken() async {
     return await FirebaseMessaging.instance.getToken();
+  }
+
+  Future setLoginStatus(String key, bool status) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setBool(key, status);
+  }
+
+  Future setUserData(String key, String userData) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString(key, userData);
   }
 
   void updateFirebaseToken(String token, String id) async {
@@ -399,7 +408,8 @@ class _SignInState extends State<SignIn> {
   Future<UserCredential> loginWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
     // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken.token);
     // Once signed in, return the UserCredential
     return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
