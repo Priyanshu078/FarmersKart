@@ -127,51 +127,59 @@ class _HomeState extends State<Home> {
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        leadingWidth: MediaQuery.of(context).size.width / 5,
-        title: Text('Farmers kart'),
+        leadingWidth: MediaQuery.of(context).size.width / 6,
+        title: Container(
+            width: MediaQuery.of(context).size.width * 2.5 / 6,
+            child: Text('Farmers kart')),
         elevation: 0,
         iconTheme: IconThemeData(color: yellow),
         actions: [
-          Stack(alignment: Alignment.topRight, children: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Cart()));
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: yellow,
-                )),
-            Consumer<APIData>(builder: (context, data, child) {
-              return Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.purple[900]),
-                height: 20,
-                width: 20,
-                child: Text("${data.cartProductCount}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15)),
-              );
-            })
-          ]),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 11,
+            width: MediaQuery.of(context).size.width / 6,
             child: Stack(alignment: Alignment.topRight, children: [
               IconButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Notifications()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Cart()));
                   },
                   icon: Icon(
-                    Icons.notifications,
+                    Icons.shopping_cart,
                     color: yellow,
                   )),
               Consumer<APIData>(builder: (context, data, child) {
-                return Flexible(
-                  child: Container(
+                return Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.purple[900]),
+                  height: 20,
+                  width: 20,
+                  child: Text("${data.cartProductCount}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15)),
+                );
+              })
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 11,
+              width: MediaQuery.of(context).size.width / 6,
+              child: Stack(alignment: Alignment.topRight, children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Notifications()));
+                    },
+                    icon: Icon(
+                      Icons.notifications,
+                      color: yellow,
+                    )),
+                Consumer<APIData>(builder: (context, data, child) {
+                  return Container(
                     height: 20,
                     width: 20,
                     decoration: BoxDecoration(
@@ -182,10 +190,10 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15),
                     ),
-                  ),
-                );
-              })
-            ]),
+                  );
+                })
+              ]),
+            ),
           ),
         ],
         flexibleSpace: Container(
