@@ -50,7 +50,8 @@ dependencies:
   google_sign_in: ^4.5.1
   url_launcher: ^6.0.10
   shared_preferences: ^2.0.8
-  sqflite: ^2.0.0+4
+  speech_to_text: ^5.1.1
+
 
 dev_dependencies:
   flutter_test:
