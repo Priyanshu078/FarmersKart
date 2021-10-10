@@ -31,7 +31,7 @@ import 'package:shellcode2/Provider/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'apiData/BannerImagesAPI.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 List<BestProductCategories> bestProductCategory = bestProductCategoryList;
 List offerData = offersData;
@@ -44,6 +44,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  stt.SpeechToText _speech;
   List allProducts = [];
   Data data = new Data();
   int _current = 0;
@@ -75,6 +76,7 @@ class _HomeState extends State<Home> {
     getCartProducts(context);
     saveData();
     requestPermission(_permission);
+    _speech = stt.SpeechToText();
     imgList = bannerImages;
     if (Provider.of<APIData>(context, listen: false).centerId == null) {
       Provider.of<APIData>(context, listen: false).initializeCenterId(
@@ -1954,13 +1956,52 @@ void getCartProducts(BuildContext context) async {
 class SearchProducts extends SearchDelegate<String> {
   List products;
   SearchProducts(this.products);
+
+  Future<bool> getPermission() async {
+    final status1 = await Permission.microphone.request();
+    if (status1 == PermissionStatus.granted) {
+      return true;
+    } else if (status1 == PermissionStatus.denied) {
+      return false;
+    } else if (status1 == PermissionStatus.permanentlyDenied) {
+      return false;
+    }
+    return false;
+  }
+
+  voiceToText() async {
+    stt.SpeechToText speech = stt.SpeechToText();
+    bool available = await speech.initialize(onStatus: (value) {
+      print("Status" + value.toString());
+    }, onError: (value) {
+      print("There is an error" + value.toString());
+    });
+    if (available) {
+      speech.listen(onResult: (value) {
+        query = value.recognizedWords;
+        print("result : " + value.toString());
+      });
+    } else {
+      print("The user has denied the use of speech recognition.");
+    }
+    // some time later...
+    // speech.stop();
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     // TODO: implement buildActions
     // actions for appbar
     return [
       IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            bool permissionGranted = await getPermission();
+            if (permissionGranted) {
+              voiceToText();
+            } else {
+              print("Premission Denied");
+            }
+          },
           icon: Icon(
             Icons.mic,
             color: Colors.amber[400],
