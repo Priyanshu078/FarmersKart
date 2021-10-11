@@ -317,27 +317,37 @@ class _HandyOrderState extends State<HandyOrder> {
                               builder: (context) =>
                                   DeliveryAddress.handyOrder(1)));
                     },
-                    child: Text(
-                      'Select Center List',
-                      style: TextStyle(color: Colors.purple),
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: Text(
+                        'Select Center List',
+                        style: TextStyle(color: Colors.purple),
+                      ),
                     ),
                   )),
               SizedBox(
-                height: 70,
+                height: 50,
               ),
+              Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+                child: MaterialButton(
+                  height: 50,
+                  minWidth: double.infinity,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  onPressed: () {
+                    placeHandyOrder(context);
+                  },
+                  color: Colors.purple[600],
+                  child: Text(
+                    "SUBMIT",
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+              )
             ],
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Add your onPressed code here!
-          placeHandyOrder(context);
-        },
-        label: const Text('SUBMIT'),
-        icon: const Icon(Icons.thumb_up),
-        backgroundColor: Colors.purple,
       ),
       bottomNavigationBar: Navigate(),
     );

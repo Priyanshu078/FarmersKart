@@ -577,22 +577,39 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                                                                           context,
                                                                       builder:
                                                                           (context) =>
-                                                                              AlertDialog(
-                                                                                title: Text(
-                                                                                  "Cancel Order",
-                                                                                  textAlign: TextAlign.center,
-                                                                                  style: TextStyle(color: Colors.amber[500]),
-                                                                                ),
-                                                                                content: TextField(decoration: InputDecoration(hintText: "Enter reason for cancel", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
-                                                                                actions: [
-                                                                                  TextButton(onPressed: () => Navigator.pop(context), child: Text("CANCEL")),
-                                                                                  TextButton(
+                                                                              SizedBox(
+                                                                                width: MediaQuery.of(context).size.width,
+                                                                                child: AlertDialog(
+                                                                                  title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                                                    Text(
+                                                                                      "Cancel Order",
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(color: Colors.amber[500]),
+                                                                                    ),
+                                                                                    Align(
+                                                                                        child: IconButton(
                                                                                       onPressed: () {
-                                                                                        cancelOrder(snapshot.data[index][0].orderId, _reasonController.text, snapshot.data[index][0].paymentOption);
                                                                                         Navigator.pop(context);
                                                                                       },
-                                                                                      child: Text("SUBMIT")),
-                                                                                ],
+                                                                                      icon: Icon(Icons.dangerous),
+                                                                                    ))
+                                                                                  ]),
+                                                                                  content: TextField(decoration: InputDecoration(hintText: "Enter reason for cancel", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
+                                                                                  actions: [
+                                                                                    MaterialButton(
+                                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                                                                                        minWidth: double.infinity,
+                                                                                        color: Colors.purple[600],
+                                                                                        onPressed: () {
+                                                                                          cancelOrder(snapshot.data[index][0].orderId, _reasonController.text, snapshot.data[index][0].paymentOption);
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        child: Text(
+                                                                                          "SUBMIT",
+                                                                                          style: TextStyle(color: Colors.white),
+                                                                                        )),
+                                                                                  ],
+                                                                                ),
                                                                               ),
                                                                       barrierDismissible:
                                                                           false);
