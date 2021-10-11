@@ -114,10 +114,11 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: phoneController,
+                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(
-                              hintText: "Your Phone Number",
+                              hintText: "Mobile No",
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -125,8 +126,8 @@ class _SignInState extends State<SignIn> {
                               disabledBorder: InputBorder.none,
                               hintStyle:
                                   Theme.of(context).textTheme.caption.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
                                         color: yellow, // Set Your Own Color
                                       ),
                             ),
@@ -152,6 +153,7 @@ class _SignInState extends State<SignIn> {
                           ),
                           child: TextField(
                             controller: pwController,
+                            keyboardType: TextInputType.number,
                             style: TextStyle(height: 1.5, color: Colors.purple),
                             cursorColor: Colors.purpleAccent,
                             decoration: InputDecoration(
@@ -163,8 +165,8 @@ class _SignInState extends State<SignIn> {
                               disabledBorder: InputBorder.none,
                               hintStyle:
                                   Theme.of(context).textTheme.caption.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
                                         color: yellow, // Set Your Own Color
                                       ),
                             ),
@@ -184,7 +186,7 @@ class _SignInState extends State<SignIn> {
                           child: Text(
                             'Forgot Password?',
                             style: TextStyle(
-                                color: Colors.purple[300], fontSize: 12),
+                                color: Colors.purple[300], fontSize: 15),
                           ),
                         ),
                         SizedBox(
@@ -221,7 +223,7 @@ class _SignInState extends State<SignIn> {
                             Text(
                               "Don't Have Account ?",
                               style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
+                                  TextStyle(fontSize: 15, color: Colors.black),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -233,7 +235,7 @@ class _SignInState extends State<SignIn> {
                               child: Text(
                                 " SIGN UP NOW",
                                 style: TextStyle(
-                                    fontSize: 12, color: Colors.purple),
+                                    fontSize: 15, color: Colors.purple),
                               ),
                             )
                           ],
@@ -268,7 +270,7 @@ class _SignInState extends State<SignIn> {
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
                           ),
                         ),
@@ -278,26 +280,56 @@ class _SignInState extends State<SignIn> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SignInButton(
-                                buttonType: ButtonType.google,
-                                buttonSize: ButtonSize.small,
-                                btnTextColor: Colors.black,
-                                btnColor: bgcolor,
-                                width: 100,
-                                btnText: 'Google',
-                                onPressed: () {
-                                  builder();
-                                }),
-                            SignInButton(
-                                buttonType: ButtonType.facebook,
-                                buttonSize: ButtonSize.small,
-                                btnTextColor: Colors.black,
-                                btnColor: bgcolor,
-                                width: 120,
-                                btnText: 'Facebook',
-                                onPressed: () {
-                                  loginWithFacebook();
-                                }),
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Image.asset(
+                                        'assets/google.png',
+                                        scale: 1.5,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text("Google",
+                                            style: TextStyle(fontSize: 15)),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Image.asset(
+                                        'assets/facebook.png',
+                                        scale: 1.5,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Facebook",
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -306,11 +338,11 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
               Positioned(
-                  top: 140,
-                  left: 140,
+                  top: 120,
+                  left: 120,
                   child: Container(
-                      height: 120,
-                      width: 120,
+                      height: 140,
+                      width: 140,
                       child: Image.asset(
                         'assets/login.png',
                         fit: BoxFit.cover,
