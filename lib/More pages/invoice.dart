@@ -165,6 +165,7 @@ class _InvoiceState extends State<Invoice> {
                         padding: EdgeInsets.all(13),
                         margin: EdgeInsets.all(5),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               'Item',
@@ -222,6 +223,22 @@ class _InvoiceState extends State<Invoice> {
                                                             FontWeight.w400)),
                                               ),
                                               Spacer(),
+                                              double.parse(widget.data[index]
+                                                          .totalAmount) >
+                                                      100
+                                                  ? Spacer()
+                                                  : Container(),
+                                              double.parse(widget.data[index]
+                                                              .totalAmount) >=
+                                                          10 &&
+                                                      double.parse(widget
+                                                              .data[index]
+                                                              .totalAmount) <
+                                                          100
+                                                  ? Container(
+                                                      width: 20.0,
+                                                    )
+                                                  : Container(),
                                               Text(
                                                   "${widget.data[index].quantity}",
                                                   style: TextStyle(
@@ -229,29 +246,25 @@ class _InvoiceState extends State<Invoice> {
                                                       fontSize: 17,
                                                       fontWeight:
                                                           FontWeight.w400)),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        45, 0, 1, 0),
-                                                child: Text(
-                                                    "₹ ${widget.data[index].totalAmount}",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .green.shade800,
-                                                        fontSize: 17,
-                                                        fontWeight:
-                                                            FontWeight.w400)),
-                                              )
+                                              Spacer(),
+                                              Text(
+                                                  "₹ ${widget.data[index].totalAmount}",
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.green.shade800,
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.w400)),
                                             ],
                                           ),
                                           Align(
                                             alignment: Alignment.centerLeft,
                                             child: Container(
                                               padding: EdgeInsets.fromLTRB(
-                                                  10, 12, 1, 5),
+                                                  0, 12, 1, 5),
                                               child: Row(
                                                 children: [
-                                                  Text('Status:',
+                                                  Text('Status:  ',
                                                       style: TextStyle(
                                                           color:
                                                               Color(0XFFFFA726),
@@ -290,13 +303,23 @@ class _InvoiceState extends State<Invoice> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('Total Amount :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17)),
-                            SizedBox(width: 30),
-                            Text("₹ ${snapshot.data["actual_total_amount"]}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 17))
+                            Container(
+                              width: MediaQuery.of(context).size.width * 3 / 4,
+                              child: Text('Total Amount :',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                  "₹ ${snapshot.data["actual_total_amount"]}",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            )
                           ],
                         ),
                       ),
@@ -305,15 +328,23 @@ class _InvoiceState extends State<Invoice> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('Delivery Charges :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17)),
-                            SizedBox(width: 30),
-                            Text("₹ ${widget.data[0].deliveryCharges}",
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17)),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 3 / 4,
+                              child: Text('Delivery Charges :',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text("₹ ${widget.data[0].deliveryCharges}",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            ),
                           ],
                         ),
                       ),
@@ -322,13 +353,23 @@ class _InvoiceState extends State<Invoice> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('New Total Amount :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17)),
-                            SizedBox(width: 30),
-                            Text("",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17))
+                            Container(
+                              width: MediaQuery.of(context).size.width * 3 / 4,
+                              child: Text('New Total Amount :',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                  "₹ ${snapshot.data["total_order_amount"].toString()}",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            )
                           ],
                         ),
                       ),
@@ -337,13 +378,33 @@ class _InvoiceState extends State<Invoice> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('Difference :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17)),
-                            SizedBox(width: 30),
-                            Text("",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400, fontSize: 17))
+                            Container(
+                              width: MediaQuery.of(context).size.width * 3 / 4,
+                              child: Text('Difference :',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17)),
+                            ),
+                            SizedBox(width: 10),
+                            snapshot.data["difference"] == '0'
+                                ? Expanded(
+                                    child: Text("₹ 0.00",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17)),
+                                  )
+                                : Expanded(
+                                    child: Text(
+                                        "₹ " +
+                                            snapshot.data["difference"]
+                                                .toString(),
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17)),
+                                  )
                           ],
                         ),
                       ),

@@ -295,7 +295,7 @@ class _HomeState extends State<Home> {
                         height: 15,
                       ),
                       Container(
-                        height: 38,
+                        height: 40,
                         decoration: BoxDecoration(
                             border: Border(
                               top: BorderSide(width: 1.0, color: yellow),
@@ -364,9 +364,9 @@ class _HomeState extends State<Home> {
                                         builder: (context) => BestSelling()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -379,7 +379,7 @@ class _HomeState extends State<Home> {
                         height: 15,
                       ),
                       Container(
-                        height: 115,
+                        height: 140,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -405,53 +405,66 @@ class _HomeState extends State<Home> {
                                 },
                                 child: Row(
                                   children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          height: 60,
-                                          width: 60,
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                "http://uprank.live/farmerskart/images/product/${bestProductCategory[index].imageUrl}",
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
-                                                    colorFilter:
-                                                        ColorFilter.mode(
-                                                            Colors.transparent,
-                                                            BlendMode
-                                                                .colorBurn)),
+                                    Card(
+                                      elevation: 5.0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.all(10),
+                                              height: 70,
+                                              width: 65,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/product/${bestProductCategory[index].imageUrl}",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
                                               ),
                                             ),
-                                            placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
-                                          ),
+                                            Text(
+                                              bestProductCategory[index].title,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 10,
+                                                color: Colors.purple,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          bestProductCategory[index].title,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 10,
-                                            color: Colors.purple,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                     Container(
-                                      width: 20,
+                                      width: 10,
                                     )
                                   ],
                                 ),
                               );
                             }),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       CarouselSlider(
                           items: imgList.map((imgUrl) {
@@ -459,15 +472,15 @@ class _HomeState extends State<Home> {
                             return Builder(
                               builder: (BuildContext context) {
                                 return Container(
-                                  width: double.maxFinite,
+                                  width: MediaQuery.of(context).size.width,
                                   margin:
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(
-                                      imgUrl,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: Image.network(imgUrl,
+                                        fit: BoxFit.fill,
+                                        width:
+                                            MediaQuery.of(context).size.width),
                                   ),
                                 );
                               },
@@ -479,7 +492,7 @@ class _HomeState extends State<Home> {
                                 _current = i;
                               });
                             },
-                            height: 150.0,
+                            height: MediaQuery.of(context).size.height / 3.5,
                             initialPage: 0,
                             autoPlay: true,
                             reverse: false,
@@ -537,9 +550,9 @@ class _HomeState extends State<Home> {
                                         builder: (context) => OfferMore()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -579,127 +592,130 @@ class _HomeState extends State<Home> {
                                               builder: (context) =>
                                                   ProductDetails(temp2, 1)));
                                     },
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      width: 150,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.all(10),
-                                            height: 80,
-                                            width: 80,
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Colors
-                                                                  .transparent,
-                                                              BlendMode
-                                                                  .colorBurn)),
+                                    child: Card(
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        width: 150,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.all(10),
+                                              height: 80,
+                                              width: 80,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
+                                                  ),
                                                 ),
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
                                               ),
-                                              placeholder: (context, url) =>
-                                                  CircularProgressIndicator(),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                                height: 20,
-                                                width: 50,
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                      top: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      left: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      right: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      bottom: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                  height: 20,
+                                                  width: 50,
+                                                  decoration: BoxDecoration(
+                                                      border: Border(
+                                                        top: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        left: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        right: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        bottom: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      gradient: LinearGradient(
+                                                          colors: [
+                                                            left,
+                                                            middle,
+                                                            Colors.purple
+                                                          ])),
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      '₹ ${offerData[index].off} OFF',
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.white),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                    gradient: LinearGradient(
-                                                        colors: [
-                                                          left,
-                                                          middle,
-                                                          Colors.purple
-                                                        ])),
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              offerData[index].title,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              "₹  ${offerData[index].newrate}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Container(
+                                                height: 25,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  color: Colors.purple,
+                                                ),
                                                 child: Align(
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    '₹ ${offerData[index].off} OFF',
+                                                    "ADD",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         color: Colors.white),
                                                   ),
                                                 )),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                            offerData[index].title,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "₹  ${offerData[index].newrate}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                              height: 25,
-                                              width: 130,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                                color: Colors.purple,
-                                              ),
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "ADD",
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white),
-                                                ),
-                                              )),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
@@ -734,126 +750,138 @@ class _HomeState extends State<Home> {
                                                   ProductDetails.offers(
                                                       temp2, 1, true, true)));
                                     },
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      width: 150,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.all(10),
-                                            height: 80,
-                                            width: 80,
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Colors
-                                                                  .transparent,
-                                                              BlendMode
-                                                                  .colorBurn)),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      elevation: 5.0,
+                                      child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        width: 150,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.all(10),
+                                              height: 80,
+                                              width: 80,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "http://uprank.live/farmerskart/images/product/${offerData[index].img}",
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                        colorFilter:
+                                                            ColorFilter.mode(
+                                                                Colors
+                                                                    .transparent,
+                                                                BlendMode
+                                                                    .colorBurn)),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                                height: 20,
-                                                width: 50,
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                      top: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      left: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      right: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
-                                                      bottom: BorderSide(
-                                                          width: 0.5,
-                                                          color: yellow),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                  height: 20,
+                                                  width: 50,
+                                                  decoration: BoxDecoration(
+                                                      border: Border(
+                                                        top: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        left: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        right: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                        bottom: BorderSide(
+                                                            width: 0.5,
+                                                            color: yellow),
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      gradient: LinearGradient(
+                                                          colors: [
+                                                            left,
+                                                            middle,
+                                                            Colors.purple
+                                                          ])),
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      '₹ ${offerData[index].productPrice[0].discount} OFF',
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.white),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                    gradient: LinearGradient(
-                                                        colors: [
-                                                          left,
-                                                          middle,
-                                                          Colors.purple
-                                                        ])),
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              offerData[index].name,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              "₹  ${offerData[index].productPrice[0].discountedPrice}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Container(
+                                                height: 25,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  color: Colors.purple,
+                                                ),
                                                 child: Align(
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    '₹ ${offerData[index].productPrice[0].discount} OFF',
+                                                    "ADD",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         color: Colors.white),
                                                   ),
                                                 )),
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Text(
-                                            offerData[index].name,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "₹  ${offerData[index].productPrice[0].discountedPrice}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                              height: 25,
-                                              width: 130,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                                color: Colors.purple,
-                                              ),
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "ADD",
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white),
-                                                ),
-                                              )),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
                                 }),
+                      ),
+                      SizedBox(
+                        height: 10.0,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -879,9 +907,9 @@ class _HomeState extends State<Home> {
                                         builder: (context) => NewArrivals()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -894,7 +922,7 @@ class _HomeState extends State<Home> {
                         height: 10,
                       ),
                       Container(
-                        height: 220,
+                        height: 240,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -917,81 +945,92 @@ class _HomeState extends State<Home> {
                                           builder: (context) =>
                                               ProductDetails(temp1, 0)));
                                 },
-                                child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 150,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        height: 80,
-                                        width: 80,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  elevation: 5.0,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    width: 150,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          height: 80,
+                                          width: 80,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Colors.transparent,
+                                                            BlendMode
+                                                                .colorBurn)),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text(
+                                          festiveSpecialList[index].title,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "₹  ${festiveSpecialList[index].newrate}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                            height: 25,
+                                            width: 130,
                                             decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                  colorFilter: ColorFilter.mode(
-                                                      Colors.transparent,
-                                                      BlendMode.colorBurn)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: Colors.purple,
                                             ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Text(
-                                        festiveSpecialList[index].title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "₹  ${festiveSpecialList[index].newrate}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                          height: 25,
-                                          width: 130,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: Colors.purple,
-                                          ),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "ADD",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          )),
-                                    ],
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "ADD",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -1024,9 +1063,9 @@ class _HomeState extends State<Home> {
                                         builder: (context) => Category()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -1426,9 +1465,9 @@ class _HomeState extends State<Home> {
                                             FestiveSpecial()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -1441,7 +1480,7 @@ class _HomeState extends State<Home> {
                         height: 10,
                       ),
                       Container(
-                        height: 220,
+                        height: 240,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -1464,81 +1503,92 @@ class _HomeState extends State<Home> {
                                           builder: (context) =>
                                               ProductDetails(temp3, 0)));
                                 },
-                                child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 150,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        height: 80,
-                                        width: 80,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  elevation: 5.0,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    width: 150,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          height: 80,
+                                          width: 80,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "http://uprank.live/farmerskart/images/product/${festiveSpecialList[index].imageUrl}",
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Colors.transparent,
+                                                            BlendMode
+                                                                .colorBurn)),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text(
+                                          festiveSpecialList[index].title,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "₹  ${festiveSpecialList[index].newrate}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                            height: 25,
+                                            width: 130,
                                             decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                  colorFilter: ColorFilter.mode(
-                                                      Colors.transparent,
-                                                      BlendMode.colorBurn)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: Colors.purple,
                                             ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Text(
-                                        festiveSpecialList[index].title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "₹  ${festiveSpecialList[index].newrate}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                          height: 25,
-                                          width: 130,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: Colors.purple,
-                                          ),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "ADD",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          )),
-                                    ],
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "ADD",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -1572,9 +1622,9 @@ class _HomeState extends State<Home> {
                                             ImmunityBooster()));
                               },
                               child: Text(
-                                'more>',
+                                'more >',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   color: Colors.purple,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -1587,7 +1637,7 @@ class _HomeState extends State<Home> {
                         height: 10,
                       ),
                       Container(
-                        height: 220,
+                        height: 240,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -1611,81 +1661,92 @@ class _HomeState extends State<Home> {
                                           builder: (context) =>
                                               ProductDetails(temp3, 0)));
                                 },
-                                child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 150,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        height: 80,
-                                        width: 80,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "http://uprank.live/farmerskart/images/product/${immunityBoosterList[index].imageUrl}",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  elevation: 5.0,
+                                  child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    width: 150,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          height: 80,
+                                          width: 80,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "http://uprank.live/farmerskart/images/product/${immunityBoosterList[index].imageUrl}",
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Colors.transparent,
+                                                            BlendMode
+                                                                .colorBurn)),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text(
+                                          immunityBoosterList[index].title,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "₹  ${immunityBoosterList[index].newrate}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                            height: 25,
+                                            width: 130,
                                             decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                  colorFilter: ColorFilter.mode(
-                                                      Colors.transparent,
-                                                      BlendMode.colorBurn)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              color: Colors.purple,
                                             ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Text(
-                                        immunityBoosterList[index].title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "₹  ${immunityBoosterList[index].newrate}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                          height: 25,
-                                          width: 130,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: Colors.purple,
-                                          ),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "ADD",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          )),
-                                    ],
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "ADD",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

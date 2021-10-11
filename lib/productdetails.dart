@@ -719,129 +719,125 @@ Widget weightList(BuildContext context, bool offers, bool category) {
                           .initializeIndex(k);
                       Navigator.pop(context);
                     },
-                    child: Flexible(
-                      child: Container(
-                        height: 35,
-                        decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(width: 1.0, color: yellow),
-                              left: BorderSide(width: 1.0, color: yellow),
-                              right: BorderSide(width: 1.0, color: yellow),
-                              bottom: BorderSide(width: 1.0, color: yellow),
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 1.0, color: yellow),
+                            left: BorderSide(width: 1.0, color: yellow),
+                            right: BorderSide(width: 1.0, color: yellow),
+                            bottom: BorderSide(width: 1.0, color: yellow),
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: LinearGradient(
+                              colors: [left, middle, Colors.purple])),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            offers
+                                ? Text(
+                                    "${temp[6][k].weight} ${temp[6][k].unit}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : !category
+                                    ? Text(
+                                        '${temp[6][k][1]} -',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        '${temp[6][k][0]} -',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                            Spacer(
+                              flex: 2,
                             ),
-                            borderRadius: BorderRadius.circular(5.0),
-                            gradient: LinearGradient(
-                                colors: [left, middle, Colors.purple])),
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 15.0, right: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              offers
-                                  ? Text(
-                                      "${temp[6][k].weight} ${temp[6][k].unit}",
-                                      style: TextStyle(
+                            offers
+                                ? Text(
+                                    "₹${temp[6][k].originalPrice}",
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14,
                                         color: Colors.white,
-                                      ),
-                                    )
-                                  : !category
-                                      ? Text(
-                                          '${temp[6][k][1]} -',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : Text(
-                                          '${temp[6][k][0]} -',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                              Spacer(
-                                flex: 2,
-                              ),
-                              offers
-                                  ? Text(
-                                      "₹${temp[6][k].originalPrice}",
-                                      style: TextStyle(
+                                        decoration: TextDecoration.lineThrough),
+                                  )
+                                : category
+                                    ? Text(
+                                        '₹${temp[6][k][1]}',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14,
                                           color: Colors.white,
                                           decoration:
-                                              TextDecoration.lineThrough),
-                                    )
-                                  : category
-                                      ? Text(
-                                          '₹${temp[6][k][1]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                        )
-                                      : temp[6][k][3] == ""
-                                          ? Text(
-                                              '₹${temp[6][k][2]}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : Text(
-                                              '₹${temp[6][k][2]}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                              ),
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      )
+                                    : temp[6][k][3] == ""
+                                        ? Text(
+                                            '₹${temp[6][k][2]}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14,
+                                              color: Colors.white,
                                             ),
-                              Spacer(
-                                flex: 2,
-                              ),
-                              offers
-                                  ? temp[6][k].discountedPrice == ""
-                                      ? Container()
-                                      : Text(
-                                          "${temp[6][k].discountedPrice}",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                  : category
-                                      ? Text(
-                                          '₹${temp[6][0][2]}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : temp[6][k][3] == ""
-                                          ? Container()
-                                          : Text(
-                                              '₹${temp[6][k][3]}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                              ),
+                                          )
+                                        : Text(
+                                            '₹${temp[6][k][2]}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
                                             ),
-                            ],
-                          ),
+                                          ),
+                            Spacer(
+                              flex: 2,
+                            ),
+                            offers
+                                ? temp[6][k].discountedPrice == ""
+                                    ? Container()
+                                    : Text(
+                                        "${temp[6][k].discountedPrice}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                : category
+                                    ? Text(
+                                        '₹${temp[6][0][2]}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : temp[6][k][3] == ""
+                                        ? Container()
+                                        : Text(
+                                            '₹${temp[6][k][3]}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                          ],
                         ),
                       ),
                     ),
