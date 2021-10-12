@@ -200,7 +200,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       text: 'Sign out',
                       icon: Icons.exit_to_app,
                       onClicked: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => SignIn(),
                         ));
                         status = false;

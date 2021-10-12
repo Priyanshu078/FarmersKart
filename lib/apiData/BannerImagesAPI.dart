@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:shellcode2/apiData/Constants.dart';
-import 'package:shellcode2/Provider/data.dart';
 
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 

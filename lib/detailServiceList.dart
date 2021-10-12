@@ -12,7 +12,6 @@ import 'package:shellcode2/filter.dart';
 import 'package:shellcode2/home.dart';
 import 'package:shellcode2/Bottom%20bar%20pages/wishlist.dart';
 import 'package:shellcode2/productdetails.dart';
-import 'package:shellcode2/search.dart';
 import '../colors.dart';
 import 'package:shellcode2/apiData/subCategory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
