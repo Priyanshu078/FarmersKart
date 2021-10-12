@@ -44,7 +44,6 @@ class CartState extends State<Cart> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -209,14 +208,16 @@ class CartState extends State<Cart> {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                                  padding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          8,
+                                                                          16,
+                                                                          8,
+                                                                          0),
                                                                   child:
                                                                       Container(
-                                                                    height: 75,
-                                                                    width: 75,
+                                                                    height: 85,
+                                                                    width: 85,
                                                                     child:
                                                                         CachedNetworkImage(
                                                                       imageUrl:
@@ -245,7 +246,7 @@ class CartState extends State<Cart> {
                                                               Column(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
-                                                                        .spaceBetween,
+                                                                        .spaceAround,
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .start,
@@ -283,92 +284,79 @@ class CartState extends State<Cart> {
                                                                                 Colors.amber[600],
                                                                             fontSize: 15),
                                                                       )),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(
+                                                                        "₹ ${snapshot.data[index][i].unitPrice}",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.purple[600],
+                                                                            fontSize: 15),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: snapshot.data[index][i].unitPrice ==
+                                                                                snapshot.data[index][i].unitOriginalPrice
+                                                                            ? 100
+                                                                            : 45,
+                                                                      ),
+                                                                      snapshot.data[index][i].unitPrice == snapshot.data[index][i].unitOriginalPrice
+                                                                          ? Container()
+                                                                          : Text(
+                                                                              "₹ ${snapshot.data[index][i].unitOriginalPrice}",
+                                                                              style: TextStyle(color: Colors.purple[600], fontSize: 15, decoration: TextDecoration.lineThrough)),
+                                                                      snapshot.data[index][i].unitPrice !=
+                                                                              snapshot.data[index][i].unitOriginalPrice
+                                                                          ? SizedBox(
+                                                                              width: 45,
+                                                                            )
+                                                                          : Container(),
+                                                                      IconButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            showDialog(
+                                                                                context: context,
+                                                                                builder: (context) => AlertDialog(
+                                                                                      content: Text("Do you want to delete product from cart ?"),
+                                                                                      title: Text("Delete"),
+                                                                                      actions: [
+                                                                                        TextButton(
+                                                                                            onPressed: () {
+                                                                                              Navigator.pop(context);
+                                                                                            },
+                                                                                            child: Text(
+                                                                                              "NO",
+                                                                                              style: TextStyle(color: Colors.black),
+                                                                                            )),
+                                                                                        TextButton(
+                                                                                            onPressed: () async {
+                                                                                              bool deleted = await deleteFromCart(snapshot.data[index][i].productId, snapshot.data[index][i].weight);
+                                                                                              if (deleted) {
+                                                                                                Navigator.pop(context);
+                                                                                                setState(() {});
+                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted Successfully")));
+                                                                                              } else {
+                                                                                                Navigator.pop(context);
+                                                                                                setState(() {});
+                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something Went Wrong, Please try Again!!")));
+                                                                                              }
+                                                                                            },
+                                                                                            child: Text(
+                                                                                              "YES",
+                                                                                              style: TextStyle(color: Colors.black),
+                                                                                            ))
+                                                                                      ],
+                                                                                    ));
+                                                                          },
+                                                                          icon:
+                                                                              Icon(Icons.delete)),
+                                                                    ],
+                                                                  ),
                                                                 ],
                                                               ),
                                                             ],
-                                                          ),
-                                                          Padding(
-                                                            padding: EdgeInsets.only(
-                                                                right: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width /
-                                                                    8),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                  "₹ ${snapshot.data[index][i].unitPrice}",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                              .purple[
-                                                                          600],
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                snapshot.data[index][i].unitPrice ==
-                                                                        snapshot
-                                                                            .data[index][
-                                                                                i]
-                                                                            .unitOriginalPrice
-                                                                    ? Text("")
-                                                                    : Text(
-                                                                        "₹ ${snapshot.data[index][i].unitOriginalPrice}",
-                                                                        style: TextStyle(
-                                                                            color: Colors.purple[
-                                                                                600],
-                                                                            fontSize:
-                                                                                15,
-                                                                            decoration:
-                                                                                TextDecoration.lineThrough)),
-                                                                IconButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder: (context) =>
-                                                                              AlertDialog(
-                                                                                content: Text("Do you want to delete product from cart ?"),
-                                                                                title: Text("Delete"),
-                                                                                actions: [
-                                                                                  TextButton(
-                                                                                      onPressed: () {
-                                                                                        Navigator.pop(context);
-                                                                                      },
-                                                                                      child: Text(
-                                                                                        "NO",
-                                                                                        style: TextStyle(color: Colors.black),
-                                                                                      )),
-                                                                                  TextButton(
-                                                                                      onPressed: () async {
-                                                                                        bool deleted = await deleteFromCart(snapshot.data[index][i].productId, snapshot.data[index][i].weight);
-                                                                                        if (deleted) {
-                                                                                          Navigator.pop(context);
-                                                                                          setState(() {});
-                                                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Deleted Successfully")));
-                                                                                        } else {
-                                                                                          Navigator.pop(context);
-                                                                                          setState(() {});
-                                                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something Went Wrong, Please try Again!!")));
-                                                                                        }
-                                                                                      },
-                                                                                      child: Text(
-                                                                                        "YES",
-                                                                                        style: TextStyle(color: Colors.black),
-                                                                                      ))
-                                                                                ],
-                                                                              ));
-                                                                    },
-                                                                    icon: Icon(Icons
-                                                                        .delete)),
-                                                              ],
-                                                            ),
                                                           ),
                                                           SizedBox(
                                                             height: 15,
