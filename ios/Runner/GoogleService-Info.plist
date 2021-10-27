@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>537455387489-4kqulm3v98o0hlk9gnmeuoq2hblae0p7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.537455387489-4kqulm3v98o0hlk9gnmeuoq2hblae0p7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>537455387489-0o5fjltl7stviekbu9fu3hino9d9ernm.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD3UxECPYrzWrW-ocACJsPaLyRWbgiv2JI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>537455387489</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.servicexpertz.shellcode</string>
+	<key>PROJECT_ID</key>
+	<string>farmers-kart</string>
+	<key>STORAGE_BUCKET</key>
+	<string>farmers-kart.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:537455387489:ios:b78b4c04c4c81518701b20</string>
+</dict>
+</plist>
